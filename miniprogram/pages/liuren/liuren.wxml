@@ -6,18 +6,18 @@
     <input type="number" value="{{num}}" bindinput="onNum" placeholder="任意正整数,如 37"/>
   </view>
 </view>
-<button class="go" bindtap="run">起 卦</button>
+<button class="go" hover-class="btn-press" bindtap="run">起 卦</button>
 <view wx:if="{{r}}">
   <view class="card">
     <view class="muted">{{r.methodLabel}} · 农历{{r.lunarMonth}}月{{r.lunarDay}}日 {{r.hourLabel}}</view>
     <view style="display:flex;text-align:center;margin-top:16rpx">
-      <view style="flex:1" wx:for="{{r.palaces}}" wx:key="index">
+      <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{r.palaces}}" wx:key="index">
         <view class="muted">{{item.t}}</view>
         <view class="gold" style="font-size:40rpx">{{item.name}}</view>
         <view class="muted">{{item.element}}·{{item.fortune}}</view>
       </view>
     </view>
-    <view style="margin-top:16rpx" wx:for="{{r.lines}}" wx:key="index">{{item}}</view>
+    <view class="ani-rise d4" style="margin-top:16rpx" wx:for="{{r.lines}}" wx:key="index">{{item}}</view>
     <view class="muted" style="margin-top:12rpx">建议:{{r.advice}}</view>
     <view class="muted">应期:{{r.timing}} · 方位:{{r.direction}}</view>
   </view>

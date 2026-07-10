@@ -1,4 +1,4 @@
-<view class="card">
+<view class="card ani-rise">
   <view class="label">出生日期</view>
   <picker mode="date" value="{{date}}" start="1600-01-01" end="2100-12-31" bindchange="onDate"><view>{{date}}</view></picker>
   <view class="label">时辰</view>
@@ -6,15 +6,15 @@
   <view class="label">性别</view>
   <picker range="{{genders}}" value="{{gi}}" bindchange="onGender"><view>{{genders[gi]}}</view></picker>
 </view>
-<button class="go" bindtap="run">开始排盘</button>
+<button class="go" hover-class="btn-press" bindtap="run">开始排盘</button>
 <view wx:if="{{r}}">
   <view class="card">
     <view style="display:flex;text-align:center">
-      <view style="flex:1" wx:for="{{r.zhus}}" wx:key="index"><view class="muted">{{item.n}}</view><view class="gold" style="font-size:44rpx">{{item.gz}}</view></view>
+      <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{r.zhus}}" wx:key="index"><view class="muted">{{item.n}}</view><view class="gold" style="font-size:44rpx">{{item.gz}}</view></view>
     </view>
-    <view style="margin-top:16rpx">日主 <text class="gold">{{r.dm}}</text> · {{r.status}}({{r.score}}分)</view>
-    <view>喜 <text class="gold">{{r.fav}}</text> 忌 {{r.unf}}</view>
-    <view class="muted" wx:for="{{r.warnings}}" wx:key="index">⚠ {{item}}</view>
+    <view class="ani-rise d4" style="margin-top:16rpx">日主 <text class="gold">{{r.dm}}</text> · {{r.status}}({{r.score}}分)</view>
+    <view class="ani-rise d5">喜 <text class="gold">{{r.fav}}</text> 忌 {{r.unf}}</view>
+    <view class="muted ani-rise d5" wx:for="{{r.warnings}}" wx:key="index">⚠ {{item}}</view>
   </view>
 </view>
 <view class="muted" style="text-align:center;margin:30rpx">仅供文化研究与娱乐</view>

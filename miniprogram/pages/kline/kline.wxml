@@ -7,8 +7,8 @@
     <picker style="flex:1" range="{{genders}}" value="{{gi}}" bindchange="onGender"><view>{{genders[gi]}}</view></picker>
   </view>
 </view>
-<button class="go" bindtap="run">生成人生K线</button>
-<view class="card" wx:if="{{natal}}">
+<button class="go" hover-class="btn-press" bindtap="run">生成人生K线</button>
+<view class="card ani-rise" wx:if="{{natal}}">
   <view class="muted">{{natal}}</view>
   <canvas type="2d" id="kc" style="width:100%;height:480rpx;margin-top:16rpx"></canvas>
   <view style="margin-top:12rpx" wx:if="{{best}}">🔺 {{best}}  🔻 {{worst}}</view>

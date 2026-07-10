@@ -30,27 +30,45 @@ Page({
       canvas.width = width * dpr; canvas.height = height * dpr;
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
-      ctx.fillStyle = '#1e1a14'; ctx.fillRect(0, 0, width, height);
-      const padL = 26, padB = 22, padT = 8;
-      const xw = (width - padL - 8) / ys.length;
-      const yOf = (v) => padT + ((98 - v) / 96) * (height - padT - padB);
-      ctx.strokeStyle = '#342d22'; ctx.fillStyle = '#9c917c'; ctx.font = '9px sans-serif';
-      for (const g of [20, 50, 80]) {
-        ctx.beginPath(); ctx.moveTo(padL, yOf(g)); ctx.lineTo(width - 8, yOf(g)); ctx.stroke();
-        ctx.fillText(String(g), 4, yOf(g) + 3);
-      }
-      ys.forEach((yr, i) => {
-        const x = padL + i * xw + xw / 2;
-        const up = yr.close >= yr.open;
-        const col = up ? '#d1553f' : '#4ea08f';
-        ctx.strokeStyle = col; ctx.fillStyle = col;
-        ctx.beginPath(); ctx.moveTo(x, yOf(yr.high)); ctx.lineTo(x, yOf(yr.low)); ctx.stroke();
-        const top = yOf(Math.max(yr.open, yr.close));
-        const h = Math.max(1.5, Math.abs(yOf(yr.open) - yOf(yr.close)));
-        if (up) ctx.fillRect(x - xw * 0.3, top, xw * 0.6, h);
-        else ctx.strokeRect(x - xw * 0.3, top, xw * 0.6, h);
-        if (i % 8 === 0) { ctx.fillStyle = '#9c917c'; ctx.fillText(String(yr.year), x - 14, height - 8); }
-      });
+      // 蜡烛逐根生长动画:从左到右点亮,每根从收盘价基线向高低点展开
+      const DUR = 1000;
+      const t0 = Date.now();
+      const frame = () => {
+        const p = Math.min(1, (Date.now() - t0) / DUR);
+        const ease = 1 - Math.pow(1 - p, 3); // easeOutCubic
+        this.paint(ctx, width, height, ys, ease);
+        if (p < 1) canvas.requestAnimationFrame(frame);
+      };
+      frame();
+    });
+  },
+  paint(ctx, width, height, ys, prog) {
+    ctx.fillStyle = '#1e1a14'; ctx.fillRect(0, 0, width, height);
+    const padL = 26, padB = 22, padT = 8;
+    const xw = (width - padL - 8) / ys.length;
+    const yOf = (v) => padT + ((98 - v) / 96) * (height - padT - padB);
+    ctx.strokeStyle = '#342d22'; ctx.fillStyle = '#9c917c'; ctx.font = '9px sans-serif';
+    for (const g of [20, 50, 80]) {
+      ctx.beginPath(); ctx.moveTo(padL, yOf(g)); ctx.lineTo(width - 8, yOf(g)); ctx.stroke();
+      ctx.fillText(String(g), 4, yOf(g) + 3);
+    }
+    const shown = ys.length * prog;
+    ys.forEach((yr, i) => {
+      if (i > shown) return;
+      const local = Math.min(1, shown - i); // 本根蜡烛的生长进度
+      const v = (x) => yr.score + (x - yr.score) * local; // 从年分基线向真实值展开
+      const x = padL + i * xw + xw / 2;
+      const up = yr.close >= yr.open;
+      const col = up ? '#d1553f' : '#4ea08f';
+      ctx.globalAlpha = 0.35 + 0.65 * local;
+      ctx.strokeStyle = col; ctx.fillStyle = col;
+      ctx.beginPath(); ctx.moveTo(x, yOf(v(yr.high))); ctx.lineTo(x, yOf(v(yr.low))); ctx.stroke();
+      const top = yOf(Math.max(v(yr.open), v(yr.close)));
+      const h = Math.max(1.5, Math.abs(yOf(v(yr.open)) - yOf(v(yr.close))));
+      if (up) ctx.fillRect(x - xw * 0.3, top, xw * 0.6, h);
+      else ctx.strokeRect(x - xw * 0.3, top, xw * 0.6, h);
+      ctx.globalAlpha = 1;
+      if (i % 8 === 0) { ctx.fillStyle = '#9c917c'; ctx.fillText(String(yr.year), x - 14, height - 8); }
     });
   },
 });

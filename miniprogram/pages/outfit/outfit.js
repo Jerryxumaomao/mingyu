@@ -23,6 +23,7 @@ Page({
         favorableWuxing: ug.favorableWuxing || [], unfavorableWuxing: ug.unfavorableWuxing || [],
         dayGan: day.pillars.day.gan, dayZhi: day.pillars.day.zhi, dayMasterGan: chart.dayMaster.gan,
       });
+      this.setData({ r: null });
       this.setData({
         r: {
           fav: (ug.favorableWuxing || []).join(''), unf: (ug.unfavorableWuxing || []).join(''),

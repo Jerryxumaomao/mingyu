@@ -22,7 +22,25 @@ Page({
   run() {
     try {
       const h = MY.calculateHehun(toPerson(this.data.a), toPerson(this.data.b));
-      this.setData({ r: { total: h.total, grade: h.grade, rules: h.rules, ap: h.a.pillars, bp: h.b.pillars } });
+      this.setData({ r: null });
+      this.setData({
+        r: { total: h.total, grade: h.grade, rules: h.rules, ap: h.a.pillars, bp: h.b.pillars },
+        shownTotal: 0,
+      });
+      this.countUp(h.total);
     } catch (e) { wx.showToast({ title: e.message, icon: 'none' }); }
   },
+  // 分数从 0 滚动到总分(easeOut,约 700ms)
+  countUp(target) {
+    if (this._timer) clearInterval(this._timer);
+    const t0 = Date.now();
+    const DUR = 700;
+    this._timer = setInterval(() => {
+      const p = Math.min(1, (Date.now() - t0) / DUR);
+      const ease = 1 - Math.pow(1 - p, 3);
+      this.setData({ shownTotal: Math.round(target * ease) });
+      if (p >= 1) { clearInterval(this._timer); this._timer = null; }
+    }, 33);
+  },
+  onUnload() { if (this._timer) clearInterval(this._timer); },
 });

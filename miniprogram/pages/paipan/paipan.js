@@ -14,6 +14,7 @@ Page({
         gender: this.data.gi === 0 ? 'male' : 'female', strengthModel: 'classic-calibrated',
       });
       const ug = r.analysis.usefulGod;
+      this.setData({ r: null });
       this.setData({
         r: {
           zhus: [

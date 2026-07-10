@@ -15,6 +15,7 @@ Page({
     try {
       const r = MY.generateXiaoliuren(params);
       const s = r.sequence;
+      this.setData({ r: null });
       this.setData({
         r: {
           methodLabel: r.methodLabel, lunarMonth: r.lunarMonth, lunarDay: r.lunarDay, hourLabel: r.hourLabel,

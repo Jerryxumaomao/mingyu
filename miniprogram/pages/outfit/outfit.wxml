@@ -8,13 +8,13 @@
   <view class="label">看哪天</view>
   <picker mode="date" value="{{target}}" bindchange="onTarget"><view>{{target}}</view></picker>
 </view>
-<button class="go" bindtap="run">生成穿搭建议</button>
+<button class="go" hover-class="btn-press" bindtap="run">生成穿搭建议</button>
 <view wx:if="{{r}}">
   <view class="card"><view class="muted">喜 {{r.fav}} 忌 {{r.unf}} · 流日 <text class="gold">{{r.dayGz}}</text></view></view>
-  <view class="card"><view class="gold">🎨 颜色</view>
+  <view class="card ani-rise d1"><view class="gold">🎨 颜色</view>
     <view>主色:{{r.main}}</view><view class="muted">点缀:{{r.accent}}</view><view style="color:#d1553f">避开:{{r.avoid}}</view></view>
-  <view class="card"><view class="gold">💍 配饰</view><view>{{r.acc}}</view></view>
-  <view class="card"><view class="gold">🌸 香调</view><view>宜:{{r.scent}}</view><view style="color:#d1553f">避:{{r.scentAvoid}}</view></view>
-  <view class="card"><view class="gold">📋 当日提示</view><view wx:for="{{r.notes}}" wx:key="index">· {{item}}</view></view>
+  <view class="card ani-rise d2"><view class="gold">💍 配饰</view><view>{{r.acc}}</view></view>
+  <view class="card ani-rise d3"><view class="gold">🌸 香调</view><view>宜:{{r.scent}}</view><view style="color:#d1553f">避:{{r.scentAvoid}}</view></view>
+  <view class="card ani-rise d4"><view class="gold">📋 当日提示</view><view wx:for="{{r.notes}}" wx:key="index">· {{item}}</view></view>
 </view>
 <view class="muted" style="text-align:center;margin:30rpx">五行取象为传统主流口径,仅供风格参考与娱乐</view>
