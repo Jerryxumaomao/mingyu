@@ -1,7 +1,8 @@
 # mingyu fork · 仓库速查(AI 必读)
 
 > 上层总指引:`../CLAUDE.md`;详细手册:`docs/fork-guide.md`;口径说明:`docs/paipan-notes.md`;
-> 工作方法论(怎么拆/怎么验/怎么排):`docs/working-method.md`。
+> 工作方法论(怎么拆/怎么验/怎么排):`docs/working-method.md`;
+> **设计规范(动任何 UI 前必读,强制遵循):`docs/design.md`**。
 > 本文件只放"在这个仓库里干活"最常用的东西。
 
 ## 一分钟上手

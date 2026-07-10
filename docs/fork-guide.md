@@ -109,6 +109,10 @@ node scripts/differential-test.mjs   # 期望:"✅ 双引擎四柱完全一致"(
 ```
 任何一步不符 → 你改坏了,回滚重想;**不要改测试期望值来过关**。
 
+### 改任何 UI(看板/小程序/视频卡)
+**先读 `docs/design.md`(知几·宣纸设计规范)**——色值/字体/间距/组件/动效全部强制;
+改色只许改其 §8 映射表列出的三处源头,禁止页面内联新 hex。
+
 ### 改了看板(dashboard/)
 ```bash
 node scripts/build-dashboard.mjs     # 期望:mingyu.js ~700kb, Done
