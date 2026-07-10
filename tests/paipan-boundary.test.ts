@@ -14,26 +14,27 @@ import { calculateSeasonInfo, getMonthCommander } from '@core/bazi/baziCalculato
 
 const ganZhi = (p: { gan: string; zhi: string }) => `${p.gan}${p.zhi}`;
 
-test('金标准盘:1994-12-04 03:15 男 佳木斯(真太阳时) → 甲戌 乙亥 甲子 丙寅', () => {
+test('金标准盘:1996-11-23 03:15 男 长春(真太阳时) → 丙子 己亥 甲子 丙寅', () => {
   const r = baziCalculator.calculateBazi({
-    year: 1994,
-    month: 12,
-    day: 4,
+    year: 1996,
+    month: 11,
+    day: 23,
     timeIndex: 2,
     gender: 'male',
     useTrueSolarTime: true,
     birthHour: 3,
     birthMinute: 15,
-    birthLongitude: 130.37,
-    birthPlace: '黑龙江佳木斯',
+    birthLongitude: 125.32,
+    birthPlace: '吉林长春',
   });
-  assert.equal(ganZhi(r.pillars.year), '甲戌');
-  assert.equal(ganZhi(r.pillars.month), '乙亥');
+  assert.equal(ganZhi(r.pillars.year), '丙子');
+  assert.equal(ganZhi(r.pillars.month), '己亥');
   assert.equal(ganZhi(r.pillars.day), '甲子');
   assert.equal(ganZhi(r.pillars.hour), '丙寅');
-  // 真太阳时校正约 +50 分钟,仍在寅时
+  // 长春 125.32°E 校正约 +35 分钟(03:15→03:49),仍在寅时
   assert.equal(r.timing?.enabled, true);
-  assert.equal(r.timing?.correctedTime.hour, 4);
+  assert.equal(r.timing?.correctedTime.hour, 3);
+  assert.equal(r.timing?.correctedTime.minute, 49);
   // 正常盘不应产生边界预警噪音
   assert.deepEqual(r.warnings, []);
   // 甲木亥月调候:火为第一喜用
@@ -42,14 +43,14 @@ test('金标准盘:1994-12-04 03:15 男 佳木斯(真太阳时) → 甲戌 乙�
 
 test('回归:日支坐印计入帮扶(甲子日,upstream #27)', () => {
   const r = baziCalculator.calculateBazi({
-    year: 1994,
-    month: 12,
-    day: 4,
+    year: 1996,
+    month: 11,
+    day: 23,
     timeIndex: 2,
     gender: 'male',
   });
-  // 帮扶 = 年甲(比)+月乙(劫)+月支亥(印)+日支子(印) = 4
-  assert.equal(r.analysis.dayMasterStrength.details.supportStrength, 4);
+  // 帮扶 = 年支子(印)+月支亥(印)+日支子(印) = 3(日支坐印计入,即 #27 回归点)
+  assert.equal(r.analysis.dayMasterStrength.details.supportStrength, 3);
 });
 
 test('立春边界:2024-02-04 16:27 立春,前后年柱月柱翻转', () => {

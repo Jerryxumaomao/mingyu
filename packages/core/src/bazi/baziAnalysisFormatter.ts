@@ -1,4 +1,5 @@
 import type { BaziChartResult } from './baziTypes';
+import type { UsefulGodSchools } from './baziUsefulGodStrategy';
 import { getCurrentTimeDescription } from './calendarTool';
 import { getLuckCycleForDate } from './luckTiming';
 
@@ -237,6 +238,21 @@ function buildBaziText(baziResult: BaziChartResult, options: FormatBaziOptions):
     const promptStrategyTrace = filterPromptStrategyTrace(analysis.usefulGod.strategyTrace);
     if (includeRules && promptStrategyTrace.length) {
       result += `取用脉络: ${promptStrategyTrace.join(' -> ')}\n`;
+    }
+    const schools = (analysis.usefulGod as { schools?: UsefulGodSchools }).schools;
+    if (schools) {
+      const zw = schools.zhuanwang;
+      const zwText = zw.qualifies
+        ? `成专旺,顺势喜${zw.favorableWuxing.join('')}忌${zw.unfavorableWuxing.join('')}`
+        : zw.nearMiss
+          ? `接近专旺不成格(旺${zw.dominantWuxing}${zw.dominantPct}%,扶抑/专旺分歧高发盘)`
+          : '不成专旺';
+      result += `用神四派: 扶抑取${schools.fuyi.primary || '-'} | 调候${schools.tiaohou.applied ? '取' + schools.tiaohou.primary : '未触发'} | 病药${schools.bingyao.applied ? '取' + schools.bingyao.primary : '无显著病'} | 专旺${zwText}\n`;
+      if (schools.consensus) {
+        result += `四派共识: 首选一致指向${schools.consensus}(高信心)\n`;
+      } else if (schools.diverged) {
+        result += `流派分歧: 扶抑首选${schools.fuyi.primary}≠调候首选${schools.tiaohou.primary},最终按调候优先;解读时说清分歧,日常调和用调候、重大决策参扶抑病药\n`;
+      }
     }
   }
 

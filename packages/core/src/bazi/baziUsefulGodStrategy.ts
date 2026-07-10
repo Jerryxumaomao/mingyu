@@ -324,6 +324,103 @@ function finalizeUsefulGodAnalysis(
   };
 }
 
+/**
+ * 用神四派并行结论(参考 DeepOracle 四派决策框架:扶抑/调候/病药/专旺)。
+ * 引擎最终裁决仍按"调候优先"的既定顺序(finalize 输出不受本字段影响),
+ * 这里把四派各自的独立判读都透出,分歧时由解读层(或人)按场景取舍:
+ *   日常调和(颜色/穿搭)以调候为主,重大决策以扶抑+病药为主,
+ *   极端命局先看专旺。四派 primary 高度一致时给 consensus 强信心标记。
+ */
+export interface UsefulGodSchools {
+  /** 扶抑派:身弱补(印比)、身强泄(食伤财官) */
+  fuyi: { favorableWuxing: string[]; primary: string };
+  /** 调候派:月令寒暖燥湿,冬木必火、夏火必水 */
+  tiaohou: { applied: boolean; favorableWuxing: string[]; primary: string };
+  /** 病药派:命局最尖锐矛盾为病,用神为药 */
+  bingyao: { applied: boolean; primary: string; hint: string };
+  /** 专旺派:一行独旺则顺势(同党/印为喜、克它为忌)。qualifies 依阈值判定 */
+  zhuanwang: {
+    dominantWuxing: string;
+    dominantPct: number;
+    /** 克制旺神的五行占比(反力之一) */
+    controllerPct: number;
+    /** 泄旺神的五行占比(反力之一) */
+    drainerPct: number;
+    /** 是否成专旺格:旺神≥50% 且克/泄反力均<10% */
+    qualifies: boolean;
+    /** 接近专旺但不成格(旺神≥42% 但未达门槛):提示流派分歧高发区 */
+    nearMiss: boolean;
+    favorableWuxing: string[];
+    unfavorableWuxing: string[];
+    note: string;
+  };
+  /** 扶抑与调候首选是否分歧(保留旧字段兼容) */
+  diverged: boolean;
+  /** 四派(适用者)首选完全一致时的共识五行,否则 null */
+  consensus: string | null;
+}
+
+/** 专旺阈值检测(参考 DeepOracle:某五行>50% 且无明显反力) */
+function detectZhuanwang(
+  dmWuxing: string,
+  wuxingCounts: Record<string, number> | undefined,
+  patternIsSpecialZhuanwang: boolean,
+): UsefulGodSchools['zhuanwang'] {
+  const generatorOf = (el: string) =>
+    Object.entries(BASIC_MAPPINGS.WUXING_SHENG).find(([, v]) => v === el)?.[0] ?? '';
+  const controllerOf = (el: string) =>
+    Object.entries(BASIC_MAPPINGS.WUXING_KE).find(([, v]) => v === el)?.[0] ?? '';
+  const empty = {
+    dominantWuxing: '',
+    dominantPct: 0,
+    controllerPct: 0,
+    drainerPct: 0,
+    qualifies: false,
+    nearMiss: false,
+    favorableWuxing: [],
+    unfavorableWuxing: [],
+    note: '五行分布数据缺失,未做专旺判定',
+  };
+  if (!wuxingCounts) return empty;
+  const total = Object.values(wuxingCounts).reduce((s, v) => s + v, 0);
+  if (total <= 0) return empty;
+  const pct = (el: string) => Math.round(((wuxingCounts[el] ?? 0) / total) * 100);
+  const dominant = Object.keys(wuxingCounts).reduce((a, b) =>
+    (wuxingCounts[b] ?? 0) > (wuxingCounts[a] ?? 0) ? b : a,
+  );
+  const dominantPct = pct(dominant);
+  const controller = controllerOf(dominant);
+  const drainer = BASIC_MAPPINGS.WUXING_SHENG[dominant] ?? '';
+  const controllerPct = controller ? pct(controller) : 0;
+  const drainerPct = drainer ? pct(drainer) : 0;
+  const noCounterForce = controllerPct < 10 && drainerPct < 10;
+  // 旺神须为日主同党(专旺格日主即旺神);从格另论,此处只判专旺
+  const dmIsDominant = dominant === dmWuxing;
+  const qualifies =
+    (dominantPct >= 50 && noCounterForce && dmIsDominant) ||
+    (patternIsSpecialZhuanwang && dmIsDominant);
+  const nearMiss = !qualifies && dmIsDominant && dominantPct >= 42;
+  let note: string;
+  if (qualifies) {
+    note = `${dominant}势独旺(${dominantPct}%)且反力薄弱,宜顺势:喜${dominant}及生${dominant}之${generatorOf(dominant)},忌克${dominant}之${controller}`;
+  } else if (nearMiss) {
+    note = `${dominant}偏旺(${dominantPct}%)但未达专旺门槛(需≥50%且克/泄反力<10%,当前克${controllerPct}%泄${drainerPct}%)——此类盘正是扶抑派与专旺派分歧高发区,以扶抑+调候为主`;
+  } else {
+    note = `无一行成专旺之势(最旺${dominant}仅${dominantPct}%),按常规格局取用`;
+  }
+  return {
+    dominantWuxing: dominant,
+    dominantPct,
+    controllerPct,
+    drainerPct,
+    qualifies,
+    nearMiss,
+    favorableWuxing: qualifies ? [dominant, generatorOf(dominant)].filter(Boolean) : [],
+    unfavorableWuxing: qualifies ? [controller].filter(Boolean) : [],
+    note,
+  };
+}
+
 export function determineUsefulGod(
   strengthStatus: string,
   pattern: PatternAnalysis,
@@ -337,6 +434,7 @@ export function determineUsefulGod(
   unfavorableWuxing: string[];
   strategyTrace: string[];
   primaryReason: string;
+  schools: UsefulGodSchools;
 } {
   assertWuxing(dmWuxing, '日主');
   if (monthBranch) assertEarthlyBranch(monthBranch, '月支');
@@ -346,6 +444,8 @@ export function determineUsefulGod(
 
   const isPatternSpecial = pattern.isSpecial;
   const baseState = buildBaseDecisionState(strengthStatus, pattern, dmWuxing);
+  // 在任何调整发生前快照扶抑派结论(downstream 可能原地修改 state)
+  const fuyiFavorable = [...baseState.favorableWuxing];
   const yearStem = climateContext?.yearStem;
   const hourBranch = climateContext?.hourBranch;
   const currentJieqi = climateContext?.currentJieqi;
@@ -488,15 +588,60 @@ export function determineUsefulGod(
     therapeuticDecision.state.matchedRuleIds.push(therapeuticHintRuleId);
   }
 
-  return finalizeUsefulGodAnalysis(
-    {
-      ...therapeuticDecision.state,
-      trace: [
-        ...therapeuticDecision.state.trace,
-        ...(therapeuticHint ? [`病药提示:${therapeuticHint}`] : []),
-        `最终取用:${therapeuticDecision.state.favorableWuxing.join(' -> ')}`,
-      ],
-    },
+  const zhuanwang = detectZhuanwang(
     dmWuxing,
+    wuxingCounts,
+    isPatternSpecial && pattern.pattern === '专旺格',
   );
+  const bingyaoApplied = therapeuticDecision.adjusted || Boolean(therapeuticPriorityWuxing);
+  const bingyao = {
+    applied: bingyaoApplied,
+    primary: therapeuticPriorityWuxing || fuyiFavorable[0] || '',
+    hint: therapeuticHint || '',
+  };
+
+  // 共识:各"适用"流派的首选五行若全部一致 → 高信心
+  const schoolPrimaries = [
+    fuyiFavorable[0],
+    climateDecision.adjusted ? climateUsefulWuxing : undefined,
+    bingyaoApplied ? bingyao.primary : undefined,
+    zhuanwang.qualifies ? zhuanwang.favorableWuxing[0] : undefined,
+  ].filter((x): x is string => Boolean(x));
+  const consensus =
+    schoolPrimaries.length >= 2 && schoolPrimaries.every((p) => p === schoolPrimaries[0])
+      ? schoolPrimaries[0]
+      : null;
+
+  const schools: UsefulGodSchools = {
+    fuyi: { favorableWuxing: fuyiFavorable, primary: fuyiFavorable[0] ?? '' },
+    tiaohou: {
+      applied: climateDecision.adjusted,
+      favorableWuxing: climateFavorableOrder,
+      primary: climateUsefulWuxing || '',
+    },
+    bingyao,
+    zhuanwang,
+    diverged: Boolean(
+      climateDecision.adjusted &&
+      fuyiFavorable[0] &&
+      climateFavorableOrder[0] &&
+      fuyiFavorable[0] !== climateFavorableOrder[0],
+    ),
+    consensus,
+  };
+
+  return {
+    ...finalizeUsefulGodAnalysis(
+      {
+        ...therapeuticDecision.state,
+        trace: [
+          ...therapeuticDecision.state.trace,
+          ...(therapeuticHint ? [`病药提示:${therapeuticHint}`] : []),
+          `最终取用:${therapeuticDecision.state.favorableWuxing.join(' -> ')}`,
+        ],
+      },
+      dmWuxing,
+    ),
+    schools,
+  };
 }

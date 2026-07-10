@@ -1,4 +1,4 @@
-import { SolarTime, Gender, LunarHour } from 'tyme4ts';
+import { SolarTime, Gender, LunarHour, LunarSect2EightCharProvider } from 'tyme4ts';
 import { TIME_MAP } from './baziDefinitions';
 import { calculateTrueSolarTime } from './trueSolarTime';
 import { checkChinaDst, isDateInChinaDstRange } from './chinaDst';
@@ -41,6 +41,7 @@ import {
   TimeInfo,
   Pillars,
   BaziChartResult,
+  BaziPillarsLite,
   InternalBaziChartResult,
   LiunianInfo,
   TimingInfo,
@@ -52,6 +53,19 @@ import { calculateMingGua } from './mingGua';
 
 type SolarTimeInstance = ReturnType<typeof SolarTime.fromYmdHms>;
 type LunarHourInstance = ReturnType<SolarTimeInstance['getLunarHour']>;
+type EightCharInstance = ReturnType<LunarHourInstance['getEightChar']>;
+
+interface ChartBase {
+  solarTime: SolarTimeInstance;
+  lunarHour: LunarHourInstance;
+  eightChar: EightCharInstance;
+  pillars: Pillars;
+  timing: TimingInfo | undefined;
+  warnings: string[];
+  finalTimeInfo: TimeInfo;
+  /** 命卦年(上游新增:以立春界年柱推的年份,供 calculateMingGua 使用) */
+  mingGuaYear: number;
+}
 
 function getMidYearPillarName(year: number): string {
   return SolarTime.fromYmdHms(year, 6, 1, 12, 0, 0)
@@ -114,16 +128,15 @@ export class BaziCalculator {
   }
 
   /**
-   * 计算核心八字数据（同步）
+   * 解析盘面基础上下文：输入校验 → 历法/夏令时/真太阳时处理 → 四柱
+   * （不含大运/流年等重计算）
    */
-  public calculateCoreBazi(person: Person): InternalBaziChartResult {
+  private resolveChartBase(person: Person): ChartBase {
     const {
       year,
       month,
       day,
       timeIndex,
-      gender,
-      age,
       isLunar,
       isLeapMonth,
       useTrueSolarTime,
@@ -145,7 +158,7 @@ export class BaziCalculator {
       throw new Error('applyChinaDst 必须是布尔值。');
     }
 
-    assertBaziGender(gender);
+    assertBaziGender(person.gender);
 
     const useTrueSolarTimeEnabled = useTrueSolarTime === true;
     const isLunarEnabled = isLunar === true;
@@ -183,8 +196,8 @@ export class BaziCalculator {
     ) {
       throw new Error('出生经度需在 -180 到 180 之间。');
     }
-    if (!Number.isInteger(year) || year < 1900 || year > 2100) {
-      throw new Error('出生年份需在 1900-2100 之间。');
+    if (!Number.isInteger(year) || year < 1600 || year > 2100) {
+      throw new Error('出生年份需在 1600-2100 之间。');
     }
     if (!Number.isInteger(month) || month < 1 || month > 12) {
       throw new Error('出生月份需在 1-12 之间。');
@@ -222,8 +235,22 @@ export class BaziCalculator {
       lunarHour = solarTime.getLunarHour();
     }
 
-    const applyChinaDst = person.applyChinaDst !== false;
+    const utcOffset = person.utcOffset ?? 8;
+    if (!Number.isFinite(utcOffset) || utcOffset < -12 || utcOffset > 14) {
+      throw new Error('utcOffset 需在 -12 到 14 之间。');
+    }
+    // 中国夏令时仅适用于东八区钟表时间
+    const applyChinaDst = person.applyChinaDst !== false && utcOffset === 8;
     const warnings: string[] = [];
+    if (
+      useTrueSolarTimeEnabled &&
+      typeof birthLongitude === 'number' &&
+      Math.abs(birthLongitude - utcOffset * 15) > 30
+    ) {
+      warnings.push(
+        `出生经度 ${birthLongitude}° 与时区标准经线 ${utcOffset * 15}°(UTC${utcOffset >= 0 ? '+' : ''}${utcOffset})相差超过 30°(2 小时),请确认 utcOffset 是否为出生地实际时区。`,
+      );
+    }
 
     if (useTrueSolarTimeEnabled) {
       const standardTime = {
@@ -283,7 +310,7 @@ export class BaziCalculator {
         }
       }
 
-      const trueSolarResult = calculateTrueSolarTime(dstInput, birthLongitude!);
+      const trueSolarResult = calculateTrueSolarTime(dstInput, birthLongitude!, utcOffset * 15);
 
       solarTime = SolarTime.fromYmdHms(
         trueSolarResult.correctedTime.year,
@@ -327,7 +354,20 @@ export class BaziCalculator {
       );
     }
 
-    const eightChar = lunarHour.getEightChar();
+    // 晚子时流派：'next-day'（默认，子初 23:00 换日）或 'same-day'（晚子时日柱算当天）
+    // tyme4ts 通过 LunarHour.provider 全局静态切换，此处换用后立即还原,避免泄漏状态
+    let eightChar: EightCharInstance;
+    if (person.lateZiRule === 'same-day') {
+      const prevProvider = LunarHour.provider;
+      LunarHour.provider = new LunarSect2EightCharProvider();
+      try {
+        eightChar = lunarHour.getEightChar();
+      } finally {
+        LunarHour.provider = prevProvider;
+      }
+    } else {
+      eightChar = lunarHour.getEightChar();
+    }
 
     const yearColumn = eightChar.getYear();
     const monthColumn = eightChar.getMonth();
@@ -361,6 +401,67 @@ export class BaziCalculator {
       ? this.getTimeInfoFromClock(timing.correctedTime.hour, timing.correctedTime.minute)
       : selectedTimeInfo!;
 
+    return {
+      solarTime,
+      lunarHour,
+      eightChar,
+      pillars,
+      timing,
+      warnings,
+      finalTimeInfo,
+      mingGuaYear,
+    };
+  }
+
+  /**
+   * 轻量排盘：只算四柱与基础信息，跳过大运/流年等重计算。
+   * 单次约 <1ms（完整 calculateCoreBazi 约 45ms），适合批量校验、差分测试与只需盘面的调用方。
+   */
+  public calculatePillars(person: Person): BaziPillarsLite {
+    const { solarTime, lunarHour, pillars, timing, warnings, finalTimeInfo } =
+      this.resolveChartBase(person);
+    const dayMasterGan = pillars.day.gan;
+    return {
+      solarDate: {
+        year: solarTime.getSolarDay().getYear(),
+        month: solarTime.getSolarDay().getMonth(),
+        day: solarTime.getSolarDay().getDay(),
+      },
+      lunarDate: {
+        year: lunarHour.getLunarDay().getLunarMonth().getLunarYear().getYear(),
+        month: lunarHour.getLunarDay().getLunarMonth().getMonth(),
+        day: lunarHour.getLunarDay().getDay(),
+        monthName: lunarHour.getLunarDay().getLunarMonth().getName(),
+        dayName: lunarHour.getLunarDay().getName(),
+      },
+      pillars,
+      dayMaster: {
+        gan: dayMasterGan,
+        element: getWuxingUtil(dayMasterGan),
+        yinYang: getGanYinYang(dayMasterGan),
+      },
+      timeInfo: finalTimeInfo,
+      timing,
+      warnings,
+    };
+  }
+
+  /**
+   * 计算核心八字数据（同步）
+   */
+  public calculateCoreBazi(person: Person): InternalBaziChartResult {
+    const { gender, age } = person;
+    const {
+      solarTime,
+      lunarHour,
+      eightChar,
+      pillars,
+      timing,
+      warnings,
+      finalTimeInfo,
+      mingGuaYear,
+    } = this.resolveChartBase(person);
+
     const dayMasterGan = pillars.day.gan;
     const genderEnum = gender === 'male' ? Gender.MAN : Gender.WOMAN;
     const luckInfo = this.luckCalculator.calculateLuckInfo(solarTime, genderEnum, dayMasterGan);
@@ -389,6 +490,8 @@ export class BaziCalculator {
         element: getWuxingUtil(dayMasterGan),
         yinYang: getGanYinYang(dayMasterGan),
       },
+      // 生肖按农历年(春节为界)取——这是民俗主流口径;注意与年柱(立春为界)口径不同,
+      // 立春~春节之间出生者两者会"错位",属有意双口径,详见 docs/paipan-notes.md
       zodiac: lunarHour
         .getLunarDay()
         .getLunarMonth()
@@ -564,9 +667,15 @@ export class BaziCalculator {
       wuxingSeasonStatus: getSeasonStatus(pillars.month.zhi),
       monthCommander,
       seasonInfo,
-      analysis: this.analyzer.analyzeBaziChart(pillars, hiddenStems, monthCommander, {
-        currentJieqi: seasonInfo.currentJieqi,
-      }),
+      analysis: this.analyzer.analyzeBaziChart(
+        pillars,
+        hiddenStems,
+        monthCommander,
+        {
+          currentJieqi: seasonInfo.currentJieqi,
+        },
+        person.strengthModel,
+      ),
     };
   }
 

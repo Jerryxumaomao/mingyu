@@ -264,8 +264,8 @@ test('八字核心计算应先拒绝无效出生日期', () => {
     useTrueSolarTime: false,
   };
   const invalidCases: Array<[Partial<typeof baseInput>, RegExp]> = [
-    [{ year: 0 }, /出生年份需在 1900-2100 之间/],
-    [{ year: 9999 }, /出生年份需在 1900-2100 之间/],
+    [{ year: 0 }, /出生年份需在 1600-2100 之间/],
+    [{ year: 9999 }, /出生年份需在 1600-2100 之间/],
     [{ month: 13 }, /出生月份需在 1-12 之间/],
     [{ day: 31, month: 2, year: 2026 }, /日期需在 1-28 之间/],
     [{ day: 31, month: 1, isLunar: true }, /农历日期需在 1-30 之间/],

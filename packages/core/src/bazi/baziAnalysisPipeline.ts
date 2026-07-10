@@ -12,7 +12,11 @@ import type {
   Wuxing,
 } from './baziTypes';
 import { WUXING } from './baziTypes';
-import type { FormationAnalysis, SeasonalStatusAnalysis } from './baziStrengthAnalyzer';
+import type {
+  FormationAnalysis,
+  SeasonalStatusAnalysis,
+  StrengthModel,
+} from './baziStrengthAnalyzer';
 import { collectCompleteBranchFormations } from './baziFormationUtils';
 import type { HiddenStemSource, VisibleStemSource } from './baziRuleMatcher';
 import { assertHeavenlyStem, assertPillars } from './baziUtils';
@@ -57,6 +61,7 @@ export interface BaziAnalysisPipelineDeps {
     rootAnalysis: RootAnalysis,
     supportAnalysis: SupportAnalysis,
     constraintAnalysis: ConstraintAnalysis,
+    model?: StrengthModel,
   ) => DayMasterStrengthAnalysis;
   determinePattern: (
     pillars: Pillars,
@@ -90,6 +95,7 @@ export interface BaziAnalysisPipelineInput {
   hiddenStems: HiddenStems;
   monthCommander?: string;
   seasonInfo?: Pick<SeasonInfo, 'currentJieqi'>;
+  strengthModel?: StrengthModel;
 }
 
 interface BaziAnalysisPipelineState {
@@ -234,6 +240,7 @@ function buildPipelineState(
     rootAnalysis,
     supportAnalysis,
     constraintAnalysis,
+    input.strengthModel,
   );
   const pattern = deps.determinePattern(
     pillars,

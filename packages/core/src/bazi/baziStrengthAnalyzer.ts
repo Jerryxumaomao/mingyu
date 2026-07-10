@@ -226,41 +226,49 @@ export function analyzeConstraint(
     totalStrength += strength;
   };
 
+  /**
+   * 克泄耗类别权重(与天干/地支位置无关):
+   * 官杀 = drainWeight + 0.4 > 财 = drainWeight > 食伤 = outputWeight。
+   * 透出(天干/地支本气)取 (1, 1.2),藏干减半取 (0.5, 0.6);
+   * 官杀的 +0.4 为固定加成,藏干不随之减半——数值沿袭原实现,待命例回归校准。
+   */
   const resolveConstraintStrength = (
     wuxing: Wuxing | undefined,
-    stemStrength: number,
-    branchStrength: number,
+    outputWeight: number,
+    drainWeight: number,
   ) => {
     if (!wuxing) {
       return 0;
     }
 
     if (wuxing === officerElement) {
-      return branchStrength + 0.4;
+      return drainWeight + 0.4;
     }
 
     if (wuxing === wealthElement) {
-      return branchStrength;
+      return drainWeight;
     }
 
     if (wuxing === generatedElement) {
-      return stemStrength;
+      return outputWeight;
     }
 
     return 0;
   };
+  const VISIBLE_WEIGHTS: [number, number] = [1, 1.2];
+  const HIDDEN_WEIGHTS: [number, number] = [0.5, 0.6];
 
   Object.entries(pillars).forEach(([position, pillar]) => {
     if (position !== 'day') {
       const stemWuxing = resolveWuxing(getWuxing, pillar.gan, `${position}柱天干`);
-      const stemStrength = resolveConstraintStrength(stemWuxing, 1, 1.2);
+      const stemStrength = resolveConstraintStrength(stemWuxing, ...VISIBLE_WEIGHTS);
       if (stemStrength > 0) {
         addConstraint(position, pillar.gan, stemStrength);
       }
     }
 
     const branchWuxing = resolveWuxing(getWuxing, pillar.zhi, `${position}柱地支`);
-    const branchStrength = resolveConstraintStrength(branchWuxing, 1, 1.2);
+    const branchStrength = resolveConstraintStrength(branchWuxing, ...VISIBLE_WEIGHTS);
     if (branchStrength > 0) {
       addConstraint(position, pillar.zhi, branchStrength);
     }
@@ -270,7 +278,7 @@ export function analyzeConstraint(
       if (index === 0 && branchStrength > 0 && hiddenWuxing === branchWuxing) {
         return;
       }
-      const hiddenStrength = resolveConstraintStrength(hiddenWuxing, 0.5, 0.6);
+      const hiddenStrength = resolveConstraintStrength(hiddenWuxing, ...HIDDEN_WEIGHTS);
       if (hiddenStrength > 0) {
         addConstraint(position, `${pillar.zhi}(${stem})`, hiddenStrength);
       }
@@ -405,12 +413,22 @@ export function analyzeFormation(
   };
 }
 
+/**
+ * 强弱分档模型:
+ * - legacy:沿袭原始阈值(6/4/2.5/1),保持既有行为
+ * - classic-calibrated:按《滴天髓阐微》61 例古籍命例校准后的阈值
+ *   (三分类网格扫描:强≥0 / 弱≤-2.5,吻合度 74%→80%;评分本身
+ *   存在约 -4 分的系统性偏移,见 scripts/calibrate-strength.mjs)
+ */
+export type StrengthModel = 'legacy' | 'classic-calibrated';
+
 export function analyzeDayMasterStrength(
   seasonalStatus: SeasonalStatusAnalysis,
   formationAnalysis: FormationAnalysis,
   rootAnalysis: RootAnalysis,
   supportAnalysis: SupportAnalysis,
   constraintAnalysis: ConstraintAnalysis,
+  model: StrengthModel = 'legacy',
 ): DayMasterStrengthAnalysis {
   const seasonalBaseScore = seasonalStatus.baseScore ?? seasonalStatus.score;
   const commanderScore = seasonalStatus.commanderScore ?? 0;
@@ -429,10 +447,17 @@ export function analyzeDayMasterStrength(
   );
 
   let status = '中和';
-  if (score >= 6) status = '身强';
-  if (score >= 4 && score < 6) status = '偏强';
-  if (score > 1 && score <= 2.5) status = '偏弱';
-  if (score <= 1) status = '身弱';
+  if (model === 'classic-calibrated') {
+    if (score >= 2.5) status = '身强';
+    if (score >= 0 && score < 2.5) status = '偏强';
+    if (score > -2.5 && score <= -1.5) status = '偏弱';
+    if (score <= -2.5) status = '身弱';
+  } else {
+    if (score >= 6) status = '身强';
+    if (score >= 4 && score < 6) status = '偏强';
+    if (score > 1 && score <= 2.5) status = '偏弱';
+    if (score <= 1) status = '身弱';
+  }
   if (
     rootAnalysis.strongRoot &&
     seasonalTotalScore >= 2 &&

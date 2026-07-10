@@ -32,6 +32,24 @@ export interface Person {
    * 仅时辰精度时只输出提示不做校正。
    */
   applyChinaDst?: boolean;
+  /**
+   * 晚子时（23:00-24:00）日柱归属流派：
+   * 'next-day'（默认）— 子初换日，晚子时日柱算次日；
+   * 'same-day' — 晚子时日柱算当天，时柱天干仍按次日日干起子时。
+   */
+  lateZiRule?: 'next-day' | 'same-day';
+  /**
+   * 出生地时区（小时,东为正,支持半时区如 5.5）。默认 8(北京时间)。
+   * 真太阳时模式下用于确定标准经线(utcOffset×15°);
+   * 非东八区时自动跳过中国夏令时校正。
+   */
+  utcOffset?: number;
+  /**
+   * 日主强弱分档模型:'legacy'(默认,原始阈值)|
+   * 'classic-calibrated'(按《滴天髓阐微》61 例古籍命例校准的阈值)。
+   * 评分本身不变,只影响强弱状态分档及依赖它的扶抑取用。
+   */
+  strengthModel?: 'legacy' | 'classic-calibrated';
 }
 
 export interface TimeInfo {
@@ -58,6 +76,25 @@ export interface DayMaster {
   gan: string;
   element: string;
   yinYang: string;
+}
+
+/**
+ * calculatePillars 的轻量返回：仅盘面与基础信息，无大运/流年/神煞等重计算
+ */
+export interface BaziPillarsLite {
+  solarDate: { year: number; month: number; day: number };
+  lunarDate: {
+    year: number;
+    month: number;
+    day: number;
+    monthName: string;
+    dayName: string;
+  };
+  pillars: Pillars;
+  dayMaster: DayMaster;
+  timeInfo: TimeInfo;
+  timing?: TimingInfo;
+  warnings: string[];
 }
 
 export interface HiddenStems {

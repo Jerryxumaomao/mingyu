@@ -156,7 +156,7 @@ test('真太阳时计算应拒绝无效日期和时空参数', () => {
     minute: 20,
   };
   const invalidCases: Array<[Parameters<typeof calculateTrueSolarTime>[0], number, RegExp]> = [
-    [{ ...baseTime, year: 1899 }, 73.5, /年份需在 1900-2100 之间/],
+    [{ ...baseTime, year: 1599 }, 73.5, /年份需在 1600-2100 之间/],
     [{ ...baseTime, month: 13 }, 73.5, /月份需在 1-12 之间/],
     [{ ...baseTime, day: 31 }, 73.5, /日期需在 1-28 之间/],
     [{ ...baseTime, hour: 24 }, 73.5, /小时需在 0-23 之间/],

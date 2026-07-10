@@ -45,8 +45,8 @@ function isLeapYear(year: number): boolean {
 }
 
 function assertSolarYear(year: number): void {
-  if (!Number.isInteger(year) || year < 1900 || year > 2100) {
-    throw new Error('年份需在 1900-2100 之间。');
+  if (!Number.isInteger(year) || year < 1600 || year > 2100) {
+    throw new Error('年份需在 1600-2100 之间。');
   }
 }
 

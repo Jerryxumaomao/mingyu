@@ -51,8 +51,10 @@ function parseOffsetMinutes(offsetText: string) {
 }
 
 export function daysInSolarMonth(year: number, month: number) {
-  if (!Number.isInteger(year) || year < 1900 || year > 2100) {
-    throw new Error('年份需在 1900-2100 之间。');
+  // 下限 1600:tyme4ts 天文算法覆盖更早年代,1600 起避开 1582 儒略/格里历切换,
+  // 同时支持古籍命例(明清)四柱反查。1900 前数据未与万年历权威源逐日核对,谨慎使用。
+  if (!Number.isInteger(year) || year < 1600 || year > 2100) {
+    throw new Error('年份需在 1600-2100 之间。');
   }
   if (!Number.isInteger(month) || month < 1 || month > 12) {
     throw new Error('月份需在 1-12 之间。');
@@ -74,8 +76,9 @@ export function getBirthDateValidationMessage(params: {
   if (params.isLeapMonth !== undefined && typeof params.isLeapMonth !== 'boolean') {
     return '闰月标志必须是布尔值。';
   }
-  if (!Number.isInteger(params.year) || params.year < 1900 || params.year > 2100) {
-    return '年份需在 1900-2100 之间。';
+  // 下限 1600:支持古籍命例反查(见 daysInSolarMonth 注释)
+  if (!Number.isInteger(params.year) || params.year < 1600 || params.year > 2100) {
+    return '年份需在 1600-2100 之间。';
   }
   if (!Number.isInteger(params.month) || params.month < 1 || params.month > 12) {
     return '月份需在 1-12 之间。';

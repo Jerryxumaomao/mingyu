@@ -8,6 +8,7 @@ import {
   analyzeSeasonalStatus,
   analyzeDayMasterStrength,
 } from './baziStrengthAnalyzer';
+import type { StrengthModel } from './baziStrengthAnalyzer';
 import { determinePattern } from './baziPatternStrategy';
 import { determineUsefulGod } from './baziUsefulGodStrategy';
 import { createBaziAnalysisPipeline } from './baziAnalysisPipeline';
@@ -46,12 +47,14 @@ export class BaziAnalyzer {
     hiddenStems: HiddenStems,
     monthCommander?: string,
     seasonInfo?: Pick<SeasonInfo, 'currentJieqi'>,
+    strengthModel?: StrengthModel,
   ): BaziAnalysisResult {
     return this.pipeline.run({
       pillars,
       hiddenStems,
       monthCommander,
       seasonInfo,
+      strengthModel,
     });
   }
 }

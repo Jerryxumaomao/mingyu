@@ -3,6 +3,17 @@
  */
 export { baziCalculator, BaziCalculator } from './baziCalculator';
 export { formatBaziForPrompt } from './baziAnalysisFormatter';
+export { recommendOutfit, WUXING_IMAGERY } from './outfitAdvisor';
+export type { OutfitInput, OutfitAdvice } from './outfitAdvisor';
+export { analyzeLiunianInteractions } from './liunianInteractions';
+export type { LiunianInteraction, LiunianInteractionInput } from './liunianInteractions';
+export type { UsefulGodSchools } from './baziUsefulGodStrategy';
+export { calculateLifeKline } from './lifeKline';
+export type { KlineYear, LifeKlineResult } from './lifeKline';
+export { calculateHehun } from './hehun';
+export type { HehunResult, HehunRule } from './hehun';
+export { CHINA_CITIES, lookupCity } from '../data/chinaCities';
+export type { CityCoord } from '../data/chinaCities';
 export { generateEnhancedAnalysisSection } from './baziPromptEnhancement';
 export { buildFortuneSelectionContext, normalizeFortuneSelection } from './fortuneSelection/index';
 export type { BaziFortuneSelectionValue, FortuneSelectionContext } from './fortuneSelection/index';
