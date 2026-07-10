@@ -126,6 +126,15 @@ cp miniprogram/lib/mingyu.js $TEMP/v.cjs && node -e "console.log(Object.keys(req
 ```
 微信开发者工具导入 miniprogram/ 目录预览;页面只许依赖 lib/mingyu.js + app.wxss。
 
+### 开运卡视频(小红书内容管线)
+```bash
+node scripts/render-daily-card.mjs 明天 7   # 引擎算流日 → hyperframes 渲 7 天带 alpha 的 MOV
+```
+组合在 `D:/Claude/Tools/hyperframes-studio/wuxing-daily/`(工具目录,不入本仓库);
+渲染环境、浏览器路径、抽帧验收陷阱(勿用 -ss,按帧号 select)见该目录上级 README.md。
+**定位注意**:hyperframes 是"HTML+GSAP → 视频"的内容管线,不是运行时库——
+小程序内的交互动效用 WXSS/canvas(已内置动效库),两者互补不互替。
+
 ### 强弱校准相关
 ```bash
 node scripts/calibrate-strength.mjs      # 报告两模型吻合度 + 阈值网格

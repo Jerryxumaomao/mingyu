@@ -13,6 +13,7 @@ pnpm test                                                # 全量测试(约 60s,
 node scripts/differential-test.mjs                       # 双引擎差分(期望"✅ 完全一致")
 node scripts/build-dashboard.mjs                         # 重打包看板站 bundle
 node scripts/daily-outfit.mjs 明天                        # 用户的每日穿搭
+node scripts/render-daily-card.mjs 明天 [N天]             # 渲五行开运卡视频(小红书素材)
 ```
 
 ## 目录责任
