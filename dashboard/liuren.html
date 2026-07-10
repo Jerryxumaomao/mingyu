@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小六壬起卦 · 命语</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><header></header>
+<main>
+  <h1>小六壬起卦</h1><p class="sub">《玉匣记》体系 · 大安/留连/速喜/赤口/小吉/空亡 三宫连断</p>
+  <div class="card">
+    <label>起课方式</label>
+    <select id="method" onchange="$('#numrow').style.display = this.value === 'number' ? '' : 'none'">
+      <option value="time">时间起课(以当下时刻)</option>
+      <option value="number">报数起课(心中默念所问,报一个数)</option>
+      <option value="random">随机起课</option>
+    </select>
+    <div id="numrow" style="display:none"><label>你的数字</label><input id="num" type="number" placeholder="任意正整数,如 37"></div>
+    <label>所问之事(可选,仅用于记录)</label><input id="q" placeholder="如:这周的合作能谈成吗">
+  </div>
+  <button class="go" onclick="run()">起 卦</button>
+  <div id="out"></div>
+</main>
+<footer>占卜结果仅供参考娱乐 · 命运从来不是定数,而是方向</footer>
+<script src="assets/mingyu.js"></script><script src="assets/common.js"></script>
+<script>
+document.querySelector('header').innerHTML = headerHTML('liuren');
+const FCOL = { 吉: 'good', 凶: 'bad' };
+function palaceHTML(title, p) {
+  return `<div class="p" style="padding:14px 10px"><span>${title}</span><b>${p.name}</b>
+  <div style="font-size:12px;color:var(--muted)">${p.element}·${p.shenSha}·<span class="${FCOL[p.fortune] || ''}">${p.fortune}</span></div></div>`;
+}
+function run() {
+  const method = $('#method').value;
+  const params = { method };
+  if (method === 'number') {
+    const n = parseInt($('#num').value, 10);
+    if (!n || n <= 0) { $('#out').innerHTML = '<div class="card bad">报数起课请输入正整数</div>'; return; }
+    params.number = n;
+  }
+  let r;
+  try { r = MY.generateXiaoliuren(params); }
+  catch (e) { $('#out').innerHTML = `<div class="card bad">${e.message}</div>`; return; }
+  const q = $('#q').value.trim();
+  const seq = r.sequence;
+  $('#out').innerHTML = `
+  <div class="card">
+    ${q ? `<div class="muted">所问:${q}</div>` : ''}
+    <div class="muted">${r.methodLabel} · 农历${r.lunarMonth}月${r.lunarDay}日 ${r.hourLabel}</div>
+    <div class="pillars" style="margin-top:12px">
+      ${palaceHTML('天时(起)', seq.start)}${palaceHTML('人事(中)', seq.process)}${palaceHTML('结果(末)', seq.result)}
+    </div>
+    <div style="margin-top:10px"><b style="color:var(--gold)">断语</b>
+      <div>起:${seq.start.meaning}</div>
+      <div>中:${seq.process.meaning}</div>
+      <div>末:${seq.result.meaning}</div>
+      <div style="margin-top:8px" class="muted">建议:${seq.result.advice} 应期:${seq.result.timing} 方位:${seq.result.direction}</div>
+    </div></div>`;
+}
+</script>
+</body></html>

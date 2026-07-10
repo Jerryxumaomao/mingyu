@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/paipan/paipan",
+    "pages/kline/kline",
+    "pages/hehun/hehun",
+    "pages/liuren/liuren",
+    "pages/outfit/outfit"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#14110d",
+    "navigationBarTitleText": "命语",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#14110d"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

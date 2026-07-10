@@ -1,0 +1,13 @@
+{
+  "year": 1990,
+  "month": 1,
+  "day": 1,
+  "timeIndex": 6,
+  "gender": "male",
+  "useTrueSolarTime": true,
+  "birthHour": 12,
+  "birthMinute": 0,
+  "birthLongitude": 120,
+  "birthPlace": "示例城市",
+  "utcOffset": 8
+}

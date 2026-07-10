@@ -1,0 +1,7 @@
+page { background: #14110d; color: #ece4d4; font-size: 28rpx; }
+.card { background: #1e1a14; border: 1rpx solid #342d22; border-radius: 20rpx; padding: 28rpx; margin: 20rpx; }
+.gold { color: #d4a94e; }
+.muted { color: #9c917c; font-size: 24rpx; }
+.go { background: #d4a94e; color: #1c150a; border-radius: 16rpx; margin: 20rpx; letter-spacing: 6rpx; }
+input, picker { background: #262019; border: 1rpx solid #342d22; border-radius: 12rpx; padding: 12rpx 16rpx; margin: 8rpx 0; }
+.label { color: #9c917c; font-size: 24rpx; margin-top: 16rpx; }

@@ -1,0 +1,8 @@
+{
+  "appid": "touristappid",
+  "projectname": "mingyu-miniprogram",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "setting": { "es6": true, "minified": true },
+  "libVersion": "latest"
+}

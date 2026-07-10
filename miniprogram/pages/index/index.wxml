@@ -1,0 +1,10 @@
+<view class="card" style="text-align:center;padding:60rpx 28rpx">
+  <view class="gold" style="font-size:48rpx;letter-spacing:16rpx">命 语</view>
+  <view class="muted" style="margin-top:12rpx">tyme4ts 天文历法 · 古籍校准引擎</view>
+</view>
+<navigator url="/pages/paipan/paipan"><view class="card">📜 <text class="gold">八字排盘</text><view class="muted">四柱 · 五行 · 强弱 · 用神</view></view></navigator>
+<navigator url="/pages/kline/kline"><view class="card">📈 <text class="gold">人生K线</text><view class="muted">逐年运势 · 流月K线 · 岁运事件</view></view></navigator>
+<navigator url="/pages/hehun/hehun"><view class="card">💞 <text class="gold">八字合婚</text><view class="muted">日柱鸳鸯合 · 用神互补 · 规则带出处</view></view></navigator>
+<navigator url="/pages/liuren/liuren"><view class="card">🔮 <text class="gold">小六壬起卦</text><view class="muted">报数 / 时间 / 随机 · 三宫连断</view></view></navigator>
+<navigator url="/pages/outfit/outfit"><view class="card">🎨 <text class="gold">五行穿搭</text><view class="muted">喜用神 → 颜色 / 配饰 / 香调</view></view></navigator>
+<view class="muted" style="text-align:center;margin:30rpx">仅供文化研究与娱乐</view>

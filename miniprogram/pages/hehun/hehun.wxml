@@ -1,0 +1,32 @@
+<view class="card">
+  <view class="gold">甲方</view>
+  <picker mode="date" value="{{a.date}}" start="1600-01-01" end="2100-12-31" bindchange="onA"><view>{{a.date}}</view></picker>
+  <view style="display:flex;gap:16rpx">
+    <picker style="flex:1" range="{{times}}" value="{{a.ti}}" data-k="ti" bindchange="onA"><view>{{times[a.ti]}}</view></picker>
+    <picker style="flex:1" range="{{genders}}" value="{{a.gi}}" data-k="gi" bindchange="onA"><view>{{genders[a.gi]}}</view></picker>
+  </view>
+</view>
+<view class="card">
+  <view class="gold">乙方</view>
+  <picker mode="date" value="{{b.date}}" start="1600-01-01" end="2100-12-31" bindchange="onB"><view>{{b.date}}</view></picker>
+  <view style="display:flex;gap:16rpx">
+    <picker style="flex:1" range="{{times}}" value="{{b.ti}}" data-k="ti" bindchange="onB"><view>{{times[b.ti]}}</view></picker>
+    <picker style="flex:1" range="{{genders}}" value="{{b.gi}}" data-k="gi" bindchange="onB"><view>{{genders[b.gi]}}</view></picker>
+  </view>
+</view>
+<button class="go" bindtap="run">开始合婚</button>
+<view wx:if="{{r}}">
+  <view class="card" style="text-align:center">
+    <view class="gold" style="font-size:72rpx">{{r.total}}<text style="font-size:28rpx;color:#9c917c"> /100</text></view>
+    <view class="gold" style="font-size:40rpx;letter-spacing:12rpx">{{r.grade}}</view>
+    <view class="muted">{{r.ap}} × {{r.bp}}</view>
+  </view>
+  <view class="card">
+    <view wx:for="{{r.rules}}" wx:key="id" style="margin-bottom:12rpx">
+      <text class="muted">[{{item.source}}] </text>{{item.name}}
+      <text style="color:{{item.score >= 0 ? '#4ea08f' : '#d1553f'}}"> {{item.score > 0 ? '+' : ''}}{{item.score}}</text>
+      <view class="muted">{{item.detail}}</view>
+    </view>
+  </view>
+</view>
+<view class="muted" style="text-align:center;margin:30rpx">仅供参考娱乐,婚姻幸福取决于双方经营</view>

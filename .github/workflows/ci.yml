@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, p0-paipan-fixes, p1-improvements]
   pull_request:
     branches: [main]
 
@@ -60,3 +60,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter mingyu-core build
       - run: pnpm run build
+
+  differential:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter mingyu-core build
+      - name: Differential test vs taibu-core (lunar-javascript oracle)
+        run: node scripts/differential-test.mjs
+        env:
+          DIFF_SAMPLES: '3000'
+      - name: Property-based paipan invariants
+        run: npx tsx --tsconfig tsconfig.app.json --test "tests/paipan-properties.test.ts"

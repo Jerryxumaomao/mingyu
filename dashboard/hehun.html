@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>八字合婚 · 命语</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><header></header>
+<main>
+  <h1>八字合婚</h1><p class="sub">日柱鸳鸯合 · 夫妻宫刑冲合害 · 用神互补 · 属相/纳音,每条规则标注出处层级</p>
+  <div class="grid"><div id="fa"></div><div id="fb"></div></div>
+  <button class="go" onclick="run()">开始合婚</button>
+  <div id="out"></div>
+</main>
+<footer>合婚为传统文化规则的量化表达,仅供参考娱乐,婚姻幸福取决于双方经营</footer>
+<script src="assets/mingyu.js"></script><script src="assets/common.js"></script>
+<script>
+document.querySelector('header').innerHTML = headerHTML('hehun');
+$('#fa').innerHTML = birthFormHTML('a', '甲方');
+$('#fb').innerHTML = birthFormHTML('b', '乙方');
+$('#b-g').value = 'female'; $('#b-y').value = 1996; $('#b-m').value = 8; $('#b-d').value = 20; $('#b-t').value = 7;
+function run() {
+  let h;
+  try { h = MY.calculateHehun(personFromForm('a'), personFromForm('b')); }
+  catch (e) { $('#out').innerHTML = `<div class="card bad">${e.message}</div>`; return; }
+  const rows = h.rules.map(r =>
+    `<tr><td><span class="pill">${r.source}</span></td><td>${r.name}</td><td class="${r.score >= 0 ? 'good' : 'bad'}">${r.score > 0 ? '+' : ''}${r.score}</td><td class="muted">${r.detail}</td></tr>`).join('');
+  $('#out').innerHTML = `
+  <div class="card" style="text-align:center">
+    <div class="score-big">${h.total}<span style="font-size:18px;color:var(--muted)"> / 100</span></div>
+    <div style="font-size:22px;color:var(--gold);letter-spacing:6px">${h.grade}</div>
+    <div class="muted" style="margin-top:8px">甲 ${h.a.pillars}(日主${h.a.dayMaster}) × 乙 ${h.b.pillars}(日主${h.b.dayMaster})</div></div>
+  <div class="card"><b>逐条明细</b><table><tr><th>出处</th><th>规则</th><th>分</th><th>说明</th></tr>${rows || '<tr><td colspan="4" class="muted">无显著组合,平淡为中</td></tr>'}</table>
+  <p class="disclaimer">${h.disclaimer}</p></div>`;
+}
+</script>
+</body></html>

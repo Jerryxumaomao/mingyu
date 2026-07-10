@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>八字排盘 · 命语</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><header></header>
+<main>
+  <h1>八字排盘</h1><p class="sub">tyme4ts 天文历法 · 支持 1600-2100 · 真太阳时含中国夏令时(1986-91)自动校正</p>
+  <div id="form"></div>
+  <button class="go" onclick="run()">开始排盘</button>
+  <div id="out"></div>
+</main>
+<footer>仅供文化研究与娱乐</footer>
+<script src="assets/mingyu.js"></script><script src="assets/common.js"></script>
+<script>
+document.querySelector('header').innerHTML = headerHTML('paipan');
+$('#form').innerHTML = birthFormHTML('a');
+function run() {
+  const p = personFromForm('a');
+  let r;
+  try { r = MY.baziCalculator.calculateBazi({ ...p, strengthModel: 'classic-calibrated' }); }
+  catch (e) { $('#out').innerHTML = `<div class="card bad">${e.message}</div>`; return; }
+  const s = r.analysis.dayMasterStrength;
+  const ug = r.analysis.usefulGod;
+  const sch = ug.schools || {};
+  const warn = (r.warnings || []).map(w => `<div class="bad">⚠ ${w}</div>`).join('');
+  const dayunRows = (r.luckInfo.cycles || []).slice(0, 9).map(c =>
+    `<tr><td>${c.age}岁</td><td>${c.ganZhi}</td><td>${c.year}</td><td>${c.isXiaoyun ? '小运' : '大运'}</td></tr>`).join('');
+  $('#out').innerHTML = `
+  <div class="card">${pillarsHTML(r.pillars)}
+    <div>日主 <b style="color:var(--gold)">${r.dayMaster.gan}${r.dayMaster.element}</b>(${r.dayMaster.yinYang})
+    · 生肖 ${r.zodiac} · ${r.constellation}座 · 格局 ${r.analysis.mingGe.pattern}</div>
+    ${r.timing?.enabled ? `<div class="muted">真太阳时 ${String(r.timing.correctedTime.hour).padStart(2, '0')}:${String(r.timing.correctedTime.minute).padStart(2, '0')}(校正 ${Math.round(r.timing.totalCorrectionMinutes)} 分钟)</div>` : ''}
+    ${warn}</div>
+  <div class="card"><b>五行 & 强弱</b>
+    <div>${Object.entries(r.wuxingStrength.percentages).map(([k, v]) => `<span class="pill">${k} ${v}%</span>`).join('')}</div>
+    <div style="margin-top:8px">日主强弱:<b style="color:var(--gold)">${s.status}</b>(${s.score} 分,古籍校准模型)</div></div>
+  <div class="card"><b>用神(最终裁决)</b>
+    <div>喜用:${(ug.favorableWuxing || []).map(w => `<span class="pill fav">${w}</span>`).join('')}
+    忌:${(ug.unfavorableWuxing || []).map(w => `<span class="pill bad">${w}</span>`).join('')}</div>
+    <div class="muted" style="margin-top:6px">取用理由:${ug.primaryReason || '-'}
+    ${sch.consensus ? `<br>✅ 四派共识:扶抑/调候/病药首选一致指向 <b style="color:var(--gold)">${sch.consensus}</b>(高信心)` : ''}</div>
+    <div class="muted">${(ug.strategyTrace || []).join(' → ')}</div></div>
+  <div class="card"><b>用神四派对照</b>
+    <div class="muted" style="margin-bottom:8px">同一张盘,四个流派各自的独立判读——分歧不是谁错,是方法论前提不同。日常穿搭以调候为主,重大决策看扶抑+病药,极端命局看专旺。</div>
+    <table><tr><th>流派</th><th>判读</th><th>说明</th></tr>
+      <tr><td>扶抑</td><td class="good">${sch.fuyi.favorableWuxing.join('') || '-'}</td><td class="muted">身强泄身、身弱补身</td></tr>
+      <tr><td>调候</td><td class="good">${sch.tiaohou.applied ? sch.tiaohou.favorableWuxing.join('') : '未触发'}</td><td class="muted">${sch.tiaohou.applied ? '月令寒暖为先' : '本盘无显著寒暖偏颇'}</td></tr>
+      <tr><td>病药</td><td class="good">${sch.bingyao.applied ? sch.bingyao.primary : '无显著病'}</td><td class="muted">${sch.bingyao.hint || '命局无尖锐矛盾'}</td></tr>
+      <tr><td>专旺</td><td class="${sch.zhuanwang.qualifies ? 'good' : sch.zhuanwang.nearMiss ? 'bad' : 'muted'}">${sch.zhuanwang.qualifies ? '顺势:' + sch.zhuanwang.favorableWuxing.join('') : sch.zhuanwang.nearMiss ? '接近专旺(不成格)' : '不成专旺'}</td><td class="muted">${sch.zhuanwang.note}</td></tr>
+    </table></div>
+  <div class="card"><b>大运</b><table><tr><th>起</th><th>干支</th><th>年份</th><th></th></tr>${dayunRows}</table></div>`;
+}
+</script>
+</body></html>

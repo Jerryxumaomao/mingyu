@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>五行穿搭 · 命语</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><header></header>
+<main>
+  <h1>五行穿搭</h1><p class="sub">本命喜用神 × 当日干支 → 颜色 / 配饰 / 香调,含十神与通关提示</p>
+  <div id="form"></div>
+  <div class="row" style="max-width:420px"><div><label>看哪天(默认今天)</label><input id="date" type="date"></div></div>
+  <button class="go" onclick="run()">生成穿搭建议</button>
+  <div id="out"></div>
+</main>
+<footer>五行取象为传统主流口径,仅供风格参考与娱乐</footer>
+<script src="assets/mingyu.js"></script><script src="assets/common.js"></script>
+<script>
+document.querySelector('header').innerHTML = headerHTML('outfit');
+$('#form').innerHTML = birthFormHTML('a');
+function run() {
+  const p = personFromForm('a');
+  const d = $('#date').value ? new Date($('#date').value + 'T12:00:00') : new Date();
+  let chart, day, adv;
+  try {
+    chart = MY.baziCalculator.calculateBazi({ ...p, strengthModel: 'classic-calibrated' });
+    day = MY.baziCalculator.calculatePillars({ year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: p.gender });
+    const ug = chart.analysis.usefulGod;
+    adv = MY.recommendOutfit({
+      favorableWuxing: ug.favorableWuxing || [], unfavorableWuxing: ug.unfavorableWuxing || [],
+      dayGan: day.pillars.day.gan, dayZhi: day.pillars.day.zhi, dayMasterGan: chart.dayMaster.gan,
+    });
+  } catch (e) { $('#out').innerHTML = `<div class="card bad">${e.message}</div>`; return; }
+  const pills = (arr, cls) => arr.map(x => `<span class="pill ${cls || ''}">${x}</span>`).join('');
+  $('#out').innerHTML = `
+  <div class="card"><div class="muted">命盘 ${chart.pillars.year.ganZhi} ${chart.pillars.month.ganZhi} ${chart.pillars.day.ganZhi} ${chart.pillars.hour.ganZhi}
+    · 喜 ${(chart.analysis.usefulGod.favorableWuxing || []).join('')} 忌 ${(chart.analysis.usefulGod.unfavorableWuxing || []).join('')}
+    · 流日 <b style="color:var(--gold)">${day.pillars.day.ganZhi}</b>(${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()})</div></div>
+  <div class="card"><b>🎨 颜色</b>
+    <div>主色:${pills(adv.colors.main, 'fav')}</div>
+    <div>点缀:${pills(adv.colors.accent)}</div>
+    <div>避开:${pills(adv.colors.avoid, 'bad')}</div></div>
+  <div class="card"><b>💍 配饰</b><div>${pills(adv.accessories)}</div></div>
+  <div class="card"><b>🌸 香调</b>
+    <div>宜:${pills(adv.scents.families, 'fav')} <span class="muted">香材:${adv.scents.notes.join('、')}</span></div>
+    <div>避:${pills(adv.scents.avoid, 'bad')}</div></div>
+  <div class="card"><b>📋 当日提示</b>${adv.notes.map(n => `<div>· ${n}</div>`).join('')}
+    ${(day.warnings || []).map(w => `<div class="bad">⚠ ${w}</div>`).join('')}</div>`;
+}
+</script>
+</body></html>
