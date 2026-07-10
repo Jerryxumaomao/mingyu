@@ -8,6 +8,7 @@
   </view>
   <view class="muted" style="letter-spacing:8rpx; margin-top:16rpx">见 微 知 著 · 先 时 而 动</view>
 </view>
+<navigator url="/pages/profile/profile"><view class="card ani-rise d1" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">档</view><view><view style="font-weight:700;letter-spacing:4rpx">{{profTitle}}</view><view class="muted">{{profDesc}}</view></view></view></navigator>
 <navigator url="/pages/paipan/paipan"><view class="card ani-rise d1" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">盘</view><view><view style="font-weight:700;letter-spacing:4rpx">八字排盘</view><view class="muted">四柱 · 强弱 · 用神四派</view></view></view></navigator>
 <navigator url="/pages/kline/kline"><view class="card ani-rise d2" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">运</view><view><view style="font-weight:700;letter-spacing:4rpx">人生K线</view><view class="muted">逐年运势 · 流月K线 · 岁运事件</view></view></view></navigator>
 <navigator url="/pages/hehun/hehun"><view class="card ani-rise d3" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">合</view><view><view style="font-weight:700;letter-spacing:4rpx">八字合婚</view><view class="muted">日柱鸳鸯合 · 用神互补</view></view></view></navigator>

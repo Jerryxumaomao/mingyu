@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/profile/profile",
     "pages/paipan/paipan",
     "pages/kline/kline",
     "pages/hehun/hehun",
