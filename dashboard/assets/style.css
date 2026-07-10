@@ -10,11 +10,11 @@
   --shadow: none;
 }
 html[data-theme="paper"] {
-  --canvas: #faf7f0; --card: #f4eee1; --elevated: #ece3d1;
-  --line: #e2d8c4; --line-strong: #cfc2a8;
-  --gold: #9a7328; --gold-active: #b5892f; --on-gold: #fdfaf3;
-  --cinnabar: #b5432f; --teal: #2e7d6c;
-  --text: #29241b; --muted: #75694f; --faint: #a2966f;
+  --canvas: #f4eddc; --card: #fbf7ec; --elevated: #efe7d3;
+  --line: #e6dcc6; --line-strong: #d5c9b2;
+  --gold: #b5432f; --gold-active: #c9573f; --on-gold: #fbf3e2;
+  --cinnabar: #b5432f; --teal: #3f7050;
+  --text: #33302a; --muted: #8a8272; --faint: #a89a78;
   --shadow: 0 1px 3px rgba(90, 70, 30, .08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }

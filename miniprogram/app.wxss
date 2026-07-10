@@ -1,17 +1,28 @@
-page { background: #14110d; color: #ece4d4; font-size: 28rpx; }
-.card { background: #1e1a14; border: 1rpx solid #342d22; border-radius: 20rpx; padding: 28rpx; margin: 20rpx; }
-.gold { color: #d4a94e; }
-.muted { color: #9c917c; font-size: 24rpx; }
-.go { background: #d4a94e; color: #1c150a; border-radius: 16rpx; margin: 20rpx; letter-spacing: 6rpx; }
-input, picker { background: #262019; border: 1rpx solid #342d22; border-radius: 12rpx; padding: 12rpx 16rpx; margin: 8rpx 0; }
-.label { color: #9c917c; font-size: 24rpx; margin-top: 16rpx; }
+/* 知几 · 宣纸主题(新中式:宣纸白 + 墨字 + 朱砂印) */
+page { background: #f4eddc; color: #33302a; font-size: 28rpx; font-family: "Noto Serif SC", "Songti SC", serif; }
+.card { background: #fbf7ec; border: 1rpx solid #e6dcc6; border-radius: 20rpx; padding: 28rpx; margin: 20rpx; box-shadow: 0 2rpx 10rpx rgba(90, 70, 30, .05); }
+.gold { color: #b5432f; }           /* 强调=朱砂(类名沿用,免全站改名) */
+.ink { color: #33302a; }
+.muted { color: #8a8272; font-size: 24rpx; }
+.go { background: #b5432f; color: #fbf3e2; border-radius: 16rpx; margin: 20rpx; letter-spacing: 6rpx; }
+input, picker { background: #fbf7ec; border: 1rpx solid #e6dcc6; border-radius: 12rpx; padding: 12rpx 16rpx; margin: 8rpx 0; color: #33302a; }
+.label { color: #8a8272; font-size: 24rpx; margin-top: 16rpx; }
+/* 汉字方章图标:描边墨章 / 实底朱砂章 */
+.glyph { width: 80rpx; height: 80rpx; border-radius: 18rpx; border: 4rpx solid #33302a; color: #33302a;
+  display: flex; align-items: center; justify-content: center; font-size: 40rpx; font-weight: 700; flex: none; }
+.glyph.zhu { background: #b5432f; border-color: #b5432f; color: #fbf3e2; }
+/* 印章 */
+.seal { width: 84rpx; height: 84rpx; border-radius: 12rpx; background: #b5432f; color: #fbf3e2;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: 30rpx; font-weight: 700; line-height: 1.15; }
+.vtxt { writing-mode: vertical-rl; letter-spacing: 16rpx; font-weight: 700; }
 
-/* ── 动效库(玄学感:浮入/翻牌/盖章/弹现/呼吸金光)── */
+/* ── 动效库(浮入/翻牌/盖章/弹现/朱砂呼吸)── */
 @keyframes rise { from { opacity: 0; transform: translateY(40rpx); } to { opacity: 1; transform: translateY(0); } }
 @keyframes flipIn { from { opacity: 0; transform: rotateY(85deg) scale(.9); } to { opacity: 1; transform: rotateY(0) scale(1); } }
 @keyframes stamp { 0% { opacity: 0; transform: scale(2) rotate(-16deg); } 55% { opacity: 1; transform: scale(.9) rotate(4deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
 @keyframes popIn { from { opacity: 0; transform: scale(.5); } to { opacity: 1; transform: scale(1); } }
-@keyframes breathe { 0%, 100% { text-shadow: 0 0 8rpx rgba(212, 169, 78, .2); opacity: .92; } 50% { text-shadow: 0 0 30rpx rgba(212, 169, 78, .8); opacity: 1; } }
+@keyframes breathe { 0%, 100% { text-shadow: 0 0 6rpx rgba(181, 67, 47, .15); opacity: .92; } 50% { text-shadow: 0 0 24rpx rgba(181, 67, 47, .5); opacity: 1; } }
 .ani-rise { animation: rise .5s cubic-bezier(.2, .7, .3, 1) both; }
 .ani-flip { animation: flipIn .55s cubic-bezier(.2, .7, .3, 1) both; }
 .ani-stamp { animation: stamp .55s cubic-bezier(.2, .8, .3, 1.1) both; }

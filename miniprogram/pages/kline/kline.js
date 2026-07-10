@@ -43,11 +43,11 @@ Page({
     });
   },
   paint(ctx, width, height, ys, prog) {
-    ctx.fillStyle = '#1e1a14'; ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = '#fbf7ec'; ctx.fillRect(0, 0, width, height);
     const padL = 26, padB = 22, padT = 8;
     const xw = (width - padL - 8) / ys.length;
     const yOf = (v) => padT + ((98 - v) / 96) * (height - padT - padB);
-    ctx.strokeStyle = '#342d22'; ctx.fillStyle = '#9c917c'; ctx.font = '9px sans-serif';
+    ctx.strokeStyle = '#e6dcc6'; ctx.fillStyle = '#8a8272'; ctx.font = '9px sans-serif';
     for (const g of [20, 50, 80]) {
       ctx.beginPath(); ctx.moveTo(padL, yOf(g)); ctx.lineTo(width - 8, yOf(g)); ctx.stroke();
       ctx.fillText(String(g), 4, yOf(g) + 3);
@@ -59,7 +59,7 @@ Page({
       const v = (x) => yr.score + (x - yr.score) * local; // 从年分基线向真实值展开
       const x = padL + i * xw + xw / 2;
       const up = yr.close >= yr.open;
-      const col = up ? '#d1553f' : '#4ea08f';
+      const col = up ? '#b5432f' : '#3f7050';
       ctx.globalAlpha = 0.35 + 0.65 * local;
       ctx.strokeStyle = col; ctx.fillStyle = col;
       ctx.beginPath(); ctx.moveTo(x, yOf(v(yr.high))); ctx.lineTo(x, yOf(v(yr.low))); ctx.stroke();
@@ -68,7 +68,7 @@ Page({
       if (up) ctx.fillRect(x - xw * 0.3, top, xw * 0.6, h);
       else ctx.strokeRect(x - xw * 0.3, top, xw * 0.6, h);
       ctx.globalAlpha = 1;
-      if (i % 8 === 0) { ctx.fillStyle = '#9c917c'; ctx.fillText(String(yr.year), x - 14, height - 8); }
+      if (i % 8 === 0) { ctx.fillStyle = '#8a8272'; ctx.fillText(String(yr.year), x - 14, height - 8); }
     });
   },
 });

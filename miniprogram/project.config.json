@@ -1,6 +1,6 @@
 {
   "appid": "touristappid",
-  "projectname": "mingyu-miniprogram",
+  "projectname": "zhiji-miniprogram",
   "miniprogramRoot": "./",
   "compileType": "miniprogram",
   "setting": { "es6": true, "minified": true },

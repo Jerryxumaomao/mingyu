@@ -52,13 +52,13 @@ function pillarsHTML(pillars) {
 
 function headerHTML(active) {
   const items = [['index', '总览'], ['paipan', '排盘'], ['kline', '人生K线'], ['hehun', '合婚'], ['liuren', '小六壬'], ['outfit', '五行穿搭']];
-  return `<a class="logo" href="index.html">命 语</a><nav>${items
+  return `<a class="logo" href="index.html">知 几</a><nav>${items
     .map(([f, n]) => `<a href="${f}.html" class="${f === active ? 'on' : ''}">${n}</a>`).join('')}</nav>
   <button class="theme-btn" onclick="toggleTheme()">${currentTheme() === 'paper' ? '🌙 水墨' : '📜 宣纸'}</button>`;
 }
 
 /* 主题:水墨(默认暗)/ 宣纸(亮,古籍气质),localStorage 记忆 */
-function currentTheme() { try { return localStorage.getItem('my-theme') || 'ink'; } catch { return 'ink'; } }
+function currentTheme() { try { return localStorage.getItem('my-theme') || 'paper'; } catch { return 'paper'; } }
 function applyTheme() {
   if (currentTheme() === 'paper') document.documentElement.setAttribute('data-theme', 'paper');
   else document.documentElement.removeAttribute('data-theme');

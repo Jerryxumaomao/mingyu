@@ -8,10 +8,10 @@
     "pages/outfit/outfit"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#14110d",
-    "navigationBarTitleText": "命语",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#14110d"
+    "navigationBarBackgroundColor": "#f4eddc",
+    "navigationBarTitleText": "知几",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f4eddc"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
