@@ -1,4 +1,39 @@
-<view class="card">
+<view wx:if="{{r}}">
+  <view class="card ani-rise">
+    <view style="display:flex; justify-content:space-between; align-items:center">
+      <view class="muted">喜 {{r.fav}} 忌 {{r.unf}} · 流日 <text class="gold">{{r.dayGz}}</text> · {{target}}</view>
+      <view class="en" style="flex:none; margin-left:12rpx">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}}</view>
+    </view>
+  </view>
+  <view class="card ani-rise d1"><view class="gold cardtitle" style="font-size:31rpx">🎨 颜色</view>
+    <view style="margin-top:8rpx">主色:{{r.main}}</view><view class="muted">点缀:{{r.accent}}</view><view style="color:#b5432f">避开:{{r.avoid}}</view></view>
+
+  <view class="card ani-rise d2" wx:if="{{owned && !owned.empty}}">
+    <view class="gold cardtitle" style="font-size:31rpx">👝 你的衣橱适配</view>
+    <view wx:if="{{owned.mats.length}}" style="margin-top:8rpx">今天戴:{{owned.mats}}</view>
+    <view wx:if="{{owned.perfumes.length}}" style="margin-top:4rpx">今天喷:<view wx:for="{{owned.perfumes}}" wx:key="index" style="margin-left:8rpx">· {{item}}</view></view>
+    <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:8rpx">你已有的配饰香水与今日喜用暂无重合,参考下方通用推荐</view>
+    <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:12rpx">管理我的衣橱 ›</view>
+  </view>
+  <view class="card ani-rise d2" wx:elif="{{isSelf}}" hover-class="btn-press" bindtap="goWardrobe">
+    <view class="gold cardtitle" style="font-size:31rpx">👝 登记我的衣橱</view>
+    <view class="muted" style="margin-top:8rpx">勾选你已有的配饰材质、搜索添加你的香水,以后直接从你有的里面挑,不再泛泛推荐 ›</view>
+  </view>
+
+  <view class="card ani-rise d3"><view class="gold cardtitle" style="font-size:31rpx">💍 配饰(通用)</view><view style="margin-top:8rpx">{{r.acc}}</view></view>
+  <view class="card ani-rise d4"><view class="gold cardtitle" style="font-size:31rpx">🌸 香调(通用)</view>
+    <view style="margin-top:8rpx">宜:{{r.scent}}</view><view style="color:#b5432f">避:{{r.scentAvoid}}</view></view>
+  <view class="card ani-rise d5"><view class="gold cardtitle" style="font-size:31rpx">📋 当日提示</view><view style="margin-top:8rpx" wx:for="{{r.notes}}" wx:key="index">· {{item}}</view></view>
+</view>
+
+<view class="card ani-rise" wx:if="{{!r && !busy && !showForm}}">
+  <view class="cardtitle">今日色彩还未点亮</view>
+  <view class="muted" style="margin-top:10rpx">设置本人档案后,这里每天自动生成;也可以点下方按钮帮别人配一配。</view>
+  <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
+</view>
+
+<view wx:if="{{showForm}}" class="card ani-rise">
+  <view class="cardtitle" style="font-size:30rpx">换一个出生信息</view>
   <view class="label">出生日期</view>
   <picker mode="date" value="{{date}}" start="1600-01-01" end="2100-12-31" bindchange="onDate"><view>{{date}}</view></picker>
   <view style="display:flex;gap:16rpx">
@@ -7,14 +42,10 @@
   </view>
   <view class="label">看哪天</view>
   <picker mode="date" value="{{target}}" bindchange="onTarget"><view>{{target}}</view></picker>
+  <button class="go" style="margin:24rpx 0 4rpx" hover-class="btn-press" bindtap="run" disabled="{{busy}}">{{busy ? '正在调色…' : '生成穿搭建议'}}</button>
 </view>
-<button class="go" hover-class="btn-press" bindtap="run">生成穿搭建议</button>
-<view wx:if="{{r}}">
-  <view class="card"><view class="muted">喜 {{r.fav}} 忌 {{r.unf}} · 流日 <text class="gold">{{r.dayGz}}</text></view></view>
-  <view class="card ani-rise d1"><view class="gold">🎨 颜色</view>
-    <view>主色:{{r.main}}</view><view class="muted">点缀:{{r.accent}}</view><view style="color:#b5432f">避开:{{r.avoid}}</view></view>
-  <view class="card ani-rise d2"><view class="gold">💍 配饰</view><view>{{r.acc}}</view></view>
-  <view class="card ani-rise d3"><view class="gold">🌸 香调</view><view>宜:{{r.scent}}</view><view style="color:#b5432f">避:{{r.scentAvoid}}</view></view>
-  <view class="card ani-rise d4"><view class="gold">📋 当日提示</view><view wx:for="{{r.notes}}" wx:key="index">· {{item}}</view></view>
-</view>
+
+<button wx:if="{{!showForm}}" class="go" style="background:transparent; color:#b5432f; border:2rpx solid #b5432f"
+  hover-class="btn-press" bindtap="toggleForm">帮 TA 配一配</button>
+
 <view class="muted" style="text-align:center;margin:30rpx">五行取象为传统主流口径,仅供风格参考与娱乐</view>

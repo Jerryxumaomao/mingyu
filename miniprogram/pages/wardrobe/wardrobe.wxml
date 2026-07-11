@@ -1,0 +1,43 @@
+<view class="card ani-rise">
+  <view class="cardtitle">我的配饰材质 <text class="en" style="margin-left:8rpx">Materials</text></view>
+  <view class="muted" style="margin-top:6rpx">勾选你已有的,穿搭页会优先从这里挑当日适配款</view>
+  <view style="display:flex; flex-wrap:wrap; gap:14rpx; margin-top:20rpx">
+    <view wx:for="{{mats}}" wx:key="n" data-n="{{item.n}}" bindtap="toggleMat"
+      style="padding:10rpx 22rpx; border-radius:999rpx; font-size:27rpx; border:2rpx solid {{owned.indexOf(item.n) > -1 ? '#b5432f' : '#d8cdb4'}}; background:{{owned.indexOf(item.n) > -1 ? '#b5432f' : 'transparent'}}; color:{{owned.indexOf(item.n) > -1 ? '#fbf3e2' : '#5d5747'}}">
+      {{item.n}}
+    </view>
+  </view>
+</view>
+
+<view class="card ani-rise d1">
+  <view class="cardtitle">我的香水架 <text class="en" style="margin-left:8rpx">Perfumes</text></view>
+  <view class="muted" style="margin-top:6rpx">搜索添加;查不到的款,自选香调存入个人库</view>
+  <input placeholder="搜香水名,如:蓝风铃 / santal" value="{{kw}}" bindinput="onKw" style="margin-top:18rpx"/>
+  <view wx:for="{{results}}" wx:key="n" data-i="{{index}}" bindtap="addPerfume" hover-class="btn-press"
+    style="display:flex; justify-content:space-between; align-items:center; padding:18rpx 8rpx; border-bottom:1rpx solid #efe7d3">
+    <view style="min-width:0">
+      <view style="font-size:29rpx">{{item.n}}</view>
+      <view class="muted" style="font-size:23rpx">{{item.f}} · 属{{item.wx}}</view>
+    </view>
+    <view class="gold" style="font-size:40rpx; flex:none">＋</view>
+  </view>
+  <view wx:if="{{showCustom}}" style="margin-top:16rpx; padding:22rpx; border:2rpx dashed #d8cdb4; border-radius:16rpx">
+    <view class="muted">库里没有「{{kw}}」,自己标一下它的香调:</view>
+    <input placeholder="香水全名(默认用搜索词)" value="{{customName}}" bindinput="onCustomName" style="margin-top:12rpx"/>
+    <picker range="{{groups}}" value="{{gIdx}}" bindchange="onGroup" style="margin-top:8rpx"><view>{{groups[gIdx]}}</view></picker>
+    <button class="go" style="margin:20rpx 0 4rpx" hover-class="btn-press" bindtap="addCustom">存入我的香水架</button>
+  </view>
+  <view wx:if="{{perfumes.length}}" style="margin-top:20rpx">
+    <view class="muted" style="margin-bottom:8rpx">已上架 {{perfumes.length}} 支</view>
+    <view wx:for="{{perfumes}}" wx:key="n"
+      style="display:flex; justify-content:space-between; align-items:center; padding:14rpx 8rpx">
+      <view style="min-width:0">
+        <text style="font-size:29rpx">{{item.n}}</text>
+        <text class="muted" style="margin-left:12rpx; font-size:23rpx">{{item.f}} · 属{{item.wx}}{{item.custom ? ' · 自建' : ''}}</text>
+      </view>
+      <view data-i="{{index}}" catchtap="removePerfume" class="muted" style="font-size:34rpx; padding:0 12rpx; flex:none">×</view>
+    </view>
+  </view>
+</view>
+
+<view class="muted ani-rise d2" style="text-align:center; margin:30rpx">材质与香调五行取象为传统主流口径,仅供风格参考与娱乐</view>

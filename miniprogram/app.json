@@ -6,7 +6,9 @@
     "pages/kline/kline",
     "pages/hehun/hehun",
     "pages/liuren/liuren",
-    "pages/outfit/outfit"
+    "pages/outfit/outfit",
+    "pages/wardrobe/wardrobe",
+    "pages/kchart/kchart"
   ],
   "window": {
     "navigationBarBackgroundColor": "#f4eddc",

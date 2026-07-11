@@ -3,18 +3,29 @@ const profile = require('../../utils/profile.js');
 const TIMES = ['早子 00-01', '丑 01-03', '寅 03-05', '卯 05-07', '辰 07-09', '巳 09-11', '午 11-13', '未 13-15', '申 15-17', '酉 17-19', '戌 19-21', '亥 21-23', '晚子 23-24'];
 
 Page({
-  onLoad() {
-    const p = profile.get();
-    if (p) this.setData({ date: p.date, ti: p.ti, gi: p.gi });
+  data: {
+    date: '1996-11-23', times: TIMES, ti: 2, genders: ['男 (乾造)', '女 (坤造)'], gi: 0,
+    natal: '', best: '', worst: '', busy: false,
+    showForm: false, isSelf: true,
   },
-  data: { date: '1996-11-23', times: TIMES, ti: 2, genders: ['男 (乾造)', '女 (坤造)'], gi: 0, natal: '', best: '', worst: '', busy: false },
+  onShow() {
+    // 有档案且尚无结果:自动按档案生成,无需手点
+    const p = profile.get();
+    if (p && !this.data.natal && !this.data.busy) {
+      this.setData({ date: p.date, ti: p.ti, gi: p.gi }, () => this.run());
+    }
+  },
   onDate(e) { this.setData({ date: e.detail.value }); },
   onTime(e) { this.setData({ ti: +e.detail.value }); },
   onGender(e) { this.setData({ gi: +e.detail.value }); },
+  toggleForm() { this.setData({ showForm: !this.data.showForm }); },
+  goBig() {
+    wx.navigateTo({ url: `/pages/kchart/kchart?date=${this.data.date}&ti=${this.data.ti}&gi=${this.data.gi}` });
+  },
   run() {
     if (this.data.busy) return;
     this.setData({ busy: true });
-    wx.showLoading({ title: '正在推演53年运势', mask: true });
+    wx.showLoading({ title: '正在推演53年', mask: true });
     // 逐年排盘是同步重活,让出一帧先把 loading 画出来再开算
     setTimeout(() => {
       let k;
@@ -29,10 +40,12 @@ Page({
         wx.showToast({ title: e.message, icon: 'none' });
         return;
       }
+      const p = profile.get();
+      const isSelf = !!p && p.date === this.data.date && p.ti === this.data.ti && p.gi === this.data.gi;
       const ys = k.years;
       const sorted = [...ys].sort((a, b) => b.score - a.score);
       this.setData({
-        busy: false,
+        busy: false, isSelf, showForm: false,
         natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
         best: sorted.slice(0, 2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
         worst: sorted.slice(-2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
