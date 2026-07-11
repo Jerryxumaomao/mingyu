@@ -176,5 +176,9 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
 > 历史沿革:v1 水墨金(暗色)→ v2 知几·宣纸(2026-07-11,用户选定 B 变体)→
 > v3 更名「玩占」(2026-07-12,前名微信被占;视觉体系不变,仅品牌字与 hero 文案换为
 > "观变玩占 / 观其变而玩其占")。样机存档 ui-proposal.html;水墨为看板次主题。
-> **App icon**:朱砂底 + 米白华文琥珀体双字(源文件与 PNG 在 `miniprogram/brand/`:
-> A 横排小红书式 = 商店头像首选,B 竖排印章式,C 宣纸反白式;各含 512 母版与 144 成品)。
+> **App icon**:双字标,两套字体版本共存于 `miniprogram/brand/`(各含 HTML 源/512 母版/144 成品):
+> - `icon-{a,b,c}-*`:华文琥珀粗圆体(小红书 logo 式)
+> - `icon-xing-{a,b,c}-*`:**志莽行书 ZhiMangXing**(Google Fonts,OFL 1.1,协议文件
+>   OFL-ZhiMangXing.txt 随库分发)——书法笔意版,当前主推;A 横排斜势 / B 印框竖排 /
+>   C 宣纸底+右下小印。行书细笔画在小尺寸靠 -webkit-text-stroke 增肥保清晰。
+> - **icon 字体是 §3.1 字体栈的唯一豁免场景**(logo 属图形标识,不受正文衬线约束)。
