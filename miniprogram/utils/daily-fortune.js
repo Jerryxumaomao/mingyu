@@ -59,7 +59,11 @@ const score = (dateObj, natal) => {
   const unfEl = dayEls.find((e) => unf.indexOf(e) > -1);
   const yi = favEl ? YI_POOL[favEl] : ['按部就班', '整理内务', '养精蓄锐'];
   const ji = unfEl ? JI_POOL[unfEl] : (band === '凶' || band === '大凶' ? ['大开大合', '仓促决定'] : ['贪多求快']);
-  return { date: `${m}月${d}日`, iso: `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`, gz: day.ganZhi, score: s, band, yi, ji, notes };
+  return {
+    date: `${m}月${d}日`, iso: `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+    gz: day.ganZhi, gwx: GAN_WX[gan], zwx: ZHI_WX[zhi],
+    score: s, band, yi, ji, notes,
+  };
 };
 
 /** 连续日序列:offsetStart~offsetEnd(相对今天的天数) */

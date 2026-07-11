@@ -1,7 +1,7 @@
 <navbar title="运势"/>
 <block wx:if="{{hasProfile && today}}">
   <!-- 今日运势打分:左信息右圆环,环心吉凶大字 -->
-  <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:30rpx">
+  <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:24rpx">
     <view style="flex:1; min-width:0">
       <view class="cardtitle">今日运势 <text class="en" style="margin-left:8rpx">Today</text></view>
       <view class="muted" style="margin-top:8rpx">{{today.date}} · 流日 {{today.gz}}</view>
@@ -9,37 +9,28 @@
         <text style="font-size:68rpx; font-weight:700; color:{{bandColor}}">{{today.score}}</text>
         <text class="muted">分</text>
       </view>
-      <view style="height:16rpx; background:#efe7d3; border-radius:999rpx; margin-top:12rpx; overflow:hidden">
+      <view style="width:250rpx; height:14rpx; background:#efe7d3; border-radius:999rpx; margin-top:12rpx; overflow:hidden">
         <view style="width:{{today.score}}%; height:100%; background:{{bandColor}}; border-radius:999rpx"></view>
       </view>
       <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:10rpx">{{today.notes[0]}}</view>
     </view>
-    <!-- 求签:签筒里抽出的一支,签文用玩占行书 -->
-    <view class="ani-stamp" style="width:104rpx; height:280rpx; background:#fbf7ec; border:3rpx solid #b5432f; border-radius:16rpx 16rpx 10rpx 10rpx; display:flex; flex-direction:column; align-items:center; flex:none; transform:rotate(3deg); box-shadow:0 6rpx 16rpx rgba(90,70,30,.18)">
-      <view style="width:100%; height:46rpx; background:#b5432f; border-radius:12rpx 12rpx 0 0; display:flex; align-items:center; justify-content:center">
-        <text style="color:#fbf3e2; font-size:20rpx; letter-spacing:2rpx">玩占</text>
-      </view>
-      <image src="/assets/qian-{{qi}}.png" mode="aspectFit" style="width:66rpx; height:190rpx; margin-top:16rpx"/>
-    </view>
+    <!-- 吉凶大字:玩占行书 -->
+    <image class="ani-stamp" src="/assets/qian-{{qi}}.png" mode="aspectFit"
+      style="width:{{qi === 0 || qi === 4 ? 130 : 170}}rpx; height:260rpx; flex:none"/>
   </view>
 
   <!-- 左:宜忌大卡(解读入口) 右:日运/年运缩略图 -->
   <view class="tile-row ani-rise d1" style="align-items:stretch">
-    <view class="tile" hover-class="btn-press" bindtap="goDay" style="flex:1.25; display:flex; flex-direction:column; justify-content:space-between">
-      <view>
-        <view style="display:flex; align-items:center; gap:16rpx">
-          <text style="font-size:52rpx; font-weight:700; color:#b5432f">宜</text>
-          <view style="font-size:27rpx; line-height:1.5">{{today.yi[0]}}<view class="muted" style="font-size:24rpx">{{today.yi[1]}}{{today.yi[2] ? ' · ' + today.yi[2] : ''}}</view></view>
-        </view>
+    <view class="tile" hover-class="btn-press" bindtap="goDay" style="flex:1.25; display:flex; flex-direction:column; padding:0">
+      <view style="flex:1; display:flex; align-items:center; gap:16rpx; padding:0 28rpx">
+        <text style="font-size:52rpx; font-weight:700; color:#b5432f">宜</text>
+        <view style="font-size:27rpx; line-height:1.5">{{today.yi[0]}}<view class="muted" style="font-size:24rpx">{{today.yi[1]}}{{today.yi[2] ? ' · ' + today.yi[2] : ''}}</view></view>
       </view>
-      <view style="border-top:1rpx dashed #d8cdb4; margin:18rpx 0"></view>
-      <view>
-        <view style="display:flex; align-items:center; gap:16rpx">
-          <text style="font-size:52rpx; font-weight:700; color:#3f7050">忌</text>
-          <view style="font-size:27rpx; line-height:1.5">{{today.ji[0]}}<view class="muted" style="font-size:24rpx">{{today.ji[1] || ''}}</view></view>
-        </view>
+      <view style="border-top:1rpx dashed #d8cdb4; margin:0 28rpx"></view>
+      <view style="flex:1; display:flex; align-items:center; gap:16rpx; padding:0 28rpx">
+        <text style="font-size:52rpx; font-weight:700; color:#3f7050">忌</text>
+        <view style="font-size:27rpx; line-height:1.5">{{today.ji[0]}}<view class="muted" style="font-size:24rpx">{{today.ji[1] || ''}}</view></view>
       </view>
-      <view class="en" style="margin-top:14rpx">Reading ›</view>
     </view>
     <view style="flex:1; display:flex; flex-direction:column; gap:20rpx">
       <view class="tile" hover-class="btn-press" bindtap="goDay">
@@ -53,11 +44,16 @@
     </view>
   </view>
 
-  <!-- 今年备忘 -->
-  <view class="card ani-rise d2" wx:if="{{yearNote}}" hover-class="btn-press" bindtap="goYear">
-    <view class="cardtitle" style="font-size:30rpx">今年备忘 <text class="en" style="margin-left:8rpx">{{yearNote.gz}} · {{yearNote.score}}</text></view>
-    <view class="muted" style="margin-top:10rpx">农历 {{yearNote.hi}} 月前后是全年相对高点,{{yearNote.lo}} 月前后偏弱宜稳。</view>
-    <view wx:if="{{yearNote.events.length}}" style="margin-top:8rpx; font-size:27rpx; color:#3f7050">留意:{{yearNote.events}}</view>
+  <!-- 今日五行 -->
+  <view class="card ani-rise d2" wx:if="{{wx5}}">
+    <view class="cardtitle" style="font-size:30rpx">今日五行 <text class="en" style="margin-left:8rpx">{{today.gz}} · Five Elements</text></view>
+    <view style="display:flex; gap:14rpx; margin-top:18rpx">
+      <view wx:for="{{wx5}}" wx:key="w" style="flex:1; text-align:center; padding:16rpx 0; border-radius:14rpx; border:2rpx solid {{item.day ? item.c : '#e6dcc6'}}; background:{{item.day ? item.c : 'transparent'}}">
+        <view style="font-size:34rpx; font-weight:700; line-height:1.3; color:{{item.day ? '#fbf3e2' : item.c}}">{{item.w}}</view>
+        <view style="font-size:20rpx; color:{{item.day ? '#fbf3e2' : '#8a8272'}}">{{item.tag}}</view>
+      </view>
+    </view>
+    <view class="muted" style="margin-top:14rpx">{{wxLine}}</view>
   </view>
 
   <!-- 今日开运色(联动穿搭) -->

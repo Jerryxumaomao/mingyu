@@ -1,6 +1,7 @@
 const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
 const daily = require('../../utils/daily-fortune.js');
+const { WX_COLOR } = require('../../utils/colormap.js');
 
 const BAND_COLOR = { 大吉: '#b5432f', 吉: '#c96f2f', 平: '#8a8272', 凶: '#3f7050', 大凶: '#2f5540' };
 
@@ -27,20 +28,19 @@ Page({
   },
   render(k) {
     const today = daily.score(new Date(), k.natal);
-    // 今年备忘:岁运事件 + 流月高低
-    const cur = new Date().getFullYear();
-    const yr = (k.years || []).find((y) => y.year === cur);
-    let yearNote = null;
-    if (yr) {
-      const ms = yr.monthScores || [];
-      const hi = ms.indexOf(Math.max(...ms)) + 1;
-      const lo = ms.indexOf(Math.min(...ms)) + 1;
-      yearNote = {
-        gz: yr.liunianGanZhi, score: Math.round(yr.score),
-        events: (yr.events || []).map((e) => e.name),
-        hi, lo,
-      };
-    }
+    // 今日五行:流日干支落在哪两行,与命局喜忌的关系
+    const fav = k.natal.favorableWuxing || [];
+    const unf = k.natal.unfavorableWuxing || [];
+    const wx5 = ['木', '火', '土', '金', '水'].map((w) => {
+      const day = today.gwx === w || today.zwx === w;
+      const tag = day ? (fav.indexOf(w) > -1 ? '当值·喜' : unf.indexOf(w) > -1 ? '当值·忌' : '当值')
+        : (fav.indexOf(w) > -1 ? '喜' : unf.indexOf(w) > -1 ? '忌' : '·');
+      return { w, c: WX_COLOR[w], day, tag };
+    });
+    const dayEls = today.gwx === today.zwx ? today.gwx : `${today.gwx}、${today.zwx}`;
+    const favDay = [today.gwx, today.zwx].some((w) => fav.indexOf(w) > -1);
+    const unfDay = [today.gwx, today.zwx].some((w) => unf.indexOf(w) > -1);
+    const wxLine = `今天${dayEls}当值,${favDay && !unfDay ? '是你的喜用日,放手去做' : unfDay && !favDay ? '与你有些相耗,稳一点' : favDay ? '喜忌相杂,顺势而为' : '平平常常,照常发挥'}。`;
     // 今日开运色:直接吃首页仪表盘缓存(首页每天会算)
     let colors = null;
     try {
@@ -48,7 +48,7 @@ Page({
       if (c && c.dash && c.dash.main) colors = { main: c.dash.main, accent: c.dash.accent || [] };
     } catch (e) { /* 没有就不显示 */ }
     const qi = { 大吉: 0, 吉: 1, 平: 2, 凶: 3, 大凶: 4 }[today.band];
-    this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], yearNote, colors },
+    this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], wx5, wxLine, colors },
       () => this.drawThumbs(k));
   },
   drawThumbs(k) {
