@@ -3,7 +3,7 @@ const MY = require('../../lib/mingyu.js');
 Page({
   // 默认报数起课:让用户带着问题参与,仪式感和随机性都最好。
   // 时间起课同一时辰(2小时)结果相同是规则本身,界面上要讲清楚,免得用户以为坏了。
-  data: { methods: ['报一个数(推荐)', '看当下时刻', '随机抽'], mi: 0, num: '', r: null },
+  data: { methods: ['报数起卦(推荐)', '以时起卦', '随手一抽'], mi: 0, num: '', r: null },
   onMethod(e) { this.setData({ mi: +e.detail.value, r: null }); },
   onNum(e) { this.setData({ num: e.detail.value }); },
   // 报数起课同数同日结果相同,"再来一卦"必须换数,所以清空回到引导态
@@ -16,7 +16,7 @@ Page({
     const params = { method };
     if (method === 'number') {
       const n = parseInt(this.data.num, 10);
-      if (!n || n <= 0) { wx.showToast({ title: '先想好问题,再报个数', icon: 'none' }); return; }
+      if (!n || n <= 0) { wx.showToast({ title: '先默念所问,再报一数', icon: 'none' }); return; }
       params.number = n;
     }
     try {
@@ -30,9 +30,9 @@ Page({
             { t: '开局', ...s.start }, { t: '过程', ...s.process }, { t: '结果', ...s.result },
           ],
           lines: [
-            `一开始:${s.start.meaning}`,
-            `中间会:${s.process.meaning}`,
-            `最后落在:${s.result.meaning}`,
+            `起——${s.start.meaning}`,
+            `变——${s.process.meaning}`,
+            `落——${s.result.meaning}`,
           ],
           advice: s.result.advice, timing: s.result.timing, direction: s.result.direction,
         },

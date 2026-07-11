@@ -9,6 +9,13 @@
     <view class="ani-rise d5">喜 <text class="gold">{{r.fav}}</text> 忌 {{r.unf}}</view>
     <view class="muted ani-rise d5" wx:for="{{r.warnings}}" wx:key="index">⚠ {{item}}</view>
   </view>
+  <view class="card ani-rise d5">
+    <view class="cardtitle" style="font-size:30rpx">这盘怎么读 <text class="en" style="margin-left:8rpx">Notes</text></view>
+    <view wx:for="{{r.explain}}" wx:key="q" style="display:flex; gap:18rpx; margin-top:18rpx">
+      <view style="flex:none; min-width:88rpx; text-align:center; align-self:flex-start; padding:6rpx 14rpx; border:2rpx solid #b5432f; border-radius:10rpx; color:#b5432f; font-size:26rpx; font-weight:700">{{item.q}}</view>
+      <view style="font-size:28rpx; line-height:1.7">{{item.a}}</view>
+    </view>
+  </view>
 </view>
 
 <view class="card ani-rise" wx:if="{{!r && !busy && !showForm}}">

@@ -32,7 +32,7 @@
 
   <!-- 今日穿搭:主色/辅色速览 → 穿搭页 -->
   <view class="card ani-rise d1" hover-class="btn-press" bindtap="goOutfit" style="position:relative; overflow:hidden; padding:36rpx 32rpx 40rpx">
-    <image src="/assets/deco-robe.png" mode="widthFix" style="position:absolute; right:16rpx; top:20rpx; width:210rpx; opacity:.3"/>
+    <image src="/assets/deco-robe.png" mode="widthFix" style="position:absolute; right:20rpx; top:50%; transform:translateY(-50%); width:210rpx; opacity:.3"/>
     <view style="display:flex; align-items:center; gap:18rpx">
       <view class="glyph zhu" style="width:64rpx; height:64rpx; font-size:34rpx; border-radius:14rpx">衣</view>
       <view>
@@ -40,16 +40,16 @@
         <view class="en" style="margin-top:2rpx">Outfit of the Day</view>
       </view>
     </view>
-    <view wx:if="{{dash}}" style="margin-top:24rpx">
-      <view style="display:flex; align-items:center; gap:12rpx">
+    <view wx:if="{{dash}}" style="margin-top:30rpx">
+      <view style="display:flex; align-items:center; gap:20rpx">
         <text class="muted" style="flex:none">主色</text>
         <view class="cbar-m" wx:for="{{dash.main}}" wx:key="n" style="background:{{item.c}}"></view>
-        <text wx:if="{{dash.main.length}}" style="font-size:28rpx">{{dash.main[0].n}}</text>
+        <text wx:if="{{dash.main.length}}" style="font-size:28rpx; margin-left:6rpx">{{dash.main[0].n}}</text>
       </view>
-      <view style="display:flex; align-items:center; gap:12rpx; margin-top:12rpx">
+      <view style="display:flex; align-items:center; gap:20rpx; margin-top:20rpx">
         <text class="muted" style="flex:none">辅色</text>
         <view class="cbar-m" wx:for="{{dash.accent}}" wx:key="n" style="background:{{item.c}}; width:22rpx; height:46rpx"></view>
-        <text wx:if="{{dash.accent.length}}" class="muted">{{dash.accent[0].n}}</text>
+        <text wx:if="{{dash.accent.length}}" class="muted" style="margin-left:6rpx">{{dash.accent[0].n}}</text>
       </view>
     </view>
     <view wx:else class="muted" style="margin-top:16rpx">{{pillars ? '正在为你调色…' : '设置档案后,每日开运色自动点亮'}}</view>

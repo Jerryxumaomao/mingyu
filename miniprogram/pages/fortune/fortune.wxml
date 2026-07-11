@@ -14,9 +14,11 @@
       </view>
       <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:10rpx">{{today.notes[0]}}</view>
     </view>
-    <!-- 吉凶大字:玩占行书 -->
-    <image class="ani-stamp" src="/assets/qian-{{qi}}.png" mode="aspectFit"
-      style="width:{{qi === 0 || qi === 4 ? 130 : 170}}rpx; height:260rpx; flex:none"/>
+    <!-- 吉凶大字:玩占行书,居右半区正中 -->
+    <view style="width:45%; flex:none; display:flex; align-items:center; justify-content:center">
+      <image class="ani-stamp" src="/assets/qian-{{qi}}.png" mode="aspectFit"
+        style="width:{{qi === 0 || qi === 4 ? 150 : 210}}rpx; height:280rpx"/>
+    </view>
   </view>
 
   <!-- 左:宜忌大卡(解读入口) 右:日运/年运缩略图 -->

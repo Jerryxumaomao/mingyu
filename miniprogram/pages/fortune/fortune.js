@@ -40,7 +40,7 @@ Page({
     const dayEls = today.gwx === today.zwx ? today.gwx : `${today.gwx}、${today.zwx}`;
     const favDay = [today.gwx, today.zwx].some((w) => fav.indexOf(w) > -1);
     const unfDay = [today.gwx, today.zwx].some((w) => unf.indexOf(w) > -1);
-    const wxLine = `今天${dayEls}当值,${favDay && !unfDay ? '是你的喜用日,放手去做' : unfDay && !favDay ? '与你有些相耗,稳一点' : favDay ? '喜忌相杂,顺势而为' : '平平常常,照常发挥'}。`;
+    const wxLine = `今日${dayEls}当值,${favDay && !unfDay ? '正合你的喜用,诸事可为' : unfDay && !favDay ? '与你的命局相耗,宜守不宜攻' : favDay ? '喜忌相杂,顺势而为' : '不喜不忌,平常心行事'}。`;
     // 今日开运色:直接吃首页仪表盘缓存(首页每天会算)
     let colors = null;
     try {
