@@ -1,3 +1,4 @@
+<navbar title="八字合婚" back="{{true}}"/>
 <view class="card">
   <view class="gold">甲方</view>
   <picker mode="date" value="{{a.date}}" start="1600-01-01" end="2100-12-31" bindchange="onA"><view>{{a.date}}</view></picker>

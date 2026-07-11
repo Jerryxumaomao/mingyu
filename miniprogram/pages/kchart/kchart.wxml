@@ -1,3 +1,4 @@
+<navbar title="全程放大" back="{{true}}"/>
 <view class="card" style="margin:16rpx 20rpx; padding:20rpx 26rpx">
   <view class="muted" style="font-size:24rpx">{{natal}}</view>
   <view style="display:flex; gap:26rpx; align-items:baseline; margin-top:8rpx; flex-wrap:wrap" wx:if="{{sel}}">

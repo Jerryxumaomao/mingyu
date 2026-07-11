@@ -1,9 +1,13 @@
+const MY = require('../../lib/mingyu.js');
 const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
 const daily = require('../../utils/daily-fortune.js');
 const reading = require('../../utils/kline-reading.js');
 
 const BAND_COLOR = { 大吉: '#b5432f', 吉: '#c96f2f', 平: '#8a8272', 凶: '#3f7050', 大凶: '#2f5540' };
+const GAN_WX = { 甲: '木', 乙: '木', 丙: '火', 丁: '火', 戊: '土', 己: '土', 庚: '金', 辛: '金', 壬: '水', 癸: '水' };
+const ZHI_WX = { 子: '水', 丑: '土', 寅: '木', 卯: '木', 辰: '土', 巳: '火', 午: '火', 未: '土', 申: '金', 酉: '金', 戌: '土', 亥: '水' };
+const bandOf = (s) => (s >= 68 ? '大吉' : s >= 56 ? '吉' : s >= 44 ? '平' : s >= 32 ? '凶' : '大凶');
 
 Page({
   data: { mode: 'day', sel: null, natalStr: '', ready: false },
@@ -72,6 +76,7 @@ Page({
   selectDay(i) {
     if (this._m === 'day' && this._i === i) return;
     this._m = 'day'; this._i = i;
+    this.setData({ selMonth: null });
     const d = this.days[i];
     this.setData({
       sel: {
@@ -99,8 +104,81 @@ Page({
         range: `高 ${Math.round(yr.high)} · 低 ${Math.round(yr.low)}`,
         dayun: yr.dayunGanZhi ? `大运 ${yr.dayunGanZhi}` : '',
       },
+    }, () => {
+      // 流月:今年默认选中当前月,其他年份选首月
+      const now = new Date();
+      this.selectMonth(yr.year === now.getFullYear() ? now.getMonth() : 0);
     });
     this.paintYears(i);
+  },
+  onMonthTouch(e) {
+    const yr = this.k.years[this._i];
+    if (!yr || this._m !== 'year' || !this.mcv) return;
+    const x = e.touches[0].x;
+    const i = Math.max(0, Math.min(11, Math.floor((x / this.mcv.width) * 12)));
+    this.selectMonth(i);
+  },
+  selectMonth(mi) {
+    const yr = this.k.years[this._i];
+    if (!yr || !(yr.monthScores || []).length) return;
+    const s = yr.monthScores[mi];
+    const band = bandOf(s);
+    let gz = '';
+    try {
+      const lm = MY.baziCalculator.calculateLiuyue(yr.year, mi + 1, this.k.natal.dayMaster);
+      gz = lm.ganZhi || `${lm.gan || ''}${lm.zhi || ''}`;
+    } catch (e) { /* 流月干支拿不到就只显示分数 */ }
+    let why = '';
+    if (gz && gz.length >= 2) {
+      const fav = this.k.natal.favorableWuxing || [];
+      const unf = this.k.natal.unfavorableWuxing || [];
+      const hits = [GAN_WX[gz[0]], ZHI_WX[gz[1]]];
+      const f = hits.filter((w) => fav.indexOf(w) > -1).length;
+      const u = hits.filter((w) => unf.indexOf(w) > -1).length;
+      why = f && !u ? '月令带喜用,宜推进' : u && !f ? '月令带忌神,宜稳守' : f && u ? '喜忌相杂,顺势而为' : '月令中性,照常即可';
+    }
+    this.setData({
+      selMonth: {
+        title: `第${mi + 1}个月(节气月)${gz ? ' · ' + gz : ''}`,
+        score: Math.round(s), band, color: BAND_COLOR[band], text: why,
+      },
+    });
+    this.drawMonths(yr, mi);
+  },
+  drawMonths(yr, selIdx) {
+    const paint = () => {
+      const { ctx, width, height } = this.mcv;
+      const ms = yr.monthScores;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#fbf7ec'; ctx.fillRect(0, 0, width, height);
+      const lo = Math.min(...ms) - 4, hi = Math.max(...ms) + 4, span = Math.max(1, hi - lo);
+      const bw = width / 12;
+      ms.forEach((s, i) => {
+        const h = ((s - lo) / span) * (height - 26);
+        ctx.fillStyle = BAND_COLOR[bandOf(s)];
+        ctx.globalAlpha = i === selIdx ? 1 : 0.45;
+        const w = bw * 0.5;
+        const x = i * bw + (bw - w) / 2;
+        ctx.beginPath();
+        if (ctx.roundRect) { ctx.roundRect(x, height - 20 - h, w, h, w / 2); ctx.fill(); }
+        else ctx.fillRect(x, height - 20 - h, w, h);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = i === selIdx ? '#33302a' : '#8a8272';
+        ctx.font = '9px sans-serif';
+        ctx.fillText(String(i + 1), i * bw + bw / 2 - 3, height - 6);
+      });
+    };
+    if (this.mcv) { paint(); return; }
+    wx.createSelectorQuery().select('#mc').fields({ node: true, size: true }).exec((res) => {
+      if (!res || !res[0]) return;
+      const { node: canvas, width, height } = res[0];
+      const dpr = (wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()).pixelRatio;
+      canvas.width = width * dpr; canvas.height = height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      this.mcv = { ctx, width, height };
+      paint();
+    });
   },
   geom(n) {
     const padL = 36;

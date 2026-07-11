@@ -216,3 +216,8 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
   删除线小签;配饰/香调改双列 chips;提示最多两条。文案短、色块大。
 - 旧 pages/kline 已删除(被 fortune + fortune-chart 取代);色名→色值映射
   统一收口 utils/colormap.js。
+- **v5.1 补充**:全局 navigationStyle:custom,标题由 components/navbar 自绘
+  (38rpx 衬线粗体+字距,与正文同字族;高度对齐右上胶囊);色块表达从圆点
+  改为竖长条 .cbar 系列(88/56/30/22rpx 宽,仿调色板);年运详图新增
+  "流月走势":12 根圆头柱(档位色,当月高亮),点选出"第N个月·干支·分数
+  ·档位+月令喜忌一句话"。

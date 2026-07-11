@@ -1,3 +1,4 @@
+<navbar title="运势"/>
 <block wx:if="{{hasProfile && today}}">
   <!-- 今日运势打分:左信息右圆环,环心吉凶大字 -->
   <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:24rpx">
@@ -59,9 +60,9 @@
   <view class="card ani-rise d3" wx:if="{{colors}}" hover-class="btn-press" bindtap="goOutfit" style="display:flex; align-items:center; gap:20rpx">
     <view style="flex:1">
       <view class="cardtitle" style="font-size:30rpx">今日开运色 <text class="en" style="margin-left:8rpx">Lucky Colors</text></view>
-      <view style="display:flex; align-items:center; gap:12rpx; margin-top:12rpx">
-        <view class="swatch" wx:for="{{colors.main}}" wx:key="n" style="background:{{item.c}}"></view>
-        <view class="swatch" wx:for="{{colors.accent}}" wx:key="n" style="background:{{item.c}}; width:34rpx; height:34rpx"></view>
+      <view style="display:flex; align-items:flex-end; gap:14rpx; margin-top:12rpx">
+        <view class="cbar-m" wx:for="{{colors.main}}" wx:key="n" style="background:{{item.c}}"></view>
+        <view class="cbar-xs" wx:for="{{colors.accent}}" wx:key="n" style="background:{{item.c}}"></view>
       </view>
     </view>
     <view class="muted" style="font-size:36rpx">›</view>

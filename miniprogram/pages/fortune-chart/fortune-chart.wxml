@@ -1,3 +1,4 @@
+<navbar title="运势详图" back="{{true}}"/>
 <!-- 日/年切换(仿参考图 segmented) -->
 <view style="display:flex; gap:12rpx; margin:24rpx 24rpx 0">
   <view data-m="day" bindtap="switchMode"
@@ -34,6 +35,14 @@
   <block wx:else>
     <view class="muted" style="margin-top:12rpx">{{sel.text}}</view>
     <view class="muted" style="margin-top:8rpx; font-size:24rpx">{{sel.range}}{{sel.dayun ? ' · ' + sel.dayun : ''}}</view>
+    <view style="margin-top:20rpx; border-top:1rpx dashed #d8cdb4; padding-top:18rpx">
+      <view style="font-weight:700; font-size:29rpx">流月走势 <text class="en" style="margin-left:8rpx">Months</text></view>
+      <canvas type="2d" id="mc" bindtouchstart="onMonthTouch" bindtouchmove="onMonthTouch" style="width:100%; height:190rpx; margin-top:12rpx"></canvas>
+      <view wx:if="{{selMonth}}" style="margin-top:10rpx; font-size:28rpx">
+        {{selMonth.title}} · <text style="color:{{selMonth.color}}; font-weight:700">{{selMonth.score}}分 {{selMonth.band}}</text>
+        <view class="muted" style="font-size:25rpx; margin-top:2rpx">{{selMonth.text}}</view>
+      </view>
+    </view>
   </block>
 </view>
 

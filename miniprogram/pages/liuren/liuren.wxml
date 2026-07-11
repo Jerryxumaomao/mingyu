@@ -1,3 +1,4 @@
+<navbar title="小六壬起卦" back="{{true}}"/>
 <view class="card">
   <view class="label">起课方式</view>
   <picker range="{{methods}}" value="{{mi}}" bindchange="onMethod"><view>{{methods[mi]}}</view></picker>

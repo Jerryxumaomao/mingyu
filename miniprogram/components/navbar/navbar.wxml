@@ -1,0 +1,6 @@
+<view style="padding-top:{{sb}}px">
+  <view style="height:{{h}}px; display:flex; align-items:center; padding:0 28rpx">
+    <view wx:if="{{back}}" bindtap="goBack" hover-class="nb-press" style="font-size:52rpx; padding:0 24rpx 6rpx 0; line-height:1; color:#33302a">‹</view>
+    <text style="font-size:38rpx; font-weight:700; letter-spacing:6rpx; color:#33302a">{{title}}</text>
+  </view>
+</view>

@@ -15,8 +15,10 @@
     "navigationBarBackgroundColor": "#f4eddc",
     "navigationBarTitleText": "玩占",
     "navigationBarTextStyle": "black",
+    "navigationStyle": "custom",
     "backgroundColor": "#f4eddc"
   },
+  "usingComponents": { "navbar": "/components/navbar/navbar" },
   "tabBar": {
     "color": "#8a8272",
     "selectedColor": "#b5432f",

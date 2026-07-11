@@ -1,3 +1,4 @@
+<navbar title="今日五行穿搭"/>
 <view wx:if="{{r}}">
   <!-- 今日色彩:大色卡,少文字 -->
   <view class="card ani-rise">
@@ -5,14 +6,14 @@
       <view class="cardtitle">今日色彩 <text class="en" style="margin-left:8rpx">Colors</text></view>
       <view class="en" style="flex:none">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}} · {{r.dayGz}}日</view>
     </view>
-    <view style="display:flex; gap:28rpx; margin-top:24rpx">
-      <view wx:for="{{r.main}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:8rpx">
-        <view style="width:88rpx; height:88rpx; border-radius:50%; background:{{item.c}}; border:2rpx solid rgba(51,48,42,.12); box-shadow:0 4rpx 12rpx rgba(90,70,30,.15)"></view>
+    <view style="display:flex; gap:26rpx; margin-top:24rpx; align-items:flex-end">
+      <view wx:for="{{r.main}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
+        <view class="cbar" style="background:{{item.c}}"></view>
         <text style="font-size:24rpx">{{item.n}}</text>
       </view>
-      <view style="width:1rpx; background:#e6dcc6"></view>
-      <view wx:for="{{r.accent}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:8rpx; justify-content:flex-end">
-        <view style="width:56rpx; height:56rpx; border-radius:50%; background:{{item.c}}; border:2rpx solid rgba(51,48,42,.12)"></view>
+      <view style="width:1rpx; height:140rpx; background:#e6dcc6; align-self:center"></view>
+      <view wx:for="{{r.accent}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
+        <view class="cbar-s" style="background:{{item.c}}"></view>
         <text class="muted" style="font-size:22rpx">{{item.n}}</text>
       </view>
     </view>

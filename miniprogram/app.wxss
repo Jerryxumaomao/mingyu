@@ -21,8 +21,12 @@ input, picker { background: #fbf7ec; border: 1rpx solid #e6dcc6; border-radius: 
 /* 半宽格子(仿新中式两列排布) */
 .tile { flex: 1; background: #fbf7ec; border: 2rpx solid #d8cdb4; border-radius: 20rpx; padding: 28rpx; min-width: 0; }
 .tile-row { display: flex; gap: 20rpx; margin: 0 24rpx 22rpx; }
-/* 色圆点 / 五行签 */
+/* 色块:竖长条(仿调色板样式,替代圆点) */
 .swatch { width: 52rpx; height: 52rpx; border-radius: 50%; border: 2rpx solid rgba(51, 48, 42, .15); flex: none; }
+.cbar { width: 88rpx; height: 176rpx; border-radius: 999rpx; border: 2rpx solid rgba(51, 48, 42, .1); box-shadow: 0 6rpx 14rpx rgba(90, 70, 30, .12); flex: none; }
+.cbar-s { width: 56rpx; height: 118rpx; border-radius: 999rpx; border: 2rpx solid rgba(51, 48, 42, .1); flex: none; }
+.cbar-m { width: 30rpx; height: 64rpx; border-radius: 999rpx; flex: none; }
+.cbar-xs { width: 22rpx; height: 44rpx; border-radius: 999rpx; flex: none; align-self: flex-end; }
 .wxp { display: inline-flex; align-items: center; justify-content: center; min-width: 46rpx; height: 46rpx;
   border-radius: 10rpx; font-size: 26rpx; font-weight: 700; color: #fbf3e2; margin-right: 8rpx; padding: 0 6rpx; flex: none; }
 .cardtitle { font-size: 34rpx; font-weight: 700; letter-spacing: 4rpx; }
