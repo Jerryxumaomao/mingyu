@@ -47,12 +47,15 @@ Page({
     if (p) this.setData({ date: p.date, ti: p.ti, gi: p.gi });
   },
   onShow() {
-    // 有档案且尚无结果:自动按档案排盘
+    // 无结果或改过档案:按档案(重新)排盘
     const p = profile.get();
-    if (p && !this.data.r && !this.data.busy) {
+    const pk = p ? `${p.date}|${p.ti}|${p.gi}` : '';
+    const stale = this.data.r && this.data.isSelf && this._pk !== pk;
+    if (p && (!this.data.r || stale) && !this.data.busy) {
       this.setData({ date: p.date, ti: p.ti, gi: p.gi }, () => this.run());
     }
   },
+  onShareAppMessage() { return { title: '排个盘,看看你的喜与忌', path: '/pages/paipan/paipan' }; },
   onDate(e) { this.setData({ date: e.detail.value }); },
   onTime(e) { this.setData({ ti: +e.detail.value }); },
   onGender(e) { this.setData({ gi: +e.detail.value }); },
@@ -70,6 +73,7 @@ Page({
         const ug = r.analysis.usefulGod;
         const p = profile.get();
         const isSelf = !!p && p.date === this.data.date && p.ti === this.data.ti && p.gi === this.data.gi;
+        this._pk = `${this.data.date}|${this.data.ti}|${this.data.gi}`;
         this.setData({ r: null });
         this.setData({
           busy: false, isSelf, showForm: false,

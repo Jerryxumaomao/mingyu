@@ -112,6 +112,8 @@ Page({
   },
   goOutfit() { wx.switchTab({ url: '/pages/outfit/outfit' }); },
   goKline() { wx.switchTab({ url: '/pages/fortune/fortune' }); },
+  onShareAppMessage() { return { title: '观其变而玩其占 · 玩占', path: '/pages/index/index' }; },
+  onShareTimeline() { return { title: '观其变而玩其占 · 玩占' }; },
   goPaipan() { wx.navigateTo({ url: '/pages/paipan/paipan' }); },
   goHehun() { wx.navigateTo({ url: '/pages/hehun/hehun' }); },
   goLiuren() { wx.navigateTo({ url: '/pages/liuren/liuren' }); },

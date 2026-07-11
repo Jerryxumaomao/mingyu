@@ -17,6 +17,7 @@ Page({
     b: { date: '1996-08-20', ti: 7, gi: 1 },
     r: null,
   },
+  onShareAppMessage() { return { title: '两个人合不合,来试试', path: '/pages/hehun/hehun' }; },
   onA(e) { this.pick('a', e); },
   onB(e) { this.pick('b', e); },
   pick(side, e) {

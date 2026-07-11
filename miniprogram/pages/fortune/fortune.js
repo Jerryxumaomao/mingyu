@@ -27,11 +27,13 @@ Page({
   },
   render(k) {
     const today = daily.score(new Date(), k.natal);
-    // 今日开运色:直接吃首页仪表盘缓存(首页每天会算)
+    // 今日开运色:吃首页仪表盘缓存,但必须校验"同档案同日",防止显示昨天/旧档案的颜色
     let colors = null;
     try {
       const c = wx.getStorageSync('wz-dash');
-      if (c && c.dash && c.dash.main) colors = { main: c.dash.main, accent: c.dash.accent || [] };
+      const d = new Date();
+      const key = `${this.person.date}|${this.person.ti}|${this.person.gi}|${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}|v2`;
+      if (c && c.key === key && c.dash && c.dash.main) colors = { main: c.dash.main, accent: c.dash.accent || [] };
     } catch (e) { /* 没有就不显示 */ }
     const qi = { 大吉: 0, 吉: 1, 平: 2, 凶: 3, 大凶: 4 }[today.band];
     this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], colors },
@@ -68,4 +70,6 @@ Page({
   goOutfit() { wx.switchTab({ url: '/pages/outfit/outfit' }); },
   goHehun() { wx.navigateTo({ url: '/pages/hehun/hehun' }); },
   goLiuren() { wx.navigateTo({ url: '/pages/liuren/liuren' }); },
+  onShareAppMessage() { return { title: '今日宜忌,看一眼再出门', path: '/pages/fortune/fortune' }; },
+  onShareTimeline() { return { title: '今日宜忌,看一眼再出门' }; },
 });

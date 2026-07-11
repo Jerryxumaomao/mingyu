@@ -245,4 +245,5 @@ Page({
     const { date, ti, gi } = this.person;
     wx.navigateTo({ url: `/pages/kchart/kchart?date=${date}&ti=${ti}&gi=${gi}` });
   },
+  onShareAppMessage() { return { title: '今日宜忌,看一眼再出门', path: '/pages/fortune/fortune' }; },
 });
