@@ -34,15 +34,19 @@ node scripts/upload-miniprogram.mjs upload 1.0.0 "首个提审版本"
 脚本守卫:appid 未替换 / 密钥缺失都会报中文指引;`robot:1`(上传机器人号,
 同号新传覆盖旧传,想并存多版本换 2~30)。
 
-## 路径③:开发者工具 Skills(装好后 AI 可全自动)
+## 路径③:开发者工具 Skills(✅ 已打通,2026-07-11 实战验证)
 
-- 需要 **Nightly 版**开发者工具(≥2.02.2607032),下载装好并**微信扫码登录**
-  (这两步只能人来);
-- 终端跑 `wechatide`,把输出的 Skill 路径交给 AI(或菜单栏"导出开发者工具 Skill");
-- 之后 AI 可调 `wechatide -c <client> -t <tool>`:开项目窗口、编译、打开指定页、
-  模拟器点击/输入/截图、读 Console/Network 日志、真机预览二维码、**上传体验版**;
-- 对本项目的价值:小程序 UI 改动可以像看板一样"改完→截图目验→迭代",
-  不再依赖用户手工在工具里点。
+- Nightly 版 2.02.2607102 已装于 `D:\Software\微信web开发者工具`,已登录;
+  `wechatide.cmd` 不在 PATH,用完整路径调用;
+- 首次接入:`wechatide auth -c Claude` → 工具内授权 → `check_devtools_status`
+  返回 openid 即就绪(服务端口 63408;安全设置里四个开关全开);
+- **实战坑**:skill 文档示例的 `project_open_window` 在 v0.2.5 实际叫
+  `open_project_window`(动词在前);工具名以 `wechatide help` 输出为准;
+- **关键发现:此路径走登录态,不受 CI 上传密钥的 IP 白名单限制**——
+  IP 报 20003 时换这条路即可;
+- 已验证可用:open_project_window / automation_viewport_action 截图 /
+  auto_preview(预览直推开发者微信)/ miniprogram_upload(传体验版);
+- v1.0.0 已于 2026-07-11 经 `miniprogram_upload` 上传后台(包体积 757KB)。
 
 ## 后台手动部分(上传之后)
 
