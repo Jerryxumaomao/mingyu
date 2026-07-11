@@ -35,11 +35,17 @@
     <view class="glyph zhu">衣</view>
     <view style="flex:1; min-width:0">
       <view class="cardtitle">今日穿搭 <text class="en" style="margin-left:8rpx">Outfit of the Day</text></view>
-      <view wx:if="{{dash}}" style="display:flex; align-items:center; gap:14rpx; margin-top:14rpx; flex-wrap:wrap">
-        <view class="swatch" wx:for="{{dash.main}}" wx:key="n" style="background:{{item.c}}"></view>
-        <text wx:if="{{dash.main.length}}" style="font-size:28rpx">{{dash.main[0].n}} 为主</text>
-        <view class="swatch" wx:for="{{dash.accent}}" wx:key="n" style="background:{{item.c}}; width:36rpx; height:36rpx"></view>
-        <text wx:if="{{dash.accent.length}}" class="muted">{{dash.accent[0].n}} 点缀</text>
+      <view wx:if="{{dash}}" style="margin-top:14rpx">
+        <view style="display:flex; align-items:center; gap:12rpx">
+          <text class="muted" style="flex:none">主色</text>
+          <view class="swatch" wx:for="{{dash.main}}" wx:key="n" style="background:{{item.c}}"></view>
+          <text wx:if="{{dash.main.length}}" style="font-size:28rpx">{{dash.main[0].n}}</text>
+        </view>
+        <view style="display:flex; align-items:center; gap:12rpx; margin-top:10rpx">
+          <text class="muted" style="flex:none">辅色</text>
+          <view class="swatch" wx:for="{{dash.accent}}" wx:key="n" style="background:{{item.c}}; width:36rpx; height:36rpx"></view>
+          <text wx:if="{{dash.accent.length}}" class="muted">{{dash.accent[0].n}}</text>
+        </view>
       </view>
       <view wx:else class="muted" style="margin-top:10rpx">{{pillars ? '正在为你调色…' : '设置档案后,每日开运色自动点亮'}}</view>
     </view>
