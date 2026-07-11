@@ -55,7 +55,7 @@ Page({
       this.setData({ date: p.date, ti: p.ti, gi: p.gi }, () => this.run());
     }
   },
-  onShareAppMessage() { return { title: '排个盘,看看你的喜与忌', path: '/pages/paipan/paipan' }; },
+  onShareAppMessage() { return { title: '看看你的生辰五行', path: '/pages/paipan/paipan' }; },
   onDate(e) { this.setData({ date: e.detail.value }); },
   onTime(e) { this.setData({ ti: +e.detail.value }); },
   onGender(e) { this.setData({ gi: +e.detail.value }); },
@@ -63,7 +63,7 @@ Page({
   run() {
     if (this.data.busy) return;
     this.setData({ busy: true });
-    wx.showLoading({ title: '正在排盘', mask: true });
+    wx.showLoading({ title: '正在生成', mask: true });
     setTimeout(() => {
       try {
         const r = MY.baziCalculator.calculateBazi({

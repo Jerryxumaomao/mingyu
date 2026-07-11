@@ -2,9 +2,9 @@
 <!-- 日/年切换(仿参考图 segmented) -->
 <view style="display:flex; gap:12rpx; margin:24rpx 24rpx 0">
   <view data-m="day" bindtap="switchMode"
-    style="padding:12rpx 36rpx; border-radius:999rpx; font-size:29rpx; {{mode === 'day' ? 'background:#b5432f; color:#fbf3e2; font-weight:700' : 'color:#8a8272; border:2rpx solid #d8cdb4'}}">日运</view>
+    style="padding:12rpx 36rpx; border-radius:999rpx; font-size:29rpx; {{mode === 'day' ? 'background:#b5432f; color:#fbf3e2; font-weight:700' : 'color:#8a8272; border:2rpx solid #d8cdb4'}}">逐日</view>
   <view data-m="year" bindtap="switchMode"
-    style="padding:12rpx 36rpx; border-radius:999rpx; font-size:29rpx; {{mode === 'year' ? 'background:#b5432f; color:#fbf3e2; font-weight:700' : 'color:#8a8272; border:2rpx solid #d8cdb4'}}">年运</view>
+    style="padding:12rpx 36rpx; border-radius:999rpx; font-size:29rpx; {{mode === 'year' ? 'background:#b5432f; color:#fbf3e2; font-weight:700' : 'color:#8a8272; border:2rpx solid #d8cdb4'}}">逐年</view>
   <view wx:if="{{mode === 'year'}}" class="muted" hover-class="btn-press" bindtap="goBig" style="margin-left:auto; align-self:center">横屏放大 ›</view>
 </view>
 

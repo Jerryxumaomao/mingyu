@@ -36,11 +36,11 @@
     </view>
     <view style="flex:1; display:flex; flex-direction:column; gap:20rpx">
       <view class="tile" hover-class="btn-press" bindtap="goDay">
-        <view style="font-weight:700; font-size:28rpx">日运 <text class="en">7 Days</text></view>
+        <view style="font-weight:700; font-size:28rpx">逐日 <text class="en">7 Days</text></view>
         <canvas type="2d" id="dthumb" style="width:100%; height:90rpx; margin-top:8rpx"></canvas>
       </view>
       <view class="tile" hover-class="btn-press" bindtap="goYear">
-        <view style="font-weight:700; font-size:28rpx">年运 <text class="en">Life</text></view>
+        <view style="font-weight:700; font-size:28rpx">逐年 <text class="en">Life</text></view>
         <canvas type="2d" id="ythumb" style="width:100%; height:90rpx; margin-top:8rpx"></canvas>
       </view>
     </view>
@@ -51,15 +51,15 @@
     <view class="tile" hover-class="btn-press" bindtap="goHehun" style="display:flex; align-items:center; gap:20rpx">
       <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">合</view>
       <view style="min-width:0">
-        <view class="cardtitle" style="font-size:30rpx">八字合婚</view>
+        <view class="cardtitle" style="font-size:30rpx">五行相配</view>
         <view class="en" style="margin-top:2rpx">Match</view>
       </view>
     </view>
     <view class="tile" hover-class="btn-press" bindtap="goLiuren" style="display:flex; align-items:center; gap:20rpx">
       <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">卦</view>
       <view style="min-width:0">
-        <view class="cardtitle" style="font-size:30rpx">小六壬起卦</view>
-        <view class="en" style="margin-top:2rpx">Divination</view>
+        <view class="cardtitle" style="font-size:30rpx">每日小签</view>
+        <view class="en" style="margin-top:2rpx">Daily Sign</view>
       </view>
     </view>
   </view>
@@ -79,7 +79,7 @@
 
 <view class="card ani-rise" wx:if="{{!hasProfile}}">
   <view class="cardtitle">运势还未点亮</view>
-  <view class="muted" style="margin-top:10rpx">设置本人档案后,今日吉凶、日运、年运会在这里自动生成。</view>
+  <view class="muted" style="margin-top:10rpx">设置本人档案后,今日吉凶与逐日、逐年走势会在这里自动生成。</view>
   <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
 </view>
 
