@@ -8,6 +8,18 @@
   <view style="margin-top:12rpx" wx:if="{{best}}">🔺 {{best}}  🔻 {{worst}}</view>
 </view>
 
+<view class="card ani-rise d1" wx:if="{{reading}}">
+  <view class="cardtitle" style="font-size:31rpx">近年走势解读 <text class="en" style="margin-left:8rpx">Recent Trend</text></view>
+  <view wx:for="{{reading.lines}}" wx:key="year" style="margin-top:18rpx; padding-left:20rpx; border-left:4rpx solid {{item.up ? '#b5432f' : item.down ? '#3f7050' : '#d8cdb4'}}">
+    <view style="font-weight:700">
+      {{item.year}} {{item.gz}} · {{item.score}}分
+      <text wx:if="{{item.now}}" class="gold" style="margin-left:8rpx; font-size:24rpx">◉ 今年</text>
+    </view>
+    <view class="muted" style="margin-top:2rpx">{{item.text}}</view>
+  </view>
+  <view style="margin-top:20rpx; padding:18rpx 20rpx; background:rgba(181,67,47,.06); border-radius:14rpx; font-size:28rpx">{{reading.summary}}</view>
+</view>
+
 <view class="card ani-rise" wx:if="{{!natal && !busy && !showForm}}">
   <view class="cardtitle">全程还未铺开</view>
   <view class="muted" style="margin-top:10rpx">设置本人档案后,这里会自动生成;也可以点下方按钮帮别人看看。</view>

@@ -1,5 +1,6 @@
 const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
+const klineReading = require('../../utils/kline-reading.js');
 const TIMES =['早子 00-01', '丑 01-03', '寅 03-05', '卯 05-07', '辰 07-09', '巳 09-11', '午 11-13', '未 13-15', '申 15-17', '酉 17-19', '戌 19-21', '亥 21-23', '晚子 23-24'];
 
 Page({
@@ -56,6 +57,7 @@ Page({
       natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
       best: sorted.slice(0, 2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
       worst: sorted.slice(-2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
+      reading: klineReading.readRecent(k, new Date().getFullYear()),
     }, () => this.draw(ys));
   },
   draw(ys) {
