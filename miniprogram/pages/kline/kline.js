@@ -7,25 +7,37 @@ Page({
     const p = profile.get();
     if (p) this.setData({ date: p.date, ti: p.ti, gi: p.gi });
   },
-  data: { date: '1996-11-23', times: TIMES, ti: 2, genders: ['男 (乾造)', '女 (坤造)'], gi: 0, natal: '', best: '', worst: '' },
+  data: { date: '1996-11-23', times: TIMES, ti: 2, genders: ['男 (乾造)', '女 (坤造)'], gi: 0, natal: '', best: '', worst: '', busy: false },
   onDate(e) { this.setData({ date: e.detail.value }); },
   onTime(e) { this.setData({ ti: +e.detail.value }); },
   onGender(e) { this.setData({ gi: +e.detail.value }); },
   run() {
-    let k;
-    try {
-      k = MY.calculateLifeKline(
-        { ...profile.personFrom(this.data.date, this.data.ti, this.data.gi), strengthModel: 'classic-calibrated' },
-        { startAge: 18, endAge: 70 },
-      );
-    } catch (e) { wx.showToast({ title: e.message, icon: 'none' }); return; }
-    const ys = k.years;
-    const sorted = [...ys].sort((a, b) => b.score - a.score);
-    this.setData({
-      natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
-      best: sorted.slice(0, 2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
-      worst: sorted.slice(-2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
-    }, () => this.draw(ys));
+    if (this.data.busy) return;
+    this.setData({ busy: true });
+    wx.showLoading({ title: '正在推演53年运势', mask: true });
+    // 逐年排盘是同步重活,让出一帧先把 loading 画出来再开算
+    setTimeout(() => {
+      let k;
+      try {
+        k = MY.calculateLifeKline(
+          { ...profile.personFrom(this.data.date, this.data.ti, this.data.gi), strengthModel: 'classic-calibrated' },
+          { startAge: 18, endAge: 70 },
+        );
+      } catch (e) {
+        wx.hideLoading();
+        this.setData({ busy: false });
+        wx.showToast({ title: e.message, icon: 'none' });
+        return;
+      }
+      const ys = k.years;
+      const sorted = [...ys].sort((a, b) => b.score - a.score);
+      this.setData({
+        busy: false,
+        natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
+        best: sorted.slice(0, 2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
+        worst: sorted.slice(-2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
+      }, () => { wx.hideLoading(); this.draw(ys); });
+    }, 80);
   },
   draw(ys) {
     wx.createSelectorQuery().select('#kc').fields({ node: true, size: true }).exec((res) => {

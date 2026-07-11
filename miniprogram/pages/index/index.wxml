@@ -1,14 +1,26 @@
-<view class="card ani-rise" style="padding:44rpx 36rpx 36rpx">
-  <view style="display:flex; justify-content:space-between; height:300rpx">
-    <view style="display:flex">
-      <view class="vtxt breathe" style="font-size:56rpx; color:#33302a">观变玩占</view>
-      <view class="vtxt muted" style="letter-spacing:10rpx; margin-right:18rpx; font-weight:400">观其变而玩其占</view>
+<navigator url="/pages/profile/profile">
+  <view class="card ani-rise" hover-class="btn-press" style="padding:44rpx 36rpx 32rpx">
+    <view style="display:flex; justify-content:space-between; height:300rpx">
+      <view style="display:flex">
+        <view class="vtxt breathe" style="font-size:56rpx; color:#33302a">观变玩占</view>
+        <view class="vtxt muted" style="letter-spacing:10rpx; margin-right:18rpx; font-weight:400">观其变而玩其占</view>
+      </view>
+      <view wx:if="{{pillars}}" style="display:flex; gap:20rpx; align-self:center">
+        <view wx:for="{{pillars}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:4rpx">
+          <view class="muted" style="font-size:20rpx">{{item.n}}</view>
+          <view style="font-size:42rpx; font-weight:700; line-height:1.2; color:{{item.day ? '#b5432f' : '#33302a'}}">{{item.g}}</view>
+          <view style="font-size:42rpx; font-weight:700; line-height:1.2; color:{{item.day ? '#b5432f' : '#33302a'}}">{{item.z}}</view>
+        </view>
+      </view>
+      <view wx:else class="muted" style="align-self:center; text-align:center; line-height:2">
+        <view style="font-size:26rpx">尚未设置本人档案</view>
+        <view style="font-size:22rpx">点击录入 · 四柱常驻此处</view>
+      </view>
+      <view class="seal ani-stamp" style="align-self:flex-end; font-size:40rpx">档</view>
     </view>
-    <view class="seal ani-stamp" style="align-self:flex-end">玩<br/>占</view>
+    <view class="muted" style="letter-spacing:4rpx; margin-top:16rpx">{{profDesc}}</view>
   </view>
-  <view class="muted" style="letter-spacing:8rpx; margin-top:16rpx">见 微 知 著 · 先 时 而 动</view>
-</view>
-<navigator url="/pages/profile/profile"><view class="card ani-rise d1" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">档</view><view><view style="font-weight:700;letter-spacing:4rpx">{{profTitle}}</view><view class="muted">{{profDesc}}</view></view></view></navigator>
+</navigator>
 <navigator url="/pages/paipan/paipan"><view class="card ani-rise d1" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">盘</view><view><view style="font-weight:700;letter-spacing:4rpx">八字排盘</view><view class="muted">四柱 · 强弱 · 用神四派</view></view></view></navigator>
 <navigator url="/pages/kline/kline"><view class="card ani-rise d2" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">运</view><view><view style="font-weight:700;letter-spacing:4rpx">人生K线</view><view class="muted">逐年运势 · 流月K线 · 岁运事件</view></view></view></navigator>
 <navigator url="/pages/hehun/hehun"><view class="card ani-rise d3" hover-class="btn-press" style="display:flex;align-items:center;gap:20rpx"><view class="glyph">合</view><view><view style="font-weight:700;letter-spacing:4rpx">八字合婚</view><view class="muted">日柱鸳鸯合 · 用神互补</view></view></view></navigator>
