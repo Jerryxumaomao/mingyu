@@ -23,8 +23,8 @@ input, picker { background: #fbf7ec; border: 1rpx solid #e6dcc6; border-radius: 
 .tile-row { display: flex; gap: 20rpx; margin: 0 24rpx 22rpx; }
 /* 色圆点 / 五行签 */
 .swatch { width: 52rpx; height: 52rpx; border-radius: 50%; border: 2rpx solid rgba(51, 48, 42, .15); flex: none; }
-.wxp { display: inline-flex; align-items: center; justify-content: center; min-width: 56rpx; height: 56rpx;
-  border-radius: 12rpx; font-size: 30rpx; font-weight: 700; color: #fbf3e2; margin-right: 10rpx; padding: 0 8rpx; }
+.wxp { display: inline-flex; align-items: center; justify-content: center; min-width: 46rpx; height: 46rpx;
+  border-radius: 10rpx; font-size: 26rpx; font-weight: 700; color: #fbf3e2; margin-right: 8rpx; padding: 0 6rpx; flex: none; }
 .cardtitle { font-size: 34rpx; font-weight: 700; letter-spacing: 4rpx; }
 /* 开屏 */
 .splash { position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 999; }
