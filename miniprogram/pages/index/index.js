@@ -3,6 +3,7 @@ const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
 
 const { WX_COLOR, hexOf } = require('../../utils/colormap.js');
+const { GAN_WX, ZHI_WX } = require('../../utils/daily-fortune.js');
 
 Page({
   data: {
@@ -44,7 +45,7 @@ Page({
     // 仪表盘:同一档案同一天只算一次(内存 + 本地缓存两级)
     const d = new Date();
     const today = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-    const key = `${p.date}|${p.ti}|${p.gi}|${today}`;
+    const key = `${p.date}|${p.ti}|${p.gi}|${today}|v2`; // v2:dash 增加 wx5/色名括注字段
     if (this._dashKey === key && this.data.dash) return;
     try {
       const c = wx.getStorageSync('wz-dash');
@@ -75,13 +76,29 @@ Page({
         yr = (k.years || []).find((y) => y.year === ty);
       }
       this._dashKey = key;
+      // 今日五行:流日干支落在哪两行,与命局喜忌的关系
+      const gwx = GAN_WX[day.pillars.day.gan];
+      const zwx = ZHI_WX[day.pillars.day.zhi];
+      const wx5 = ['木', '火', '土', '金', '水'].map((w) => {
+        const onDay = gwx === w || zwx === w;
+        const tag = onDay ? (fav.indexOf(w) > -1 ? '当值·喜' : unf.indexOf(w) > -1 ? '当值·忌' : '当值')
+          : (fav.indexOf(w) > -1 ? '喜' : unf.indexOf(w) > -1 ? '忌' : '·');
+        return { w, c: WX_COLOR[w], day: onDay, tag };
+      });
+      const dayEls = gwx === zwx ? gwx : `${gwx}、${zwx}`;
+      const favDay = [gwx, zwx].some((w) => fav.indexOf(w) > -1);
+      const unfDay = [gwx, zwx].some((w) => unf.indexOf(w) > -1);
+      const wxLine = `今日${dayEls}当值,${favDay && !unfDay ? '正合你的喜用,诸事可为' : unfDay && !favDay ? '与你的命局相耗,宜守不宜攻' : favDay ? '喜忌相杂,顺势而为' : '不喜不忌,平常心行事'}。`;
+      const alt = (arr) => (arr.length > 1 ? `${arr[0].n}(${arr.slice(1).map((x) => x.n).join('、')})` : (arr[0] ? arr[0].n : ''));
+      const main = (adv.colors.main || []).slice(0, 3).map((n) => ({ n, c: hexOf(n) }));
+      const accent = (adv.colors.accent || []).slice(0, 2).map((n) => ({ n, c: hexOf(n) }));
       const dash = {
         strength: chart.analysis.dayMasterStrength.status,
         fav: fav.map((w) => ({ w, c: WX_COLOR[w] || '#8a8272' })),
         unf: unf.map((w) => ({ w, c: WX_COLOR[w] || '#8a8272' })),
         dayGz: day.pillars.day.ganZhi,
-        main: (adv.colors.main || []).slice(0, 3).map((n) => ({ n, c: hexOf(n) })),
-        accent: (adv.colors.accent || []).slice(0, 2).map((n) => ({ n, c: hexOf(n) })),
+        wx5, wxLine,
+        main, accent, mainTxt: alt(main), accentTxt: alt(accent),
         year: yr ? {
           y: ty, gz: yr.liunianGanZhi, score: Math.round(yr.score),
           lv: yr.score >= 67 ? '高走' : yr.score >= 45 ? '平稳' : '低回',

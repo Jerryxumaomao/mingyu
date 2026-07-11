@@ -1,7 +1,6 @@
 const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
 const daily = require('../../utils/daily-fortune.js');
-const { WX_COLOR } = require('../../utils/colormap.js');
 
 const BAND_COLOR = { 大吉: '#b5432f', 吉: '#c96f2f', 平: '#8a8272', 凶: '#3f7050', 大凶: '#2f5540' };
 
@@ -28,19 +27,6 @@ Page({
   },
   render(k) {
     const today = daily.score(new Date(), k.natal);
-    // 今日五行:流日干支落在哪两行,与命局喜忌的关系
-    const fav = k.natal.favorableWuxing || [];
-    const unf = k.natal.unfavorableWuxing || [];
-    const wx5 = ['木', '火', '土', '金', '水'].map((w) => {
-      const day = today.gwx === w || today.zwx === w;
-      const tag = day ? (fav.indexOf(w) > -1 ? '当值·喜' : unf.indexOf(w) > -1 ? '当值·忌' : '当值')
-        : (fav.indexOf(w) > -1 ? '喜' : unf.indexOf(w) > -1 ? '忌' : '·');
-      return { w, c: WX_COLOR[w], day, tag };
-    });
-    const dayEls = today.gwx === today.zwx ? today.gwx : `${today.gwx}、${today.zwx}`;
-    const favDay = [today.gwx, today.zwx].some((w) => fav.indexOf(w) > -1);
-    const unfDay = [today.gwx, today.zwx].some((w) => unf.indexOf(w) > -1);
-    const wxLine = `今日${dayEls}当值,${favDay && !unfDay ? '正合你的喜用,诸事可为' : unfDay && !favDay ? '与你的命局相耗,宜守不宜攻' : favDay ? '喜忌相杂,顺势而为' : '不喜不忌,平常心行事'}。`;
     // 今日开运色:直接吃首页仪表盘缓存(首页每天会算)
     let colors = null;
     try {
@@ -48,7 +34,7 @@ Page({
       if (c && c.dash && c.dash.main) colors = { main: c.dash.main, accent: c.dash.accent || [] };
     } catch (e) { /* 没有就不显示 */ }
     const qi = { 大吉: 0, 吉: 1, 平: 2, 凶: 3, 大凶: 4 }[today.band];
-    this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], wx5, wxLine, colors },
+    this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], colors },
       () => this.drawThumbs(k));
   },
   drawThumbs(k) {
@@ -80,4 +66,6 @@ Page({
   goDay() { wx.navigateTo({ url: '/pages/fortune-chart/fortune-chart?mode=day' }); },
   goYear() { wx.navigateTo({ url: '/pages/fortune-chart/fortune-chart?mode=year' }); },
   goOutfit() { wx.switchTab({ url: '/pages/outfit/outfit' }); },
+  goHehun() { wx.navigateTo({ url: '/pages/hehun/hehun' }); },
+  goLiuren() { wx.navigateTo({ url: '/pages/liuren/liuren' }); },
 });

@@ -77,4 +77,4 @@ const series = (natal, offsetStart, offsetEnd) => {
   return out;
 };
 
-module.exports = { score, series };
+module.exports = { score, series, GAN_WX, ZHI_WX };
