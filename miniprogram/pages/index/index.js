@@ -24,14 +24,14 @@ Page({
       app.globalData.splashDone = true;
       this.setData({ splash: true });
       wx.hideTabBar({ animation: false });
-      this._splashTimer = setTimeout(() => this.endSplash(), 2600);
+      this._splashTimer = setTimeout(() => this.endSplash(), 1600);
     }
   },
   skipSplash() { clearTimeout(this._splashTimer); this.endSplash(); },
   endSplash() {
     if (!this.data.splash || this.data.splashFade) return;
     this.setData({ splashFade: true });
-    setTimeout(() => { this.setData({ splash: false }); wx.showTabBar({ animation: true }); }, 480);
+    setTimeout(() => { this.setData({ splash: false }); wx.showTabBar({ animation: true }); }, 400);
   },
   onShow() {
     const p = profile.get();
