@@ -1,10 +1,10 @@
 <view class="card ani-rise" style="padding:44rpx 36rpx 36rpx">
   <view style="display:flex; justify-content:space-between; height:300rpx">
     <view style="display:flex">
-      <view class="vtxt breathe" style="font-size:56rpx; color:#33302a">知几其神</view>
-      <view class="vtxt muted" style="letter-spacing:10rpx; margin-right:18rpx; font-weight:400">易 · 系辞</view>
+      <view class="vtxt breathe" style="font-size:56rpx; color:#33302a">观变玩占</view>
+      <view class="vtxt muted" style="letter-spacing:10rpx; margin-right:18rpx; font-weight:400">观其变而玩其占</view>
     </view>
-    <view class="seal ani-stamp" style="align-self:flex-end">知<br/>几</view>
+    <view class="seal ani-stamp" style="align-self:flex-end">玩<br/>占</view>
   </view>
   <view class="muted" style="letter-spacing:8rpx; margin-top:16rpx">见 微 知 著 · 先 时 而 动</view>
 </view>
