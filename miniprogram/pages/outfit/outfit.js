@@ -27,7 +27,7 @@ Page({
       this.setData({ date: p.date, ti: p.ti, gi: p.gi, target: today() }, () => this.run());
     } else if (this.data.r && this.data.isSelf && this._fav) {
       // 从"我的衣橱"改完回来:只刷新适配部分
-      this.setData({ owned: wardrobe.match(this._fav) });
+      this.setData({ owned: wardrobe.match(this._fav, this._unf || []) });
     }
   },
   onShareAppMessage() { return { title: '今日穿搭色,给你挑好了', path: '/pages/outfit/outfit' }; },
@@ -68,12 +68,13 @@ Page({
         const p = profile.get();
         const isSelf = !!p && p.date === this.data.date && p.ti === this.data.ti && p.gi === this.data.gi;
         this._fav = favArr;
+        this._unf = unfArr;
         this._runKey = `${this.data.date}|${this.data.ti}|${this.data.gi}|${today()}`;
         const paint = (ns, k) => (ns || []).slice(0, k || 4).map((n) => ({ n, c: hexOf(n) }));
         this.setData({ r: null });
         this.setData({
           busy: false, isSelf, showForm: false,
-          owned: isSelf ? wardrobe.match(favArr) : null,
+          owned: isSelf ? wardrobe.match(favArr, unfArr) : null,
           r: {
             fav: favArr.join(''), unf: unfArr.join(''),
             dayGz: day.pillars.day.ganZhi,

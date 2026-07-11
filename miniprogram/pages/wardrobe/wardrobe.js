@@ -12,7 +12,8 @@ Page({
   },
   onLoad() {
     const w = wardrobe.get();
-    this.setData({ owned: w.mats, perfumes: w.perfumes });
+    // 旧存量条目补上分布标记(●◐○)展示字段
+    this.setData({ owned: w.mats, perfumes: w.perfumes.map((p) => ({ ...p, d: wardrobe.marks(p.wx) })) });
   },
   persist() {
     wardrobe.save({ mats: this.data.owned, perfumes: this.data.perfumes });
@@ -29,7 +30,8 @@ Page({
     if (!kw) { this.setData({ kw: '', results: [], showCustom: false }); return; }
     const results = PERFUMES
       .filter((p) => p.n.toLowerCase().includes(kw) || p.en.includes(kw))
-      .slice(0, 8);
+      .slice(0, 8)
+      .map((p) => ({ ...p, d: wardrobe.marks(p.wx) }));
     this.setData({ kw: e.detail.value.trim(), results, showCustom: !results.length });
   },
   addPerfume(e) {
@@ -37,7 +39,7 @@ Page({
     if (this.data.perfumes.some((x) => x.n === p.n)) {
       wx.showToast({ title: '已在香水架上', icon: 'none' }); return;
     }
-    this.setData({ perfumes: [...this.data.perfumes, { n: p.n, wx: p.wx, f: p.f }], kw: '', results: [] }, () => this.persist());
+    this.setData({ perfumes: [...this.data.perfumes, { n: p.n, wx: p.wx, f: p.f, d: wardrobe.marks(p.wx) }], kw: '', results: [] }, () => this.persist());
     wx.showToast({ title: '已上架', icon: 'success' });
   },
   onCustomName(e) { this.setData({ customName: e.detail.value }); },
@@ -47,7 +49,7 @@ Page({
     if (!name) { wx.showToast({ title: '先填香水名', icon: 'none' }); return; }
     if (this.data.perfumes.some((x) => x.n === name)) { wx.showToast({ title: '已在香水架上', icon: 'none' }); return; }
     const g = this.data.groups[this.data.gIdx];
-    const p = { n: name, wx: [g[0]], f: g.slice(4), custom: true };
+    const p = { n: name, wx: [g[0]], f: g.slice(4), custom: true, d: wardrobe.marks([g[0]]) };
     this.setData({ perfumes: [...this.data.perfumes, p], kw: '', results: [], showCustom: false, customName: '' }, () => this.persist());
     wx.showToast({ title: '已存入个人库', icon: 'success' });
   },

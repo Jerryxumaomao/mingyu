@@ -18,7 +18,7 @@
     style="display:flex; justify-content:space-between; align-items:center; padding:18rpx 8rpx; border-bottom:1rpx solid #efe7d3">
     <view style="min-width:0">
       <view style="font-size:29rpx">{{item.n}}</view>
-      <view class="muted" style="font-size:23rpx">{{item.f}} · 属{{item.wx}}</view>
+      <view class="muted" style="font-size:23rpx">{{item.f}} · {{item.d}}</view>
     </view>
     <view class="gold" style="font-size:40rpx; flex:none">＋</view>
   </view>
@@ -34,7 +34,7 @@
       style="display:flex; justify-content:space-between; align-items:center; padding:14rpx 8rpx">
       <view style="min-width:0">
         <text style="font-size:29rpx">{{item.n}}</text>
-        <text class="muted" style="margin-left:12rpx; font-size:23rpx">{{item.f}} · 属{{item.wx}}{{item.custom ? ' · 自建' : ''}}</text>
+        <text class="muted" style="margin-left:12rpx; font-size:23rpx">{{item.f}} · {{item.d}}{{item.custom ? ' · 自建' : ''}}</text>
       </view>
       <view data-i="{{index}}" catchtap="removePerfume" class="muted" style="font-size:34rpx; padding:0 12rpx; flex:none">×</view>
     </view>
