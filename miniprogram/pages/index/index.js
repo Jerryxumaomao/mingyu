@@ -1,5 +1,6 @@
 const MY = require('../../lib/mingyu.js');
 const profile = require('../../utils/profile.js');
+const klineCache = require('../../utils/kline-cache.js');
 
 const WX_COLOR = { 木: '#3f7050', 火: '#b5432f', 土: '#8a6a3b', 金: '#b8952e', 水: '#3a5f7d' };
 const COLOR_HEX = [
@@ -71,10 +72,14 @@ Page({
         favorableWuxing: fav, unfavorableWuxing: unf,
         dayGan: day.pillars.day.gan, dayZhi: day.pillars.day.zhi, dayMasterGan: chart.dayMaster.gan,
       });
-      // 今年运势:只算当年附近的窄窗,避免整条K线的开销
-      const age = ty - Number(p.date.split('-')[0]);
-      const k = MY.calculateLifeKline(person, { startAge: Math.max(1, age - 1), endAge: age + 2 });
-      const yr = (k.years || []).find((y) => y.year === ty);
+      // 今年运势:优先吃启动预载的全程缓存;未命中才算当年附近的窄窗
+      const cached = klineCache.get(p.date, p.ti, p.gi);
+      let yr = cached ? (cached.years || []).find((y) => y.year === ty) : null;
+      if (!yr) {
+        const age = ty - Number(p.date.split('-')[0]);
+        const k = MY.calculateLifeKline(person, { startAge: Math.max(1, age - 1), endAge: age + 2 });
+        yr = (k.years || []).find((y) => y.year === ty);
+      }
       this._dashKey = key;
       const dash = {
         strength: chart.analysis.dayMasterStrength.status,

@@ -1,5 +1,5 @@
-const MY = require('../../lib/mingyu.js');
 const profile = require('../../utils/profile.js');
+const klineCache = require('../../utils/kline-cache.js');
 
 Page({
   data: { sel: null, natal: '', ready: false },
@@ -15,10 +15,9 @@ Page({
   },
   compute() {
     try {
-      const k = MY.calculateLifeKline(
-        { ...profile.personFrom(this.person.date, this.person.ti, this.person.gi), strengthModel: 'classic-calibrated' },
-        { startAge: 18, endAge: 70 },
-      );
+      const { date, ti, gi } = this.person;
+      let k = klineCache.get(date, ti, gi);
+      if (!k) { k = klineCache.build(date, ti, gi); klineCache.save(k); }
       this.ys = k.years;
       this.setData({
         ready: true,

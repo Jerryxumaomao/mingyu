@@ -1,6 +1,6 @@
-const MY = require('../../lib/mingyu.js');
 const profile = require('../../utils/profile.js');
-const TIMES = ['早子 00-01', '丑 01-03', '寅 03-05', '卯 05-07', '辰 07-09', '巳 09-11', '午 11-13', '未 13-15', '申 15-17', '酉 17-19', '戌 19-21', '亥 21-23', '晚子 23-24'];
+const klineCache = require('../../utils/kline-cache.js');
+const TIMES =['早子 00-01', '丑 01-03', '寅 03-05', '卯 05-07', '辰 07-09', '巳 09-11', '午 11-13', '未 13-15', '申 15-17', '酉 17-19', '戌 19-21', '亥 21-23', '晚子 23-24'];
 
 Page({
   data: {
@@ -24,33 +24,39 @@ Page({
   },
   run() {
     if (this.data.busy) return;
+    const { date, ti, gi } = this.data;
+    const cached = klineCache.get(date, ti, gi);
+    if (cached) { this.render(cached); return; } // 启动时已预载,秒开
     this.setData({ busy: true });
     wx.showLoading({ title: '正在推演53年', mask: true });
     // 逐年排盘是同步重活,让出一帧先把 loading 画出来再开算
     setTimeout(() => {
       let k;
       try {
-        k = MY.calculateLifeKline(
-          { ...profile.personFrom(this.data.date, this.data.ti, this.data.gi), strengthModel: 'classic-calibrated' },
-          { startAge: 18, endAge: 70 },
-        );
+        k = klineCache.build(date, ti, gi);
       } catch (e) {
         wx.hideLoading();
         this.setData({ busy: false });
         wx.showToast({ title: e.message, icon: 'none' });
         return;
       }
-      const p = profile.get();
-      const isSelf = !!p && p.date === this.data.date && p.ti === this.data.ti && p.gi === this.data.gi;
-      const ys = k.years;
-      const sorted = [...ys].sort((a, b) => b.score - a.score);
-      this.setData({
-        busy: false, isSelf, showForm: false,
-        natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
-        best: sorted.slice(0, 2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
-        worst: sorted.slice(-2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
-      }, () => { wx.hideLoading(); this.draw(ys); });
+      klineCache.save(k);
+      wx.hideLoading();
+      this.setData({ busy: false });
+      this.render(k);
     }, 80);
+  },
+  render(k) {
+    const p = profile.get();
+    const isSelf = !!p && p.date === this.data.date && p.ti === this.data.ti && p.gi === this.data.gi;
+    const ys = k.years;
+    const sorted = [...ys].sort((a, b) => b.score - a.score);
+    this.setData({
+      isSelf, showForm: false,
+      natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
+      best: sorted.slice(0, 2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
+      worst: sorted.slice(-2).map((x) => `${x.year}${x.liunianGanZhi} ${x.score}`).join(' / '),
+    }, () => this.draw(ys));
   },
   draw(ys) {
     wx.createSelectorQuery().select('#kc').fields({ node: true, size: true }).exec((res) => {

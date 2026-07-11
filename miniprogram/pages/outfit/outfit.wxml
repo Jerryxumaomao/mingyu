@@ -46,6 +46,6 @@
 </view>
 
 <button wx:if="{{!showForm}}" class="go" style="background:transparent; color:#b5432f; border:2rpx solid #b5432f"
-  hover-class="btn-press" bindtap="toggleForm">帮 TA 配一配</button>
+  hover-class="btn-press" bindtap="toggleForm">帮 TA 看看</button>
 
 <view class="muted" style="text-align:center;margin:30rpx">五行取象为传统主流口径,仅供风格参考与娱乐</view>
