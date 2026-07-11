@@ -3,6 +3,11 @@ packages:
 overrides:
   esbuild: 0.28.1
 allowBuilds:
+  # miniprogram-ci 的间接依赖;不跑构建脚本也能正常 upload/preview(已验证),故禁用
+  '@parcel/watcher': false
+  '@swc/core': false
   esbuild: true
+  less: false
+  protobufjs: false
 onlyBuiltDependencies:
   - esbuild
