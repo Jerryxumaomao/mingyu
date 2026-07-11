@@ -26,28 +26,8 @@
     </view>
   </view>
 
-  <!-- 衣橱适配 -->
-  <view class="card ani-rise d1" wx:if="{{owned && !owned.empty}}">
-    <view class="cardtitle" style="font-size:30rpx">👝 从你的衣橱挑 <text class="en" style="margin-left:8rpx">My Picks</text></view>
-    <view wx:if="{{owned.mats.length}}" style="display:flex; align-items:center; gap:12rpx; margin-top:14rpx; flex-wrap:wrap">
-      <text style="font-weight:700; flex:none">戴</text>
-      <view wx:for="{{owned.mats}}" wx:key="index" style="padding:8rpx 20rpx; border-radius:999rpx; background:#b5432f; color:#fbf3e2; font-size:25rpx">{{item}}</view>
-    </view>
-    <view wx:if="{{owned.perfumes.length}}" style="margin-top:12rpx">
-      <view style="display:flex; gap:12rpx; margin-top:6rpx" wx:for="{{owned.perfumes}}" wx:key="index">
-        <text style="font-weight:700; flex:none">喷</text><text style="font-size:27rpx">{{item}}</text>
-      </view>
-    </view>
-    <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:12rpx">已有单品与今日喜用暂无重合,看下方通用推荐</view>
-    <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:14rpx">管理我的衣橱 ›</view>
-  </view>
-  <view class="card ani-rise d1" wx:elif="{{isSelf}}" hover-class="btn-press" bindtap="goWardrobe">
-    <view class="cardtitle" style="font-size:30rpx">👝 登记我的衣橱 <text class="en" style="margin-left:8rpx">Wardrobe</text></view>
-    <view class="muted" style="margin-top:8rpx">勾配饰、加香水,以后直接从你有的里面挑 ›</view>
-  </view>
-
   <!-- 配饰 + 香调:两列并排 chips -->
-  <view class="tile-row ani-rise d2">
+  <view class="tile-row ani-rise d1">
     <view class="tile">
       <view style="font-weight:700; font-size:29rpx">配饰 <text class="en">Wear</text></view>
       <view style="display:flex; gap:10rpx; flex-wrap:wrap; margin-top:14rpx">
@@ -61,6 +41,41 @@
         <view wx:for="{{r.scentAvoid}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; border:2rpx solid #e6dcc6; color:#8a8272; font-size:24rpx; text-decoration:line-through">{{item}}</view>
       </view>
     </view>
+  </view>
+
+  <!-- 搭配:从衣橱里挑(新用户空态盖灰蒙版) -->
+  <view class="card ani-rise d2" wx:if="{{isSelf && owned}}" style="position:relative; overflow:hidden">
+    <view class="cardtitle" style="font-size:30rpx">搭配 <text class="en" style="margin-left:8rpx">My Picks</text></view>
+    <block wx:if="{{!owned.empty}}">
+      <view wx:if="{{owned.mats.length}}" style="display:flex; align-items:center; gap:12rpx; margin-top:16rpx; flex-wrap:wrap">
+        <text style="font-weight:700; flex:none">戴</text>
+        <view wx:for="{{owned.mats}}" wx:key="index" style="padding:8rpx 20rpx; border-radius:999rpx; background:#b5432f; color:#fbf3e2; font-size:25rpx">{{item}}</view>
+      </view>
+      <view wx:if="{{owned.perfumes.length}}" style="margin-top:12rpx">
+        <view style="display:flex; gap:12rpx; margin-top:6rpx" wx:for="{{owned.perfumes}}" wx:key="index">
+          <text style="font-weight:700; flex:none">喷</text><text style="font-size:27rpx">{{item}}</text>
+        </view>
+      </view>
+      <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:14rpx">已有单品与今日喜用暂无重合,可参考上方通用推荐</view>
+      <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:16rpx">管理我的衣橱 ›</view>
+    </block>
+    <block wx:else>
+      <!-- 占位(蒙版之下,示意这里将来长什么样) -->
+      <view style="display:flex; align-items:center; gap:12rpx; margin-top:16rpx">
+        <text style="font-weight:700; flex:none">戴</text>
+        <view wx:for="{{[1, 2, 3]}}" wx:key="*this" style="width:120rpx; height:52rpx; border-radius:999rpx; border:2rpx dashed #d8cdb4"></view>
+      </view>
+      <view style="display:flex; align-items:center; gap:12rpx; margin-top:14rpx">
+        <text style="font-weight:700; flex:none">喷</text>
+        <view style="width:280rpx; height:52rpx; border-radius:999rpx; border:2rpx dashed #d8cdb4"></view>
+      </view>
+      <!-- 灰蒙版 + 引导按钮 -->
+      <view style="position:absolute; left:0; top:0; right:0; bottom:0; background:rgba(51,48,42,.42); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16rpx">
+        <view hover-class="btn-press" bindtap="goWardrobe"
+          style="background:#b5432f; color:#fbf3e2; padding:18rpx 46rpx; border-radius:999rpx; font-size:29rpx; letter-spacing:4rpx; box-shadow:0 6rpx 16rpx rgba(0,0,0,.28)">＋ 添加配饰 / 香水</view>
+        <view style="color:#fbf3e2; font-size:24rpx; letter-spacing:2rpx; opacity:.85">登记一次,每天从你有的里面挑</view>
+      </view>
+    </block>
   </view>
 
   <view class="card ani-rise d3" wx:if="{{r.notes.length}}">

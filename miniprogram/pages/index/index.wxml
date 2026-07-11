@@ -73,13 +73,17 @@
       <view class="cardtitle" style="font-size:30rpx">命盘喜忌</view>
       <view class="en" style="margin-top:4rpx">Useful God</view>
       <view wx:if="{{dash}}" style="margin-top:16rpx">
-        <view style="display:flex; align-items:center; flex-wrap:wrap; row-gap:8rpx; margin-bottom:10rpx">
-          <text class="muted" style="margin-right:8rpx">喜</text>
-          <view class="wxp" wx:for="{{dash.fav}}" wx:key="w" style="background:{{item.c}}">{{item.w}}</view>
+        <view style="display:flex; align-items:center; margin-bottom:10rpx">
+          <text class="muted" style="margin-right:12rpx; flex:none">喜</text>
+          <view style="flex:1; display:flex; flex-wrap:wrap; gap:8rpx">
+            <view class="wxp" wx:for="{{dash.fav}}" wx:key="w" style="background:{{item.c}}; margin-right:0">{{item.w}}</view>
+          </view>
         </view>
-        <view style="display:flex; align-items:center; flex-wrap:wrap; row-gap:8rpx">
-          <text class="muted" style="margin-right:8rpx">忌</text>
-          <view class="wxp" wx:for="{{dash.unf}}" wx:key="w" style="background:transparent; border:2rpx solid {{item.c}}; color:{{item.c}}">{{item.w}}</view>
+        <view style="display:flex; align-items:center">
+          <text class="muted" style="margin-right:12rpx; flex:none">忌</text>
+          <view style="flex:1; display:flex; flex-wrap:wrap; gap:8rpx">
+            <view class="wxp" wx:for="{{dash.unf}}" wx:key="w" style="background:transparent; border:2rpx solid {{item.c}}; color:{{item.c}}; margin-right:0">{{item.w}}</view>
+          </view>
         </view>
         <view class="muted" style="margin-top:12rpx">日主{{dash.strength}} · 详盘 ›</view>
       </view>
