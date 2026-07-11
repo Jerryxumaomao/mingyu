@@ -2,13 +2,7 @@ const MY = require('../../lib/mingyu.js');
 const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
 
-const WX_COLOR = { 木: '#3f7050', 火: '#b5432f', 土: '#8a6a3b', 金: '#b8952e', 水: '#3a5f7d' };
-const COLOR_HEX = [
-  [/红|朱|绛|赤/, '#b5432f'], [/紫/, '#7a4b7f'], [/粉/, '#d98b8b'], [/橙/, '#c96f2f'],
-  [/黄|金/, '#c9a227'], [/棕|咖|驼|褐|赭/, '#8a6a3b'], [/绿|松/, '#3f7050'], [/青/, '#2f6f6f'],
-  [/蓝|黛|藏/, '#3a5f7d'], [/黑|墨|玄/, '#33302a'], [/灰/, '#8a8272'], [/白|米|杏|象牙/, '#efe9d9'], [/银/, '#b9b9b9'],
-];
-const hexOf = (n) => (COLOR_HEX.find(([re]) => re.test(n)) || [0, '#d8cdb4'])[1];
+const { WX_COLOR, hexOf } = require('../../utils/colormap.js');
 
 Page({
   data: {
@@ -100,7 +94,7 @@ Page({
     }
   },
   goOutfit() { wx.switchTab({ url: '/pages/outfit/outfit' }); },
-  goKline() { wx.switchTab({ url: '/pages/kline/kline' }); },
+  goKline() { wx.switchTab({ url: '/pages/fortune/fortune' }); },
   goPaipan() { wx.navigateTo({ url: '/pages/paipan/paipan' }); },
   goHehun() { wx.navigateTo({ url: '/pages/hehun/hehun' }); },
   goLiuren() { wx.navigateTo({ url: '/pages/liuren/liuren' }); },

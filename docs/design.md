@@ -199,3 +199,20 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
   (storage key `wz-dash`),重计算走 setTimeout 让 loading 先渲染。
 - **插图**:assets/deco-branch.png(水墨银杏小枝,源 brand/deco-branch.html),
   用于头卡右上角 opacity .35;新插图一律走"SVG 手绘线稿 → headless 渲染"同管线。
+
+## 13. v5 增补(2026-07-11:运势中枢 / 详图交互 / 穿搭视觉化)
+
+- **tab3 更名"运势"**,页面为运势中枢(pages/fortune):顶卡=今日评分+右侧圆环
+  (环心吉凶大字,档位色:大吉/吉=朱砂/橙,平=灰墨,凶/大凶=松绿系);
+  下方左"宜/忌"大卡(1.25 倍宽,上宜下忌,虚线分隔)+ 右侧日运/年运缩略 sparkline;
+  再下"今年备忘"(岁运事件+流月高低)与"今日开运色"(联动穿搭 tab)。
+- **运势详图**(pages/fortune-chart):日运/年运胶囊切换;日运=±15 天折线,
+  年运=全程蜡烛;按住滑动出虚线选择,下方解读卡随选中实时更新;
+  年运模式保留"横屏放大"入口(kchart)。
+- **日运评分**(utils/daily-fortune.js):流日干支×喜忌,权重与 lifeKline 同源,
+  加合/冲日支修正;分档 ≥68大吉/≥56吉/≥44平/≥32凶/<32大凶;
+  宜忌事项按"当日喜用五行"查表生成。
+- **穿搭页视觉化**:大色圆(主色 88rpx×3 / 辅色 56rpx×2)+ 名称,"今天别碰"
+  删除线小签;配饰/香调改双列 chips;提示最多两条。文案短、色块大。
+- 旧 pages/kline 已删除(被 fortune + fortune-chart 取代);色名→色值映射
+  统一收口 utils/colormap.js。

@@ -64,4 +64,4 @@ const readRecent = (k, curYear) => {
   return { lines, summary };
 };
 
-module.exports = { readRecent };
+module.exports = { readRecent, yearText };

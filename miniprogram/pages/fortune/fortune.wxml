@@ -1,0 +1,77 @@
+<block wx:if="{{hasProfile && today}}">
+  <!-- 今日运势打分:左信息右圆环,环心吉凶大字 -->
+  <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:24rpx">
+    <view style="flex:1; min-width:0">
+      <view class="cardtitle">今日运势 <text class="en" style="margin-left:8rpx">Today</text></view>
+      <view class="muted" style="margin-top:8rpx">{{today.date}} · 流日 {{today.gz}}</view>
+      <view style="margin-top:14rpx; display:flex; align-items:baseline; gap:10rpx">
+        <text style="font-size:64rpx; font-weight:700; color:{{bandColor}}">{{today.score}}</text>
+        <text class="muted">分</text>
+      </view>
+      <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:6rpx">{{today.notes[0]}}</view>
+    </view>
+    <view style="position:relative; width:220rpx; height:220rpx; flex:none">
+      <canvas type="2d" id="ring" style="width:220rpx; height:220rpx"></canvas>
+      <view style="position:absolute; left:0; top:0; width:220rpx; height:220rpx; display:flex; align-items:center; justify-content:center">
+        <text style="font-size:{{today.band.length > 1 ? 52 : 64}}rpx; font-weight:700; color:{{bandColor}}">{{today.band}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 左:宜忌大卡(解读入口) 右:日运/年运缩略图 -->
+  <view class="tile-row ani-rise d1" style="align-items:stretch">
+    <view class="tile" hover-class="btn-press" bindtap="goDay" style="flex:1.25; display:flex; flex-direction:column; justify-content:space-between">
+      <view>
+        <view style="display:flex; align-items:center; gap:16rpx">
+          <text style="font-size:52rpx; font-weight:700; color:#b5432f">宜</text>
+          <view style="font-size:27rpx; line-height:1.5">{{today.yi[0]}}<view class="muted" style="font-size:24rpx">{{today.yi[1]}}{{today.yi[2] ? ' · ' + today.yi[2] : ''}}</view></view>
+        </view>
+      </view>
+      <view style="border-top:1rpx dashed #d8cdb4; margin:18rpx 0"></view>
+      <view>
+        <view style="display:flex; align-items:center; gap:16rpx">
+          <text style="font-size:52rpx; font-weight:700; color:#3f7050">忌</text>
+          <view style="font-size:27rpx; line-height:1.5">{{today.ji[0]}}<view class="muted" style="font-size:24rpx">{{today.ji[1] || ''}}</view></view>
+        </view>
+      </view>
+      <view class="en" style="margin-top:14rpx">Reading ›</view>
+    </view>
+    <view style="flex:1; display:flex; flex-direction:column; gap:20rpx">
+      <view class="tile" hover-class="btn-press" bindtap="goDay">
+        <view style="font-weight:700; font-size:28rpx">日运 <text class="en">7 Days</text></view>
+        <canvas type="2d" id="dthumb" style="width:100%; height:90rpx; margin-top:8rpx"></canvas>
+      </view>
+      <view class="tile" hover-class="btn-press" bindtap="goYear">
+        <view style="font-weight:700; font-size:28rpx">年运 <text class="en">Life</text></view>
+        <canvas type="2d" id="ythumb" style="width:100%; height:90rpx; margin-top:8rpx"></canvas>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今年备忘 -->
+  <view class="card ani-rise d2" wx:if="{{yearNote}}" hover-class="btn-press" bindtap="goYear">
+    <view class="cardtitle" style="font-size:30rpx">今年备忘 <text class="en" style="margin-left:8rpx">{{yearNote.gz}} · {{yearNote.score}}</text></view>
+    <view class="muted" style="margin-top:10rpx">农历 {{yearNote.hi}} 月前后是全年相对高点,{{yearNote.lo}} 月前后偏弱宜稳。</view>
+    <view wx:if="{{yearNote.events.length}}" style="margin-top:8rpx; font-size:27rpx; color:#3f7050">留意:{{yearNote.events}}</view>
+  </view>
+
+  <!-- 今日开运色(联动穿搭) -->
+  <view class="card ani-rise d3" wx:if="{{colors}}" hover-class="btn-press" bindtap="goOutfit" style="display:flex; align-items:center; gap:20rpx">
+    <view style="flex:1">
+      <view class="cardtitle" style="font-size:30rpx">今日开运色 <text class="en" style="margin-left:8rpx">Lucky Colors</text></view>
+      <view style="display:flex; align-items:center; gap:12rpx; margin-top:12rpx">
+        <view class="swatch" wx:for="{{colors.main}}" wx:key="n" style="background:{{item.c}}"></view>
+        <view class="swatch" wx:for="{{colors.accent}}" wx:key="n" style="background:{{item.c}}; width:34rpx; height:34rpx"></view>
+      </view>
+    </view>
+    <view class="muted" style="font-size:36rpx">›</view>
+  </view>
+</block>
+
+<view class="card ani-rise" wx:if="{{!hasProfile}}">
+  <view class="cardtitle">运势还未点亮</view>
+  <view class="muted" style="margin-top:10rpx">设置本人档案后,今日吉凶、日运、年运会在这里自动生成。</view>
+  <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
+</view>
+
+<view class="muted ani-rise d4" style="text-align:center; margin:30rpx">分数为传统规则的量化表达,仅供文化研究与娱乐</view>

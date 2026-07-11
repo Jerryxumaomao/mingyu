@@ -1,29 +1,70 @@
 <view wx:if="{{r}}">
+  <!-- 今日色彩:大色卡,少文字 -->
   <view class="card ani-rise">
     <view style="display:flex; justify-content:space-between; align-items:center">
-      <view class="muted">喜 {{r.fav}} 忌 {{r.unf}} · 流日 <text class="gold">{{r.dayGz}}</text> · {{target}}</view>
-      <view class="en" style="flex:none; margin-left:12rpx">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}}</view>
+      <view class="cardtitle">今日色彩 <text class="en" style="margin-left:8rpx">Colors</text></view>
+      <view class="en" style="flex:none">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}} · {{r.dayGz}}日</view>
+    </view>
+    <view style="display:flex; gap:28rpx; margin-top:24rpx">
+      <view wx:for="{{r.main}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:8rpx">
+        <view style="width:88rpx; height:88rpx; border-radius:50%; background:{{item.c}}; border:2rpx solid rgba(51,48,42,.12); box-shadow:0 4rpx 12rpx rgba(90,70,30,.15)"></view>
+        <text style="font-size:24rpx">{{item.n}}</text>
+      </view>
+      <view style="width:1rpx; background:#e6dcc6"></view>
+      <view wx:for="{{r.accent}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:8rpx; justify-content:flex-end">
+        <view style="width:56rpx; height:56rpx; border-radius:50%; background:{{item.c}}; border:2rpx solid rgba(51,48,42,.12)"></view>
+        <text class="muted" style="font-size:22rpx">{{item.n}}</text>
+      </view>
+    </view>
+    <view style="display:flex; align-items:center; gap:12rpx; margin-top:22rpx; flex-wrap:wrap">
+      <text class="muted" style="font-size:24rpx; flex:none">今天别碰</text>
+      <view wx:for="{{r.avoid}}" wx:key="n" style="display:flex; align-items:center; gap:6rpx; padding:4rpx 16rpx; border-radius:999rpx; border:2rpx solid #e6dcc6">
+        <view style="width:20rpx; height:20rpx; border-radius:50%; background:{{item.c}}; opacity:.5"></view>
+        <text class="muted" style="font-size:22rpx; text-decoration:line-through">{{item.n}}</text>
+      </view>
     </view>
   </view>
-  <view class="card ani-rise d1"><view class="gold cardtitle" style="font-size:31rpx">🎨 颜色</view>
-    <view style="margin-top:8rpx">主色:{{r.main}}</view><view class="muted">点缀:{{r.accent}}</view><view style="color:#b5432f">避开:{{r.avoid}}</view></view>
 
-  <view class="card ani-rise d2" wx:if="{{owned && !owned.empty}}">
-    <view class="gold cardtitle" style="font-size:31rpx">👝 你的衣橱适配</view>
-    <view wx:if="{{owned.mats.length}}" style="margin-top:8rpx">今天戴:{{owned.mats}}</view>
-    <view wx:if="{{owned.perfumes.length}}" style="margin-top:4rpx">今天喷:<view wx:for="{{owned.perfumes}}" wx:key="index" style="margin-left:8rpx">· {{item}}</view></view>
-    <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:8rpx">你已有的配饰香水与今日喜用暂无重合,参考下方通用推荐</view>
-    <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:12rpx">管理我的衣橱 ›</view>
+  <!-- 衣橱适配 -->
+  <view class="card ani-rise d1" wx:if="{{owned && !owned.empty}}">
+    <view class="cardtitle" style="font-size:30rpx">👝 从你的衣橱挑 <text class="en" style="margin-left:8rpx">My Picks</text></view>
+    <view wx:if="{{owned.mats.length}}" style="display:flex; align-items:center; gap:12rpx; margin-top:14rpx; flex-wrap:wrap">
+      <text style="font-weight:700; flex:none">戴</text>
+      <view wx:for="{{owned.mats}}" wx:key="index" style="padding:8rpx 20rpx; border-radius:999rpx; background:#b5432f; color:#fbf3e2; font-size:25rpx">{{item}}</view>
+    </view>
+    <view wx:if="{{owned.perfumes.length}}" style="margin-top:12rpx">
+      <view style="display:flex; gap:12rpx; margin-top:6rpx" wx:for="{{owned.perfumes}}" wx:key="index">
+        <text style="font-weight:700; flex:none">喷</text><text style="font-size:27rpx">{{item}}</text>
+      </view>
+    </view>
+    <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:12rpx">已有单品与今日喜用暂无重合,看下方通用推荐</view>
+    <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:14rpx">管理我的衣橱 ›</view>
   </view>
-  <view class="card ani-rise d2" wx:elif="{{isSelf}}" hover-class="btn-press" bindtap="goWardrobe">
-    <view class="gold cardtitle" style="font-size:31rpx">👝 登记我的衣橱</view>
-    <view class="muted" style="margin-top:8rpx">勾选你已有的配饰材质、搜索添加你的香水,以后直接从你有的里面挑,不再泛泛推荐 ›</view>
+  <view class="card ani-rise d1" wx:elif="{{isSelf}}" hover-class="btn-press" bindtap="goWardrobe">
+    <view class="cardtitle" style="font-size:30rpx">👝 登记我的衣橱 <text class="en" style="margin-left:8rpx">Wardrobe</text></view>
+    <view class="muted" style="margin-top:8rpx">勾配饰、加香水,以后直接从你有的里面挑 ›</view>
   </view>
 
-  <view class="card ani-rise d3"><view class="gold cardtitle" style="font-size:31rpx">💍 配饰(通用)</view><view style="margin-top:8rpx">{{r.acc}}</view></view>
-  <view class="card ani-rise d4"><view class="gold cardtitle" style="font-size:31rpx">🌸 香调(通用)</view>
-    <view style="margin-top:8rpx">宜:{{r.scent}}</view><view style="color:#b5432f">避:{{r.scentAvoid}}</view></view>
-  <view class="card ani-rise d5"><view class="gold cardtitle" style="font-size:31rpx">📋 当日提示</view><view style="margin-top:8rpx" wx:for="{{r.notes}}" wx:key="index">· {{item}}</view></view>
+  <!-- 配饰 + 香调:两列并排 chips -->
+  <view class="tile-row ani-rise d2">
+    <view class="tile">
+      <view style="font-weight:700; font-size:29rpx">配饰 <text class="en">Wear</text></view>
+      <view style="display:flex; gap:10rpx; flex-wrap:wrap; margin-top:14rpx">
+        <view wx:for="{{r.acc}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; border:2rpx solid #d8cdb4; font-size:24rpx">{{item}}</view>
+      </view>
+    </view>
+    <view class="tile">
+      <view style="font-weight:700; font-size:29rpx">香调 <text class="en">Scent</text></view>
+      <view style="display:flex; gap:10rpx; flex-wrap:wrap; margin-top:14rpx">
+        <view wx:for="{{r.scent}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; background:rgba(181,67,47,.1); color:#b5432f; font-size:24rpx">{{item}}</view>
+        <view wx:for="{{r.scentAvoid}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; border:2rpx solid #e6dcc6; color:#8a8272; font-size:24rpx; text-decoration:line-through">{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card ani-rise d3" wx:if="{{r.notes.length}}">
+    <view wx:for="{{r.notes}}" wx:key="index" class="muted" style="margin-top:{{index ? '8rpx' : '0'}}">✦ {{item}}</view>
+  </view>
 </view>
 
 <view class="card ani-rise" wx:if="{{!r && !busy && !showForm}}">
