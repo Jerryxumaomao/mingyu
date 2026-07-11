@@ -14,6 +14,17 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f4eddc"
   },
+  "tabBar": {
+    "color": "#8a8272",
+    "selectedColor": "#b5432f",
+    "backgroundColor": "#fbf7ec",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/outfit/outfit", "text": "穿搭", "iconPath": "assets/tab-yi.png", "selectedIconPath": "assets/tab-yi-on.png" },
+      { "pagePath": "pages/index/index", "text": "玩占", "iconPath": "assets/tab-home.png", "selectedIconPath": "assets/tab-home-on.png" },
+      { "pagePath": "pages/kline/kline", "text": "年运", "iconPath": "assets/tab-yun.png", "selectedIconPath": "assets/tab-yun-on.png" }
+    ]
+  },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

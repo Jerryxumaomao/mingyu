@@ -182,3 +182,20 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
 >   OFL-ZhiMangXing.txt 随库分发)——书法笔意版,当前主推;A 横排斜势 / B 印框竖排 /
 >   C 宣纸底+右下小印。行书细笔画在小尺寸靠 -webkit-text-stroke 增肥保清晰。
 > - **icon 字体是 §3.1 字体栈的唯一豁免场景**(logo 属图形标识,不受正文衬线约束)。
+
+## 12. v4 增补(2026-07-11:开屏 / 底部导航 / 排版基准 v2)
+
+- **排版基准 v2**(用户反馈原字号偏小、行距不足,全局提级):正文 32rpx、行高 1.75;
+  辅文 .muted 26rpx/1.7;标题 .cardtitle 34rpx;英文小注 .en 18rpx Georgia 大写加宽
+  (仿新中式"中文大字 + 英文小注"排版)。卡片 padding 32rpx、圆角 22rpx。
+- **底部导航(tabBar)**:穿搭 | 玩占(中,首页) | 年运 三键;
+  icon 为汉字方章(描边灰墨=未选,朱砂实底=选中),资产 assets/tab-*.png(81px)。
+  tab 页跳转必须 wx.switchTab,普通页仍 navigateTo。
+- **开屏**:冷启动展示一次 assets/splash.jpg(豆绿失焦树影 + 左上品牌竖排:
+  易环/WANZHAN 框/玩占行书框字/拼音/朱砂小印,源 brand/splash.html),2.6s 自动淡出,
+  轻触跳过;期间 hideTabBar。品牌列顶部须避开状态栏(top≥190/1624)。
+- **首页=仪表盘**:头卡(观变玩占 + 四柱常驻 + 档印)→ 今日穿搭色卡(主色/点缀色圆点)
+  → 命盘喜忌 + 今年运势(半宽 .tile 两列)→ 合婚/起卦入口。数据同档案同日缓存
+  (storage key `wz-dash`),重计算走 setTimeout 让 loading 先渲染。
+- **插图**:assets/deco-branch.png(水墨银杏小枝,源 brand/deco-branch.html),
+  用于头卡右上角 opacity .35;新插图一律走"SVG 手绘线稿 → headless 渲染"同管线。

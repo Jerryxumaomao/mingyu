@@ -11,6 +11,13 @@ Page({
     const p = profile.get();
     if (p) this.setData({ date: p.date, ti: p.ti, gi: p.gi });
   },
+  onShow() {
+    // 作为 tab 页:有档案且尚无结果时自动生成,免去手动点按
+    const p = profile.get();
+    if (p && !this.data.r) {
+      this.setData({ date: p.date, ti: p.ti, gi: p.gi }, () => this.run());
+    }
+  },
   data: { date: '1996-11-23', times: TIMES, ti: 2, genders: ['男 (乾造)', '女 (坤造)'], gi: 0, target: today(), r: null },
   onDate(e) { this.setData({ date: e.detail.value }); },
   onTime(e) { this.setData({ ti: +e.detail.value }); },

@@ -30,7 +30,10 @@
   "libVersion": "latest",
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "brand" },
+      { "type": "file", "value": "README.md" }
+    ],
     "include": []
   },
   "editorSetting": {}

@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{margin:0;padding:0}
+body{width:162px;height:162px;background:transparent;display:flex;align-items:center;justify-content:center}
+.box{width:132px;height:132px;border-radius:26px;display:flex;align-items:center;justify-content:center;
+  text-align:center;font-family:"Noto Serif SC","SimSun",serif;font-weight:900}
+.off{border:8px solid #8a8272;color:#8a8272;background:transparent}
+.on{background:#b5432f;color:#fbf3e2;border:8px solid #b5432f}
+.c1{font-size:84px;line-height:1}
+.c2{font-size:46px;line-height:1.1}
+</style></head><body>
+<div class="box" id="box"><span id="t" class="c1"></span></div>
+<script>
+const q = new URLSearchParams(location.search);
+const box = document.getElementById('box'), t = document.getElementById('t');
+box.classList.add(q.get('on') === '1' ? 'on' : 'off');
+const txt = q.get('t') || '衣';
+t.innerHTML = txt.length > 1 ? txt.split('').join('<br>') : txt;
+if (txt.length > 1) t.className = 'c2';
+</script>
+</body></html>

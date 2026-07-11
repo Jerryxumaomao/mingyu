@@ -1,1 +1,1 @@
-App({});
+App({ globalData: { splashDone: false } });
