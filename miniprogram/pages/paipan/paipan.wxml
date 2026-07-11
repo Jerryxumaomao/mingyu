@@ -1,15 +1,7 @@
 <navbar title="八字排盘" back="{{true}}"/>
-<view class="card ani-rise">
-  <view class="label">出生日期</view>
-  <picker mode="date" value="{{date}}" start="1600-01-01" end="2100-12-31" bindchange="onDate"><view>{{date}}</view></picker>
-  <view class="label">时辰</view>
-  <picker range="{{times}}" value="{{ti}}" bindchange="onTime"><view>{{times[ti]}}</view></picker>
-  <view class="label">性别</view>
-  <picker range="{{genders}}" value="{{gi}}" bindchange="onGender"><view>{{genders[gi]}}</view></picker>
-</view>
-<button class="go" hover-class="btn-press" bindtap="run">开始排盘</button>
 <view wx:if="{{r}}">
-  <view class="card">
+  <view class="card ani-rise">
+    <view style="display:flex; justify-content:flex-end"><text class="en">{{isSelf ? 'MY CHART' : 'FOR FRIEND'}}</text></view>
     <view style="display:flex;text-align:center">
       <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{r.zhus}}" wx:key="index"><view class="muted">{{item.n}}</view><view class="gold" style="font-size:44rpx">{{item.gz}}</view></view>
     </view>
@@ -18,4 +10,25 @@
     <view class="muted ani-rise d5" wx:for="{{r.warnings}}" wx:key="index">⚠ {{item}}</view>
   </view>
 </view>
+
+<view class="card ani-rise" wx:if="{{!r && !busy && !showForm}}">
+  <view class="cardtitle">命盘还未展开</view>
+  <view class="muted" style="margin-top:10rpx">设置本人档案后,这里会自动排盘;也可以点下方按钮帮别人排。</view>
+  <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
+</view>
+
+<view wx:if="{{showForm}}" class="card ani-rise">
+  <view class="cardtitle" style="font-size:30rpx">换一个出生信息</view>
+  <view class="label">出生日期</view>
+  <picker mode="date" value="{{date}}" start="1600-01-01" end="2100-12-31" bindchange="onDate"><view>{{date}}</view></picker>
+  <view style="display:flex;gap:16rpx">
+    <picker style="flex:1" range="{{times}}" value="{{ti}}" bindchange="onTime"><view>{{times[ti]}}</view></picker>
+    <picker style="flex:1" range="{{genders}}" value="{{gi}}" bindchange="onGender"><view>{{genders[gi]}}</view></picker>
+  </view>
+  <button class="go" style="margin:24rpx 0 4rpx" hover-class="btn-press" bindtap="run" disabled="{{busy}}">{{busy ? '正在排盘…' : '开始排盘'}}</button>
+</view>
+
+<button wx:if="{{!showForm}}" class="go" style="background:transparent; color:#b5432f; border:2rpx solid #b5432f"
+  hover-class="btn-press" bindtap="toggleForm">帮 TA 看看</button>
+
 <view class="muted" style="text-align:center;margin:30rpx">仅供文化研究与娱乐</view>

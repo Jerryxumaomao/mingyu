@@ -47,24 +47,9 @@ Page({
       const c = wx.getStorageSync('wz-dash');
       if (c && c.dash && c.dash.main) colors = { main: c.dash.main, accent: c.dash.accent || [] };
     } catch (e) { /* 没有就不显示 */ }
-    this.setData({ hasProfile: true, today, bandColor: BAND_COLOR[today.band], yearNote, colors },
-      () => { this.drawRing(today); this.drawThumbs(k); });
-  },
-  drawRing(t) {
-    wx.createSelectorQuery().select('#ring').fields({ node: true, size: true }).exec((res) => {
-      if (!res || !res[0]) return;
-      const { node: canvas, width, height } = res[0];
-      const dpr = (wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()).pixelRatio;
-      canvas.width = width * dpr; canvas.height = height * dpr;
-      const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
-      const cx = width / 2, cy = height / 2, r = Math.min(cx, cy) - 8;
-      ctx.lineWidth = 10; ctx.lineCap = 'round';
-      ctx.strokeStyle = '#efe7d3';
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
-      ctx.strokeStyle = BAND_COLOR[t.band];
-      ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + (t.score / 100) * Math.PI * 2); ctx.stroke();
-    });
+    const qi = { 大吉: 0, 吉: 1, 平: 2, 凶: 3, 大凶: 4 }[today.band];
+    this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], yearNote, colors },
+      () => this.drawThumbs(k));
   },
   drawThumbs(k) {
     const seven = daily.series(k.natal, 0, 6).map((x) => x.score);

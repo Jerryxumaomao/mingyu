@@ -9,7 +9,7 @@ const toPerson = (s) => {
 Page({
   onLoad() {
     const p = profile.get();
-    if (p) this.setData({ 'a.date': p.date, 'a.ti': p.ti, 'a.gi': p.gi });
+    if (p) this.setData({ 'a.date': p.date, 'a.ti': p.ti, 'a.gi': p.gi, hasProf: true });
   },
   data: {
     times: TIMES, genders: ['男 (乾造)', '女 (坤造)'],

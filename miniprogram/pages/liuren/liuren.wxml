@@ -1,13 +1,33 @@
 <navbar title="小六壬起卦" back="{{true}}"/>
-<view class="card">
-  <view class="label">起课方式</view>
-  <picker range="{{methods}}" value="{{mi}}" bindchange="onMethod"><view>{{methods[mi]}}</view></picker>
-  <view wx:if="{{mi === 1}}">
-    <view class="label">心中默念所问,报一个数</view>
-    <input type="number" value="{{num}}" bindinput="onNum" placeholder="任意正整数,如 37"/>
+
+<!-- 引导:三步,大白话 -->
+<view class="card ani-rise" wx:if="{{!r}}">
+  <view class="cardtitle">怎么问,才准</view>
+  <view style="margin-top:14rpx; display:flex; gap:16rpx; align-items:baseline">
+    <text class="gold" style="font-weight:700; flex:none">一</text>
+    <text style="font-size:28rpx">静下来,在心里默想一件<text style="font-weight:700">具体的事</text>——"这周的面试顺不顺""要不要答应 TA"。越具体,越有得聊。</text>
+  </view>
+  <view style="margin-top:10rpx; display:flex; gap:16rpx; align-items:baseline">
+    <text class="gold" style="font-weight:700; flex:none">二</text>
+    <text style="font-size:28rpx">心里有了问题后,凭第一直觉报一个数,别犹豫。</text>
+  </view>
+  <view style="margin-top:10rpx; display:flex; gap:16rpx; align-items:baseline">
+    <text class="gold" style="font-weight:700; flex:none">三</text>
+    <text style="font-size:28rpx">点"起卦",看开局→过程→结果三步走向。一事一问,同一件事别反复问。</text>
   </view>
 </view>
+
+<view class="card ani-rise d1">
+  <view class="label">起卦方式</view>
+  <picker range="{{methods}}" value="{{mi}}" bindchange="onMethod"><view>{{methods[mi]}}</view></picker>
+  <view wx:if="{{mi === 0}}">
+    <view class="label">想着你的问题,报一个数</view>
+    <input type="number" value="{{num}}" bindinput="onNum" placeholder="凭直觉,任意正整数,如 37"/>
+  </view>
+  <view wx:if="{{mi === 1}}" class="muted" style="margin-top:12rpx">按当下时刻起卦。同一个时辰(两小时)内结果相同,这是老规矩,不是出错了——想多问几次,换"报数"方式。</view>
+</view>
 <button class="go" hover-class="btn-press" bindtap="run">起 卦</button>
+
 <view wx:if="{{r}}">
   <view class="card">
     <view class="muted">{{r.methodLabel}} · 农历{{r.lunarMonth}}月{{r.lunarDay}}日 {{r.hourLabel}}</view>
@@ -15,12 +35,13 @@
       <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{r.palaces}}" wx:key="index">
         <view class="muted">{{item.t}}</view>
         <view class="gold" style="font-size:40rpx">{{item.name}}</view>
-        <view class="muted">{{item.element}}·{{item.fortune}}</view>
+        <view class="muted">{{item.fortune}}</view>
       </view>
     </view>
     <view class="ani-rise d4" style="margin-top:16rpx" wx:for="{{r.lines}}" wx:key="index">{{item}}</view>
-    <view class="muted" style="margin-top:12rpx">建议:{{r.advice}}</view>
-    <view class="muted">应期:{{r.timing}} · 方位:{{r.direction}}</view>
+    <view style="margin-top:14rpx; padding:16rpx 20rpx; background:rgba(181,67,47,.06); border-radius:14rpx">给你的话:{{r.advice}}</view>
+    <view class="muted" style="margin-top:10rpx">大概时间:{{r.timing}} · 有利方向:{{r.direction}}</view>
   </view>
+  <button class="go" style="background:transparent; color:#b5432f; border:2rpx solid #b5432f" hover-class="btn-press" bindtap="reset" wx:if="{{mi !== 1}}">换个问题,再来一卦</button>
 </view>
-<view class="muted" style="text-align:center;margin:30rpx">占卜结果仅供参考娱乐</view>
+<view class="muted" style="text-align:center;margin:30rpx">占卦结果仅供参考娱乐,大事还要自己拿主意</view>

@@ -1,21 +1,25 @@
 <navbar title="运势"/>
 <block wx:if="{{hasProfile && today}}">
   <!-- 今日运势打分:左信息右圆环,环心吉凶大字 -->
-  <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:24rpx">
+  <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:30rpx">
     <view style="flex:1; min-width:0">
       <view class="cardtitle">今日运势 <text class="en" style="margin-left:8rpx">Today</text></view>
       <view class="muted" style="margin-top:8rpx">{{today.date}} · 流日 {{today.gz}}</view>
-      <view style="margin-top:14rpx; display:flex; align-items:baseline; gap:10rpx">
-        <text style="font-size:64rpx; font-weight:700; color:{{bandColor}}">{{today.score}}</text>
+      <view style="margin-top:12rpx; display:flex; align-items:baseline; gap:10rpx">
+        <text style="font-size:68rpx; font-weight:700; color:{{bandColor}}">{{today.score}}</text>
         <text class="muted">分</text>
       </view>
-      <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:6rpx">{{today.notes[0]}}</view>
-    </view>
-    <view style="position:relative; width:220rpx; height:220rpx; flex:none">
-      <canvas type="2d" id="ring" style="width:220rpx; height:220rpx"></canvas>
-      <view style="position:absolute; left:0; top:0; width:220rpx; height:220rpx; display:flex; align-items:center; justify-content:center">
-        <text style="font-size:{{today.band.length > 1 ? 52 : 64}}rpx; font-weight:700; color:{{bandColor}}">{{today.band}}</text>
+      <view style="height:16rpx; background:#efe7d3; border-radius:999rpx; margin-top:12rpx; overflow:hidden">
+        <view style="width:{{today.score}}%; height:100%; background:{{bandColor}}; border-radius:999rpx"></view>
       </view>
+      <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:10rpx">{{today.notes[0]}}</view>
+    </view>
+    <!-- 求签:签筒里抽出的一支,签文用玩占行书 -->
+    <view class="ani-stamp" style="width:104rpx; height:280rpx; background:#fbf7ec; border:3rpx solid #b5432f; border-radius:16rpx 16rpx 10rpx 10rpx; display:flex; flex-direction:column; align-items:center; flex:none; transform:rotate(3deg); box-shadow:0 6rpx 16rpx rgba(90,70,30,.18)">
+      <view style="width:100%; height:46rpx; background:#b5432f; border-radius:12rpx 12rpx 0 0; display:flex; align-items:center; justify-content:center">
+        <text style="color:#fbf3e2; font-size:20rpx; letter-spacing:2rpx">玩占</text>
+      </view>
+      <image src="/assets/qian-{{qi}}.png" mode="aspectFit" style="width:66rpx; height:190rpx; margin-top:16rpx"/>
     </view>
   </view>
 
