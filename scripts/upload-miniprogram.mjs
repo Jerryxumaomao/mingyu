@@ -60,6 +60,13 @@ if (mode === 'preview') {
 } else if (mode === 'upload') {
   if (!version) { console.error('✖ 用法:node scripts/upload-miniprogram.mjs upload <版本号> <版本描述>'); process.exit(1); }
   const desc = descParts.join(' ') || `${version} 提交`;
+  // 版本备注是审核可见记录,禁用命理敏感词(口径见 miniprogram/brand/store-copy.md)
+  const banned = /占卜|算命|测算|命理|风水|八字|四柱|命盘|排盘|K线|运势|流年|大运|喜忌|用神|合婚|起卦|六壬|卜卦|吉凶|神煞/;
+  const hit = desc.match(banned);
+  if (hit) {
+    console.error(`✖ 版本描述含敏感词「${hit[0]}」,会留在后台审核记录里。换成"穿搭推荐/文化知识/阅读体验"类措辞再传。`);
+    process.exit(1);
+  }
   await ci.upload({ project, version, desc, setting, robot: 1, onProgressUpdate: m => console.log(' ', typeof m === 'string' ? m : m._msg || '') });
   console.log(`✅ 已上传 v${version}(机器人1)。后续在后台手动走:`);
   console.log('   版本管理 → 开发版本(找到这条)→ [选为体验版](可选)→ 提交审核');
