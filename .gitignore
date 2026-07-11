@@ -37,3 +37,7 @@ Thumbs.db
 
 # 个人出生信息,不入库
 scripts/natal.json
+
+# 小程序代码上传密钥(微信后台下载的 private.wxXXXX.key),泄露=任何人可传代码
+scripts/private.*.key
+*.key
