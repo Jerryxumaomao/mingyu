@@ -5,7 +5,6 @@
     "pages/paipan/paipan",
     "pages/fortune/fortune",
     "pages/fortune-chart/fortune-chart",
-    "pages/hehun/hehun",
     "pages/liuren/liuren",
     "pages/outfit/outfit",
     "pages/wardrobe/wardrobe",
@@ -27,7 +26,7 @@
     "list": [
       { "pagePath": "pages/outfit/outfit", "text": "穿搭", "iconPath": "assets/tab-yi.png", "selectedIconPath": "assets/tab-yi-on.png" },
       { "pagePath": "pages/index/index", "text": "玩占", "iconPath": "assets/tab-home.png", "selectedIconPath": "assets/tab-home-on.png" },
-      { "pagePath": "pages/fortune/fortune", "text": "运势", "iconPath": "assets/tab-yun.png", "selectedIconPath": "assets/tab-yun-on.png" }
+      { "pagePath": "pages/fortune/fortune", "text": "今日", "iconPath": "assets/tab-yun.png", "selectedIconPath": "assets/tab-yun-on.png" }
     ]
   },
   "style": "v2",

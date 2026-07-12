@@ -1,9 +1,9 @@
-<navbar title="运势"/>
+<navbar title="今日"/>
 <block wx:if="{{hasProfile && today}}">
   <!-- 今日运势打分:左信息右圆环,环心吉凶大字 -->
   <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:24rpx">
     <view style="flex:1; min-width:0">
-      <view class="cardtitle">今日运势 <text class="en" style="margin-left:8rpx">Today</text></view>
+      <view class="cardtitle">今日指数 <text class="en" style="margin-left:8rpx">Today</text></view>
       <view class="muted" style="margin-top:8rpx">{{today.date}} · 流日 {{today.gz}}</view>
       <view style="margin-top:12rpx; display:flex; align-items:baseline; gap:10rpx">
         <text style="font-size:68rpx; font-weight:700; color:{{bandColor}}">{{today.score}}</text>
@@ -14,10 +14,10 @@
       </view>
       <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:10rpx">{{today.notes[0]}}</view>
     </view>
-    <!-- 吉凶大字:玩占行书,居右半区正中 -->
+    <!-- 档位大字:玩占行书,居右半区正中 -->
     <view style="width:45%; flex:none; display:flex; align-items:center; justify-content:center">
       <image class="ani-stamp" src="/assets/qian-{{qi}}.png" mode="aspectFit"
-        style="width:{{qi === 0 || qi === 4 ? 150 : 210}}rpx; height:280rpx"/>
+        style="width:210rpx; height:280rpx"/>
     </view>
   </view>
 
@@ -46,22 +46,14 @@
     </view>
   </view>
 
-  <!-- 合婚 + 起卦 -->
-  <view class="tile-row ani-rise d2">
-    <view class="tile" hover-class="btn-press" bindtap="goHehun" style="display:flex; align-items:center; gap:20rpx">
-      <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">合</view>
-      <view style="min-width:0">
-        <view class="cardtitle" style="font-size:30rpx">五行相配</view>
-        <view class="en" style="margin-top:2rpx">Match</view>
-      </view>
+  <!-- 每日小签 -->
+  <view class="card ani-rise d2" hover-class="btn-press" bindtap="goLiuren" style="display:flex; align-items:center; gap:22rpx">
+    <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">签</view>
+    <view style="min-width:0; flex:1">
+      <view class="cardtitle" style="font-size:30rpx">每日小签</view>
+      <view class="muted" style="margin-top:2rpx">静心默念一事,抽一支文化小签</view>
     </view>
-    <view class="tile" hover-class="btn-press" bindtap="goLiuren" style="display:flex; align-items:center; gap:20rpx">
-      <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">卦</view>
-      <view style="min-width:0">
-        <view class="cardtitle" style="font-size:30rpx">每日小签</view>
-        <view class="en" style="margin-top:2rpx">Daily Sign</view>
-      </view>
-    </view>
+    <view class="muted" style="font-size:36rpx">›</view>
   </view>
 
   <!-- 今日开运色(联动穿搭) -->
@@ -78,8 +70,8 @@
 </block>
 
 <view class="card ani-rise" wx:if="{{!hasProfile}}">
-  <view class="cardtitle">运势还未点亮</view>
-  <view class="muted" style="margin-top:10rpx">设置本人档案后,今日吉凶与逐日、逐年走势会在这里自动生成。</view>
+  <view class="cardtitle">今日还未点亮</view>
+  <view class="muted" style="margin-top:10rpx">设置本人档案后,今日参考与逐日、逐年走势会在这里自动生成。</view>
   <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
 </view>
 

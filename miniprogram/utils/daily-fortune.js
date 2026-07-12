@@ -26,7 +26,8 @@ const JI_POOL = {
   金: ['硬碰硬', '苛责较真'],
   水: ['优柔寡断', '轻信传言'],
 };
-const BANDS = [[68, '大吉'], [56, '吉'], [44, '平'], [32, '凶'], [-1, '大凶']];
+// 档位用中性字(旺/顺/平/缓/守),避免吉凶断语式表述
+const BANDS = [[68, '旺'], [56, '顺'], [44, '平'], [32, '缓'], [-1, '守']];
 
 /** natal: klineCache 的 natal(pillars 字符串 + favorable/unfavorableWuxing) */
 const score = (dateObj, natal) => {

@@ -24,7 +24,7 @@
     <view class="label">心中念着所问,报一数</view>
     <input type="number" value="{{num}}" bindinput="onNum" placeholder="信手一数,如 37"/>
   </view>
-  <view wx:if="{{mi === 1}}" class="muted" style="margin-top:12rpx">以当下时辰抽签。同一时辰(两小时)之内签文相同,古法如此;若想多问,改用报数。</view>
+  <view wx:if="{{mi === 1}}" class="muted" style="margin-top:12rpx">按当下时刻抽签,两小时之内签文相同,古法如此;若想多问,改用报数。</view>
 </view>
 <button class="go" hover-class="btn-press" bindtap="run">抽 签</button>
 
@@ -35,7 +35,6 @@
       <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{r.palaces}}" wx:key="index">
         <view class="muted">{{item.t}}</view>
         <view class="gold" style="font-size:40rpx">{{item.name}}</view>
-        <view class="muted">{{item.fortune}}</view>
       </view>
     </view>
     <view class="ani-rise d4" style="margin-top:16rpx" wx:for="{{r.lines}}" wx:key="index">{{item}}</view>

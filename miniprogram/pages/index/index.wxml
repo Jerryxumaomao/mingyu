@@ -90,7 +90,7 @@
       <view wx:else class="muted" style="margin-top:16rpx">设置档案后显示</view>
     </view>
     <view class="tile" hover-class="btn-press" bindtap="goKline">
-      <view class="cardtitle" style="font-size:30rpx">今年运势</view>
+      <view class="cardtitle" style="font-size:30rpx">今年走势</view>
       <view class="en" style="margin-top:4rpx">This Year</view>
       <view wx:if="{{dash && dash.year}}" style="margin-top:16rpx">
         <view style="display:flex; align-items:baseline; gap:10rpx">

@@ -1,4 +1,4 @@
-<navbar title="运势详图" back="{{true}}"/>
+<navbar title="趋势详图" back="{{true}}"/>
 <!-- 日/年切换(仿参考图 segmented) -->
 <view style="display:flex; gap:12rpx; margin:24rpx 24rpx 0">
   <view data-m="day" bindtap="switchMode"

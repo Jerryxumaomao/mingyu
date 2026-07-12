@@ -9,7 +9,7 @@
 <view class="card ani-rise d1">
   <view class="label">出生日期</view>
   <picker mode="date" value="{{date}}" start="1600-01-01" end="2100-12-31" bindchange="onDate"><view>{{date}}</view></picker>
-  <view class="label">时辰 / 性别</view>
+  <view class="label">出生时段 / 性别</view>
   <view style="display:flex;gap:16rpx">
     <picker style="flex:1" range="{{times}}" value="{{ti}}" bindchange="onTime"><view>{{times[ti]}}</view></picker>
     <picker style="flex:1" range="{{genders}}" value="{{gi}}" bindchange="onGender"><view>{{genders[gi]}}</view></picker>
@@ -21,7 +21,7 @@
 </view>
 <button class="go" hover-class="btn-press" bindtap="save">保 存 档 案</button>
 <view wx:if="{{preview}}" class="card ani-pop">
-  <view class="muted">档案四柱预览{{tsNote}}</view>
+  <view class="muted">传统历法干支{{tsNote}}</view>
   <view style="display:flex;text-align:center;margin-top:12rpx">
     <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{preview}}" wx:key="index">
       <view class="muted">{{item.n}}</view>

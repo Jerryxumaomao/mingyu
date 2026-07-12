@@ -3,7 +3,7 @@ const profile = require('../../utils/profile.js');
 const wardrobe = require('../../utils/wardrobe.js');
 const klineCache = require('../../utils/kline-cache.js');
 const { hexOf } = require('../../utils/colormap.js');
-const TIMES = ['早子 00-01', '丑 01-03', '寅 03-05', '卯 05-07', '辰 07-09', '巳 09-11', '午 11-13', '未 13-15', '申 15-17', '酉 17-19', '戌 19-21', '亥 21-23', '晚子 23-24'];
+const TIMES = ['00:00-01:00', '01:00-03:00', '03:00-05:00', '05:00-07:00', '07:00-09:00', '09:00-11:00', '11:00-13:00', '13:00-15:00', '15:00-17:00', '17:00-19:00', '19:00-21:00', '21:00-23:00', '23:00-24:00'];
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -11,7 +11,7 @@ const today = () => {
 
 Page({
   data: {
-    date: '1996-11-23', times: TIMES, ti: 2, genders: ['男 (乾造)', '女 (坤造)'], gi: 0,
+    date: '1996-11-23', times: TIMES, ti: 2, genders: ['男', '女'], gi: 0,
     target: today(), r: null, busy: false, showForm: false, isSelf: true, owned: null,
   },
   onLoad() {
