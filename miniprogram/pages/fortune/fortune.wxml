@@ -14,10 +14,10 @@
       </view>
       <view wx:if="{{today.notes.length}}" class="muted" style="font-size:24rpx; margin-top:10rpx">{{today.notes[0]}}</view>
     </view>
-    <!-- 档位大字:玩占行书,居右半区正中 -->
-    <view style="width:45%; flex:none; display:flex; align-items:center; justify-content:center">
+    <!-- 档位大字:占满右半区,做视觉记忆点 -->
+    <view style="width:46%; flex:none; display:flex; align-items:center; justify-content:center">
       <image class="ani-stamp" src="/assets/qian-{{qi}}.png" mode="aspectFit"
-        style="width:210rpx; height:280rpx"/>
+        style="width:320rpx; height:360rpx; transform:rotate(-3deg)"/>
     </view>
   </view>
 
