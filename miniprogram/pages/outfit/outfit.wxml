@@ -26,8 +26,21 @@
     </view>
   </view>
 
+  <!-- 未来一周色卡入口:七段彩带预览 -->
+  <view class="card ani-rise d1" wx:if="{{week}}" hover-class="btn-press" bindtap="goWeek" style="display:flex; align-items:center; gap:22rpx">
+    <view style="flex:1; min-width:0">
+      <view class="cardtitle" style="font-size:30rpx">未来一周 <text class="en" style="margin-left:8rpx">Week Colors</text></view>
+      <view style="display:flex; gap:6rpx; margin-top:14rpx">
+        <view wx:for="{{week}}" wx:key="index"
+          style="flex:1; height:22rpx; background:{{item}}; border-radius:{{index === 0 ? '999rpx 4rpx 4rpx 999rpx' : index === 6 ? '4rpx 999rpx 999rpx 4rpx' : '4rpx'}}"></view>
+      </view>
+      <view class="muted" style="margin-top:10rpx; font-size:24rpx">七天的主色排好了,出行/见人提前配</view>
+    </view>
+    <view class="muted" style="font-size:36rpx; flex:none">›</view>
+  </view>
+
   <!-- 配饰 + 香调:两列并排 chips -->
-  <view class="tile-row ani-rise d1">
+  <view class="tile-row ani-rise d2">
     <view class="tile">
       <view style="font-weight:700; font-size:29rpx">配饰 <text class="en">Wear</text></view>
       <view style="display:flex; gap:10rpx; flex-wrap:wrap; margin-top:14rpx">

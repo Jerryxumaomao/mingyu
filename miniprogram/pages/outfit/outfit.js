@@ -3,6 +3,12 @@ const profile = require('../../utils/profile.js');
 const wardrobe = require('../../utils/wardrobe.js');
 const klineCache = require('../../utils/kline-cache.js');
 const { hexOf } = require('../../utils/colormap.js');
+const { GAN_WX, ZHI_WX } = require('../../utils/daily-fortune.js');
+// 与一周色卡同一规则:当值喜用优先,让彩带逐日有变化
+const dayFav = (fav, gan, zhi) => {
+  const pri = [GAN_WX[gan], ZHI_WX[zhi]].filter((w, i, a) => fav.indexOf(w) > -1 && a.indexOf(w) === i);
+  return [...pri, ...fav.filter((w) => pri.indexOf(w) === -1)];
+};
 const TIMES = ['00:00-01:00', '01:00-03:00', '03:00-05:00', '05:00-07:00', '07:00-09:00', '09:00-11:00', '11:00-13:00', '13:00-15:00', '15:00-17:00', '17:00-19:00', '19:00-21:00', '21:00-23:00', '23:00-24:00'];
 const today = () => {
   const d = new Date();
@@ -38,6 +44,7 @@ Page({
   onTarget(e) { this.setData({ target: e.detail.value }); },
   toggleForm() { this.setData({ showForm: !this.data.showForm }); },
   goWardrobe() { wx.navigateTo({ url: '/pages/wardrobe/wardrobe' }); },
+  goWeek() { wx.navigateTo({ url: '/pages/week-colors/week-colors' }); },
   run() {
     if (this.data.busy) return;
     this.setData({ busy: true });
@@ -71,9 +78,26 @@ Page({
         this._unf = unfArr;
         this._runKey = `${this.data.date}|${this.data.ti}|${this.data.gi}|${today()}`;
         const paint = (ns, k) => (ns || []).slice(0, k || 4).map((n) => ({ n, c: hexOf(n) }));
+        // 未来一周彩带:每天的第一主色拼一条(入口卡预览用)
+        let week = null;
+        if (isSelf) {
+          week = [];
+          for (let i = 0; i < 7; i++) {
+            const wd = new Date();
+            wd.setDate(wd.getDate() + i);
+            const dp = MY.baziCalculator.calculatePillars({
+              year: wd.getFullYear(), month: wd.getMonth() + 1, day: wd.getDate(), timeIndex: 6, gender,
+            });
+            const wa = MY.recommendOutfit({
+              favorableWuxing: dayFav(favArr, dp.pillars.day.gan, dp.pillars.day.zhi), unfavorableWuxing: unfArr,
+              dayGan: dp.pillars.day.gan, dayZhi: dp.pillars.day.zhi, dayMasterGan,
+            });
+            week.push(hexOf((wa.colors.main || [''])[0] || ''));
+          }
+        }
         this.setData({ r: null });
         this.setData({
-          busy: false, isSelf, showForm: false,
+          busy: false, isSelf, showForm: false, week,
           owned: isSelf ? wardrobe.match(favArr, unfArr) : null,
           r: {
             fav: favArr.join(''), unf: unfArr.join(''),

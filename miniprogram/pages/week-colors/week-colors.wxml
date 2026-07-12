@@ -1,0 +1,27 @@
+<navbar title="一周色卡" back="{{true}}"/>
+
+<view wx:if="{{days}}">
+  <view class="card ani-rise d{{index < 6 ? index + 1 : 6}}" wx:for="{{days}}" wx:key="date"
+    style="display:flex; align-items:center; gap:24rpx; {{item.today ? 'border:2rpx solid #b5432f' : ''}}">
+    <view style="flex:none; width:96rpx; text-align:center">
+      <view style="font-size:30rpx; font-weight:700; color:{{item.today ? '#b5432f' : '#33302a'}}">{{item.label}}</view>
+      <view class="muted" style="font-size:22rpx">{{item.date}}</view>
+      <view class="muted" style="font-size:20rpx">{{item.gz}}</view>
+    </view>
+    <view style="flex:1; display:flex; align-items:flex-end; gap:12rpx">
+      <view class="cbar-m" wx:for="{{item.main}}" wx:for-item="c" wx:key="n" style="background:{{c.c}}"></view>
+      <view class="cbar-xs" wx:for="{{item.accent}}" wx:for-item="c" wx:key="n" style="background:{{c.c}}"></view>
+    </view>
+    <view style="flex:none; text-align:right">
+      <view style="font-size:28rpx">{{item.name}}</view>
+      <view class="en">Main</view>
+    </view>
+  </view>
+  <view class="muted ani-rise d6" style="text-align:center; margin:30rpx">按传统五行色彩文化生成 · 仅供风格参考与娱乐</view>
+</view>
+
+<view class="card ani-rise" wx:if="{{!hasProfile}}">
+  <view class="cardtitle">一周色卡还未铺开</view>
+  <view class="muted" style="margin-top:10rpx">设置本人档案后,这里会显示未来七天的穿搭色。</view>
+  <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
+</view>
