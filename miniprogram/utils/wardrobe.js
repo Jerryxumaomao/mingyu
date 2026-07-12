@@ -31,7 +31,7 @@ const match = (favorable, unfavorable) => {
     .map((n) => MATERIALS.find((m) => m.n === n))
     .filter((m) => m && fav.includes(m.wx))
     .sort((a, b) => fav.indexOf(a.wx) - fav.indexOf(b.wx))
-    .map((m) => `${m.n}(${m.wx}${fav.indexOf(m.wx) < 2 ? '·主' : ''})`);
+    .map((m) => `${m.n}${fav.indexOf(m.wx) < 2 ? '(主推)' : ''}`);
   const TIER = ['首选', '换风格', '点到即可'];
   const scored = [];
   w.perfumes.forEach((p) => {
@@ -43,7 +43,7 @@ const match = (favorable, unfavorable) => {
     else if (fav.indexOf(main) > -1 || (arr[1] && fav.indexOf(arr[1]) > -1)) tier = 1;
     else if (arr[2] && fav.indexOf(arr[2]) > -1) tier = 2;
     if (tier === null) return;
-    scored.push({ tier, s: `${p.n} ${marks(arr)} · ${TIER[tier]}` });
+    scored.push({ tier, s: `${p.n} · ${TIER[tier]}` });
   });
   scored.sort((a, b) => a.tier - b.tier);
   return { mats, perfumes: scored.map((x) => x.s), empty: !w.mats.length && !w.perfumes.length };

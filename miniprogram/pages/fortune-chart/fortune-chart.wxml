@@ -9,7 +9,6 @@
 </view>
 
 <view class="card" style="margin-top:20rpx; padding:20rpx">
-  <view class="muted" style="font-size:23rpx; margin-bottom:8rpx">{{natalStr}}</view>
   <canvas type="2d" id="fc" bindtouchstart="onTouch" bindtouchmove="onTouch" style="width:100%; height:420rpx"></canvas>
   <view class="muted" style="text-align:center; font-size:23rpx; margin-top:6rpx">在图上按住滑动选择{{mode === 'day' ? '日期' : '年份'}}</view>
 </view>
@@ -34,9 +33,9 @@
   </block>
   <block wx:else>
     <view class="muted" style="margin-top:12rpx">{{sel.text}}</view>
-    <view class="muted" style="margin-top:8rpx; font-size:24rpx">{{sel.range}}{{sel.dayun ? ' · ' + sel.dayun : ''}}</view>
+    <view class="muted" style="margin-top:8rpx; font-size:24rpx">{{sel.range}}</view>
     <view style="margin-top:20rpx; border-top:1rpx dashed #d8cdb4; padding-top:18rpx">
-      <view style="font-weight:700; font-size:29rpx">流月走势 <text class="en" style="margin-left:8rpx">Months</text></view>
+      <view style="font-weight:700; font-size:29rpx">逐月走势 <text class="en" style="margin-left:8rpx">Months</text></view>
       <canvas type="2d" id="mc" bindtouchstart="onMonthTouch" bindtouchmove="onMonthTouch" style="width:100%; height:190rpx; margin-top:12rpx"></canvas>
       <view wx:if="{{selMonth}}" style="margin-top:10rpx; font-size:28rpx">
         {{selMonth.title}} · <text style="color:{{selMonth.color}}; font-weight:700">{{selMonth.score}}分 {{selMonth.band}}</text>

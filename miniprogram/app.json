@@ -2,7 +2,6 @@
   "pages": [
     "pages/index/index",
     "pages/profile/profile",
-    "pages/paipan/paipan",
     "pages/fortune/fortune",
     "pages/fortune-chart/fortune-chart",
     "pages/liuren/liuren",

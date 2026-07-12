@@ -8,7 +8,7 @@ const { GAN_WX, ZHI_WX } = require('../../utils/daily-fortune.js');
 Page({
   data: {
     padTop: 40, splash: false, splashFade: false,
-    pillars: null, profDesc: '设置一次本人档案,四柱常驻首页,五个功能自动带入',
+    pillars: null, profDesc: '设置一次本人档案,每日灵感自动生成',
     dash: null,
   },
   onLoad() {
@@ -42,7 +42,7 @@ Page({
   onShow() {
     const p = profile.get();
     if (!p) {
-      this.setData({ pillars: null, dash: null, profDesc: '设置一次本人档案,四柱常驻首页,五个功能自动带入' });
+      this.setData({ pillars: null, dash: null, profDesc: '设置一次本人档案,每日灵感自动生成' });
       return;
     }
     try {
@@ -125,6 +125,5 @@ Page({
   goKline() { wx.switchTab({ url: '/pages/fortune/fortune' }); },
   onShareAppMessage() { return { title: '观其变而玩其占 · 玩占', path: '/pages/index/index' }; },
   onShareTimeline() { return { title: '观其变而玩其占 · 玩占' }; },
-  goPaipan() { wx.navigateTo({ url: '/pages/paipan/paipan' }); },
   goLiuren() { wx.navigateTo({ url: '/pages/liuren/liuren' }); },
 });

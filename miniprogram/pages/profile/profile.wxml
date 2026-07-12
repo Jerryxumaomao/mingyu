@@ -20,14 +20,9 @@
   <input value="{{hm}}" bindinput="onHm" placeholder="HH:MM,与城市一起填才生效"/>
 </view>
 <button class="go" hover-class="btn-press" bindtap="save">保 存 档 案</button>
-<view wx:if="{{preview}}" class="card ani-pop">
-  <view class="muted">传统历法干支{{tsNote}}</view>
-  <view style="display:flex;text-align:center;margin-top:12rpx">
-    <view style="flex:1" class="ani-flip d{{index + 1}}" wx:for="{{preview}}" wx:key="index">
-      <view class="muted">{{item.n}}</view>
-      <view class="gold" style="font-size:40rpx">{{item.gz}}</view>
-    </view>
-  </view>
+<view wx:if="{{preview}}" class="card ani-pop" style="text-align:center">
+  <view style="font-size:30rpx">档案已保存{{tsNote}}</view>
+  <view class="muted" style="margin-top:8rpx">每日色彩与走势将按此档案自动生成</view>
 </view>
 <view wx:if="{{hasProfile}}" style="text-align:center;margin:10rpx">
   <text class="muted" style="text-decoration:underline" bindtap="clearProfile">清除本机档案</text>

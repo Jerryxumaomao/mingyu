@@ -4,7 +4,7 @@
   <view class="card ani-rise" hover-class="btn-press" bindtap="goDay" style="display:flex; align-items:center; gap:24rpx">
     <view style="flex:1; min-width:0">
       <view class="cardtitle">今日指数 <text class="en" style="margin-left:8rpx">Today</text></view>
-      <view class="muted" style="margin-top:8rpx">{{today.date}} · 流日 {{today.gz}}</view>
+      <view class="muted" style="margin-top:8rpx">{{today.date}}</view>
       <view style="margin-top:12rpx; display:flex; align-items:baseline; gap:10rpx">
         <text style="font-size:68rpx; font-weight:700; color:{{bandColor}}">{{today.score}}</text>
         <text class="muted">分</text>

@@ -48,9 +48,9 @@ const score = (dateObj, natal) => {
   let s = 50 + eScore(GAN_WX[gan]) * 1.0 + eScore(ZHI_WX[zhi]) * 1.2;
   const notes = [];
   if (natalDayZhi) {
-    if (LIU_HE[zhi] === natalDayZhi) { s += 4; notes.push(`流日${zhi}六合命局日支,人和顺遂`); }
-    else if (inTrine(zhi, natalDayZhi)) { s += 3; notes.push(`流日${zhi}三合命局日支,合作有缘`); }
-    else if (LIU_CHONG[zhi] === natalDayZhi) { s -= 5; notes.push(`流日${zhi}冲命局日支,易生变动,稳字当头`); }
+    if (LIU_HE[zhi] === natalDayZhi) { s += 4; notes.push('今天与你合拍,人和顺遂'); }
+    else if (inTrine(zhi, natalDayZhi)) { s += 3; notes.push('今天有贵人缘,合作顺当'); }
+    else if (LIU_CHONG[zhi] === natalDayZhi) { s -= 5; notes.push('今天易有变动,稳字当头'); }
   }
   s = Math.min(98, Math.max(2, Math.round(s * 10) / 10));
   const band = BANDS.find(([lo]) => s >= lo)[1];

@@ -6,6 +6,7 @@
 const GAN_WX = { 甲: '木', 乙: '木', 丙: '火', 丁: '火', 戊: '土', 己: '土', 庚: '金', 辛: '金', 壬: '水', 癸: '水' };
 const ZHI_WX = { 子: '水', 丑: '土', 寅: '木', 卯: '木', 辰: '土', 巳: '火', 午: '火', 未: '土', 申: '金', 酉: '金', 戌: '土', 亥: '水' };
 
+// 措辞不露术语:干支/喜忌/大运等留在引擎层,页面只说"顺风/费力/底子稳"
 const yearText = (yr, natal, prev) => {
   const fav = natal.favorableWuxing || [];
   const unf = natal.unfavorableWuxing || [];
@@ -13,25 +14,23 @@ const yearText = (yr, natal, prev) => {
   const zWx = ZHI_WX[yr.liunianGanZhi[1]];
   const favHit = [gWx, zWx].filter((w) => fav.includes(w));
   const unfHit = [gWx, zWx].filter((w) => unf.includes(w));
-  // 喜用有主次:排前二的才算"当令",排后面的只是"次喜"
   const favRank = favHit.length ? Math.min(...favHit.map((w) => fav.indexOf(w))) : 99;
   const parts = [];
-  if (favHit.length === 2 && favRank < 2) parts.push(favHit[0] === favHit[1] ? `干支一片${favHit[0]},喜用当令` : '干支皆喜,顺水行舟');
-  else if (favHit.length === 2) parts.push('干支为次级喜用,平顺但力道有限');
-  else if (favHit.length === 1 && !unfHit.length) parts.push(favRank < 2 ? `${favHit[0]}为主喜用,有实质帮扶` : `${favHit[0]}为次喜,小有助益`);
-  else if (unfHit.length === 2) parts.push(unfHit[0] === unfHit[1] ? `干支一片${unfHit[0]},忌神当令,阻力明显` : '干支皆忌,宜守不宜攻');
-  else if (unfHit.length === 1 && !favHit.length) parts.push(`${unfHit[0]}为忌,略有消耗`);
-  else if (favHit.length && unfHit.length) parts.push('喜忌相杂,起伏之年');
-  else parts.push('五行中性,平平之年');
+  if (favHit.length === 2 && favRank < 2) parts.push('天时正好,顺水行舟');
+  else if (favHit.length === 2) parts.push('平顺之年,力道温和');
+  else if (favHit.length === 1 && !unfHit.length) parts.push(favRank < 2 ? '有实质助力' : '小有助益');
+  else if (unfHit.length === 2) parts.push('阻力明显,宜守不宜攻');
+  else if (unfHit.length === 1 && !favHit.length) parts.push('略有消耗');
+  else if (favHit.length && unfHit.length) parts.push('好坏参半,起伏之年');
+  else parts.push('平平常常的一年');
   if (yr.dayunGanZhi) {
     const dHit = [GAN_WX[yr.dayunGanZhi[0]], ZHI_WX[yr.dayunGanZhi[1]]];
     const dFav = dHit.filter((w) => fav.includes(w)).length;
     const dUnf = dHit.filter((w) => unf.includes(w)).length;
-    if (dFav && !dUnf) parts.push(`大运${yr.dayunGanZhi}托底`);
-    else if (dUnf && !dFav) parts.push(`大运${yr.dayunGanZhi}底色偏紧`);
+    if (dFav && !dUnf) parts.push('底子稳');
+    else if (dUnf && !dFav) parts.push('底子偏紧');
   }
-  if ((yr.factors || []).some((f) => f.indexOf('合日支') > -1)) parts.push('流年合日支,人和顺遂');
-  if ((yr.events || []).length) parts.push(`留意:${yr.events.map((e) => e.name).join('、')}`);
+  if ((yr.factors || []).some((f) => f.indexOf('合日支') > -1)) parts.push('人和顺遂');
   let dirTxt = '';
   if (prev) {
     const d = yr.score - prev.score;

@@ -29,10 +29,7 @@ Page({
       if (!k) { k = klineCache.build(date, ti, gi); klineCache.save(k); }
       this.k = k;
       this.days = daily.series(k.natal, -15, 15); // 前后各15天
-      this.setData({
-        ready: true,
-        natalStr: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
-      }, () => this.initCanvas());
+      this.setData({ ready: true }, () => this.initCanvas());
     } catch (e) {
       wx.hideLoading();
       wx.showToast({ title: e.message, icon: 'none' });
@@ -80,7 +77,7 @@ Page({
     const d = this.days[i];
     this.setData({
       sel: {
-        kind: 'day', title: `${d.iso} · ${d.gz}日`, score: d.score, band: d.band,
+        kind: 'day', title: d.iso, score: d.score, band: d.band,
         color: BAND_COLOR[d.band], isToday: d.offset === 0,
         yi: d.yi.join(' · '), ji: d.ji.join(' · '),
         note: d.notes.join(';') || '',
@@ -97,7 +94,7 @@ Page({
     const band = yr.score >= 67 ? '佳' : yr.score >= 45 ? '平' : '緩';
     this.setData({
       sel: {
-        kind: 'year', title: `${yr.year} ${yr.liunianGanZhi}年 · ${yr.age}岁`, score: Math.round(yr.score),
+        kind: 'year', title: `${yr.year} 年 · ${yr.age}岁`, score: Math.round(yr.score),
         band, color: yr.score >= 67 ? '#b5432f' : yr.score >= 45 ? '#8a8272' : '#3f7050',
         isToday: yr.year === new Date().getFullYear(),
         text: r.text,
@@ -123,23 +120,22 @@ Page({
     if (!yr || !(yr.monthScores || []).length) return;
     const s = yr.monthScores[mi];
     const band = bandOf(s);
-    let gz = '';
+    let why = '';
     try {
       const lm = MY.baziCalculator.calculateLiuyue(yr.year, mi + 1, this.k.natal.dayMaster);
-      gz = lm.ganZhi || `${lm.gan || ''}${lm.zhi || ''}`;
-    } catch (e) { /* 流月干支拿不到就只显示分数 */ }
-    let why = '';
-    if (gz && gz.length >= 2) {
-      const fav = this.k.natal.favorableWuxing || [];
-      const unf = this.k.natal.unfavorableWuxing || [];
-      const hits = [GAN_WX[gz[0]], ZHI_WX[gz[1]]];
-      const f = hits.filter((w) => fav.indexOf(w) > -1).length;
-      const u = hits.filter((w) => unf.indexOf(w) > -1).length;
-      why = f && !u ? '月令带喜用,宜推进' : u && !f ? '月令带忌神,宜稳守' : f && u ? '喜忌相杂,顺势而为' : '月令中性,照常即可';
-    }
+      const gz = lm.ganZhi || `${lm.gan || ''}${lm.zhi || ''}`;
+      if (gz && gz.length >= 2) {
+        const fav = this.k.natal.favorableWuxing || [];
+        const unf = this.k.natal.unfavorableWuxing || [];
+        const hits = [GAN_WX[gz[0]], ZHI_WX[gz[1]]];
+        const f = hits.filter((w) => fav.indexOf(w) > -1).length;
+        const u = hits.filter((w) => unf.indexOf(w) > -1).length;
+        why = f && !u ? '这个月顺风,宜推进' : u && !f ? '这个月费力,宜稳守' : f && u ? '好坏参半,顺势而为' : '平常月份,照常即可';
+      }
+    } catch (e) { /* 拿不到月信息就只显示分数 */ }
     this.setData({
       selMonth: {
-        title: `第${mi + 1}个月(节气月)${gz ? ' · ' + gz : ''}`,
+        title: `第${mi + 1}个月(节气月)`,
         score: Math.round(s), band, color: BAND_COLOR[band], text: why,
       },
     });

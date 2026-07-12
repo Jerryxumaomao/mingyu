@@ -1,8 +1,7 @@
 <navbar title="全程放大" back="{{true}}"/>
 <view class="card" style="margin:16rpx 20rpx; padding:20rpx 26rpx">
-  <view class="muted" style="font-size:24rpx">{{natal}}</view>
   <view style="display:flex; gap:26rpx; align-items:baseline; margin-top:8rpx; flex-wrap:wrap" wx:if="{{sel}}">
-    <text style="font-size:34rpx; font-weight:700; color:{{sel.up ? '#b5432f' : '#3f7050'}}">{{sel.year}} {{sel.gz}}</text>
+    <text style="font-size:34rpx; font-weight:700; color:{{sel.up ? '#b5432f' : '#3f7050'}}">{{sel.year}} 年</text>
     <text class="muted">{{sel.age}}岁</text>
     <text>年分 <text style="font-weight:700; color:#b5432f">{{sel.score}}</text></text>
     <text class="muted">高 {{sel.high}} · 低 {{sel.low}} · 开 {{sel.open}} · 收 {{sel.close}}</text>

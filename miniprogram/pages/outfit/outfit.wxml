@@ -1,10 +1,10 @@
-<navbar title="今日五行穿搭"/>
+<navbar title="今日穿搭"/>
 <view wx:if="{{r}}">
   <!-- 今日色彩:大色卡,少文字 -->
   <view class="card ani-rise">
     <view style="display:flex; justify-content:space-between; align-items:center">
       <view class="cardtitle">今日色彩 <text class="en" style="margin-left:8rpx">Colors</text></view>
-      <view class="en" style="flex:none">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}} · {{r.dayGz}}日</view>
+      <view class="en" style="flex:none">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}}</view>
     </view>
     <view style="display:flex; gap:26rpx; margin-top:24rpx; align-items:flex-end">
       <view wx:for="{{r.main}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
@@ -69,7 +69,7 @@
           <text style="font-weight:700; flex:none">喷</text><text style="font-size:27rpx">{{item}}</text>
         </view>
       </view>
-      <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:14rpx">已有单品与今日喜用暂无重合,可参考上方通用推荐</view>
+      <view wx:if="{{!owned.mats.length && !owned.perfumes.length}}" class="muted" style="margin-top:14rpx">已有单品与今日色系暂无重合,可参考上方通用推荐</view>
       <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:16rpx">管理我的衣橱 ›</view>
     </block>
     <block wx:else>
@@ -91,9 +91,6 @@
     </block>
   </view>
 
-  <view class="card ani-rise d3" wx:if="{{r.notes.length}}">
-    <view wx:for="{{r.notes}}" wx:key="index" class="muted" style="margin-top:{{index ? '8rpx' : '0'}}">✦ {{item}}</view>
-  </view>
 </view>
 
 <view class="card ani-rise" wx:if="{{!r && !busy && !showForm}}">
@@ -118,4 +115,4 @@
 <button wx:if="{{!showForm}}" class="go" style="background:transparent; color:#b5432f; border:2rpx solid #b5432f"
   hover-class="btn-press" bindtap="toggleForm">帮 TA 看看</button>
 
-<view class="muted" style="text-align:center;margin:30rpx">五行取象为传统主流口径,仅供风格参考与娱乐</view>
+<view class="muted" style="text-align:center;margin:30rpx">灵感源自传统文化配色,仅供风格参考与娱乐</view>

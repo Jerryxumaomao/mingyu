@@ -2,7 +2,8 @@ const MATERIALS = require('../../data/materials.js');
 const PERFUMES = require('../../data/perfumes.js');
 const wardrobe = require('../../utils/wardrobe.js');
 
-const WX_GROUPS = ['木 · 绿叶草木调', '火 · 辛香东方调', '土 · 大地檀香调', '金 · 醛香白花调', '水 · 海洋清凉调'];
+// 展示用中性香调分组;首字符仍是内部归类键,截取逻辑不变
+const WX_GROUPS = ['木质绿意(绿叶/草本)', '火暖甜香(辛香/东方)', '土沉稳调(檀香/大地)', '金净白调(白花/皂感)', '水清凉调(海洋/水生)'];
 
 Page({
   data: {
@@ -49,7 +50,7 @@ Page({
     if (!name) { wx.showToast({ title: '先填香水名', icon: 'none' }); return; }
     if (this.data.perfumes.some((x) => x.n === name)) { wx.showToast({ title: '已在香水架上', icon: 'none' }); return; }
     const g = this.data.groups[this.data.gIdx];
-    const p = { n: name, wx: [g[0]], f: g.slice(4), custom: true, d: wardrobe.marks([g[0]]) };
+    const p = { n: name, wx: [g[0]], f: g, custom: true, d: wardrobe.marks([g[0]]) };
     this.setData({ perfumes: [...this.data.perfumes, p], kw: '', results: [], showCustom: false, customName: '' }, () => this.persist());
     wx.showToast({ title: '已存入个人库', icon: 'success' });
   },

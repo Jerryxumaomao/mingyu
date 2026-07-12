@@ -19,10 +19,7 @@ Page({
       let k = klineCache.get(date, ti, gi);
       if (!k) { k = klineCache.build(date, ti, gi); klineCache.save(k); }
       this.ys = k.years;
-      this.setData({
-        ready: true,
-        natal: `${k.natal.pillars} · 喜${k.natal.favorableWuxing.join('')}忌${k.natal.unfavorableWuxing.join('')}`,
-      }, () => this.initCanvas());
+      this.setData({ ready: true }, () => this.initCanvas());
     } catch (e) {
       wx.hideLoading();
       wx.showToast({ title: e.message, icon: 'none' });
