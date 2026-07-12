@@ -18,15 +18,26 @@ Page({
     if (!app.globalData.splashDone) {
       app.globalData.splashDone = true;
       this.setData({ splash: true });
-      wx.hideTabBar({ animation: false });
+      wx.hideTabBar({ animation: false, fail: () => { /* 隐藏失败无妨,照常倒计时 */ } });
       this._splashTimer = setTimeout(() => this.endSplash(), 1600);
+      // 看门狗:真机上任何一步失灵,4 秒后强制清场,绝不让全屏遮罩卡死页面
+      this._splashGuard = setTimeout(() => this.endSplash(), 4000);
     }
   },
-  skipSplash() { clearTimeout(this._splashTimer); this.endSplash(); },
+  skipSplash() { this.endSplash(); },
+  onSplashError() { this.endSplash(); }, // 开屏图加载失败:立即退场,避免透明遮罩挡点击
   endSplash() {
-    if (!this.data.splash || this.data.splashFade) return;
+    clearTimeout(this._splashTimer);
+    clearTimeout(this._splashGuard);
+    if (this._splashEnded) return;
+    this._splashEnded = true;
     this.setData({ splashFade: true });
-    setTimeout(() => { this.setData({ splash: false }); wx.showTabBar({ animation: true }); }, 400);
+    setTimeout(() => { this.setData({ splash: false }); this.restoreTab(); }, 400);
+    // 双保险:淡出回调若失灵,1.2 秒后无条件清干净
+    setTimeout(() => { this.setData({ splash: false }); this.restoreTab(); }, 1200);
+  },
+  restoreTab() {
+    wx.showTabBar({ animation: false, fail: () => setTimeout(() => wx.showTabBar({ animation: false, fail: () => {} }), 800) });
   },
   onShow() {
     const p = profile.get();

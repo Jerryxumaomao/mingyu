@@ -1,6 +1,6 @@
 <!-- 开屏(冷启动一次,轻触跳过) -->
 <view wx:if="{{splash}}" class="splash {{splashFade ? 'splash-out' : ''}}" bindtap="skipSplash">
-  <image src="/assets/splash.jpg" mode="aspectFill" style="width:100%;height:100%"/>
+  <image src="/assets/splash.jpg" mode="aspectFill" binderror="onSplashError" style="width:100%;height:100%"/>
 </view>
 
 <view style="padding-top:{{padTop}}px; padding-bottom:30rpx">
