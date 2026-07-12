@@ -2,7 +2,7 @@ const profile = require('../../utils/profile.js');
 const klineCache = require('../../utils/kline-cache.js');
 const daily = require('../../utils/daily-fortune.js');
 
-const BAND_COLOR = { 旺: '#b5432f', 顺: '#c96f2f', 平: '#8a8272', 缓: '#3f7050', 守: '#2f5540' };
+const BAND_COLOR = { 旺: '#b5432f', 順: '#c96f2f', 平: '#8a8272', 緩: '#3f7050', 守: '#2f5540' };
 
 Page({
   data: {
@@ -35,7 +35,7 @@ Page({
       const key = `${this.person.date}|${this.person.ti}|${this.person.gi}|${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}|v2`;
       if (c && c.key === key && c.dash && c.dash.main) colors = { main: c.dash.main, accent: c.dash.accent || [] };
     } catch (e) { /* 没有就不显示 */ }
-    const qi = { 旺: 0, 顺: 1, 平: 2, 缓: 3, 守: 4 }[today.band];
+    const qi = { 旺: 0, 順: 1, 平: 2, 緩: 3, 守: 4 }[today.band];
     this.setData({ hasProfile: true, today, qi, bandColor: BAND_COLOR[today.band], colors },
       () => this.drawThumbs(k));
   },

@@ -46,12 +46,12 @@
     </view>
   </view>
 
-  <!-- 每日小签 -->
+  <!-- 疗愈祈愿 -->
   <view class="card ani-rise d2" hover-class="btn-press" bindtap="goLiuren" style="display:flex; align-items:center; gap:22rpx">
-    <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">签</view>
+    <view class="glyph" style="width:76rpx; height:76rpx; font-size:38rpx">愿</view>
     <view style="min-width:0; flex:1">
-      <view class="cardtitle" style="font-size:30rpx">每日小签</view>
-      <view class="muted" style="margin-top:2rpx">静心默念一事,抽一支文化小签</view>
+      <view class="cardtitle" style="font-size:30rpx">疗愈祈愿</view>
+      <view class="muted" style="margin-top:2rpx">静心默念一个心愿,求一句安心话</view>
     </view>
     <view class="muted" style="font-size:36rpx">›</view>
   </view>

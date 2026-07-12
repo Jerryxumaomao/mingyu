@@ -47,3 +47,6 @@ project.private.config.json
 miniprogram/project.private.config.json
 # 误在仓库根目录打开开发者工具生成的配置(正确项目目录是 miniprogram/)
 /project.config.json
+
+# cwTeX Q Kai 楷体(14MB,仅本地渲字用;下载地址见 brand/qianchar.html 注释)
+miniprogram/brand/cwTeXQKai-Medium.ttf

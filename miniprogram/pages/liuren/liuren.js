@@ -4,7 +4,7 @@ Page({
   // 默认报数起课:让用户带着问题参与,仪式感和随机性都最好。
   // 时间起课同一时辰(2小时)结果相同是规则本身,界面上要讲清楚,免得用户以为坏了。
   data: { methods: ['报数抽签(推荐)', '以时抽签', '随手一抽'], mi: 0, num: '', r: null },
-  onShareAppMessage() { return { title: '心里有事?来抽一签', path: '/pages/liuren/liuren' }; },
+  onShareAppMessage() { return { title: '有心事?来一支疗愈小签', path: '/pages/liuren/liuren' }; },
   onMethod(e) { this.setData({ mi: +e.detail.value, r: null }); },
   onNum(e) { this.setData({ num: e.detail.value }); },
   // 报数起课同数同日结果相同,"再来一卦"必须换数,所以清空回到引导态

@@ -4,10 +4,10 @@ const klineCache = require('../../utils/kline-cache.js');
 const daily = require('../../utils/daily-fortune.js');
 const reading = require('../../utils/kline-reading.js');
 
-const BAND_COLOR = { 旺: '#b5432f', 顺: '#c96f2f', 平: '#8a8272', 缓: '#3f7050', 守: '#2f5540' };
+const BAND_COLOR = { 旺: '#b5432f', 順: '#c96f2f', 平: '#8a8272', 緩: '#3f7050', 守: '#2f5540' };
 const GAN_WX = { 甲: '木', 乙: '木', 丙: '火', 丁: '火', 戊: '土', 己: '土', 庚: '金', 辛: '金', 壬: '水', 癸: '水' };
 const ZHI_WX = { 子: '水', 丑: '土', 寅: '木', 卯: '木', 辰: '土', 巳: '火', 午: '火', 未: '土', 申: '金', 酉: '金', 戌: '土', 亥: '水' };
-const bandOf = (s) => (s >= 68 ? '旺' : s >= 56 ? '顺' : s >= 44 ? '平' : s >= 32 ? '缓' : '守');
+const bandOf = (s) => (s >= 68 ? '旺' : s >= 56 ? '順' : s >= 44 ? '平' : s >= 32 ? '緩' : '守');
 
 Page({
   data: { mode: 'day', sel: null, natalStr: '', ready: false },
@@ -94,7 +94,7 @@ Page({
     const ys = this.k.years;
     const yr = ys[i];
     const r = reading.yearText(yr, this.k.natal, i > 0 ? ys[i - 1] : null);
-    const band = yr.score >= 67 ? '佳' : yr.score >= 45 ? '平' : '缓';
+    const band = yr.score >= 67 ? '佳' : yr.score >= 45 ? '平' : '緩';
     this.setData({
       sel: {
         kind: 'year', title: `${yr.year} ${yr.liunianGanZhi}年 · ${yr.age}岁`, score: Math.round(yr.score),
