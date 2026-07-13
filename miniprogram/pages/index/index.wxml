@@ -16,9 +16,19 @@
         <view style="font-size:24rpx">{{today.date}}</view>
         <view style="font-size:30rpx; letter-spacing:4rpx; color:#33302a; margin-top:4rpx">今日{{today.element}}气当值</view>
       </view>
-      <view class="seal ani-stamp" style="align-self:flex-end; font-size:40rpx">今</view>
+      <view class="seal ani-stamp" style="align-self:flex-end; width:64rpx; height:64rpx; font-size:22rpx; line-height:1.2">玩<br/>占</view>
     </view>
-    <view class="muted" style="letter-spacing:4rpx; margin-top:18rpx">每日更新 · 传统文化生活日历</view>
+    <view wx:if="{{today}}" style="display:flex; gap:24rpx; margin-top:18rpx; align-items:baseline; flex-wrap:wrap">
+      <view style="display:flex; gap:10rpx; align-items:baseline">
+        <text style="font-size:32rpx; font-weight:700; color:#b5432f; flex:none">宜</text>
+        <text style="font-size:26rpx">{{today.yi}}</text>
+      </view>
+      <view style="display:flex; gap:10rpx; align-items:baseline">
+        <text style="font-size:32rpx; font-weight:700; color:#3f7050; flex:none">忌</text>
+        <text style="font-size:26rpx">{{today.ji}}</text>
+      </view>
+    </view>
+    <view wx:else class="muted" style="letter-spacing:4rpx; margin-top:18rpx">每日更新 · 传统文化生活日历</view>
   </view>
 
   <!-- 今日指数 + 今日五行色 -->
@@ -37,18 +47,6 @@
     </view>
     <view style="width:200rpx; flex:none; display:flex; align-items:center; justify-content:center">
       <image class="ani-stamp" src="/assets/qian-{{today.qi}}.png" mode="aspectFit" style="width:200rpx; height:240rpx; transform:rotate(-3deg)"/>
-    </view>
-  </view>
-
-  <!-- 今日宜忌(黄历) -->
-  <view wx:if="{{today}}" class="tile-row ani-rise d2">
-    <view class="tile" style="display:flex; align-items:center; gap:16rpx">
-      <text style="font-size:46rpx; font-weight:700; color:#b5432f; flex:none">宜</text>
-      <text style="font-size:26rpx; line-height:1.5">{{today.yi}}</text>
-    </view>
-    <view class="tile" style="display:flex; align-items:center; gap:16rpx">
-      <text style="font-size:46rpx; font-weight:700; color:#3f7050; flex:none">忌</text>
-      <text style="font-size:26rpx; line-height:1.5">{{today.ji}}</text>
     </view>
   </view>
 

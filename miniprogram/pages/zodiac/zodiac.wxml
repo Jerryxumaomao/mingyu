@@ -1,7 +1,7 @@
+<navbar title="十二生肖今日"/>
 <view wx:if="{{today}}">
-  <view class="card ani-rise" style="text-align:center; padding:30rpx">
-    <view class="cardtitle">十二生肖今日 <text class="en" style="margin-left:8rpx">{{today.date}}</text></view>
-    <view class="muted" style="margin-top:8rpx">今日{{today.element}}气当值 · 十二生肖各有提点,找到你的属相看一看</view>
+  <view class="card ani-rise" style="text-align:center; padding:26rpx">
+    <view class="muted">{{today.date}} · 今日{{today.element}}气当值 · 找到你的属相看一看</view>
   </view>
 
   <view class="card ani-rise d{{index < 6 ? 1 : 2}}" wx:for="{{zodiacs}}" wx:key="animal"

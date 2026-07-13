@@ -25,8 +25,10 @@
     <view style="flex:1; min-width:0">
       <view class="cardtitle" style="font-size:30rpx">未来一周 <text class="en" style="margin-left:8rpx">Week Colors</text></view>
       <view style="display:flex; gap:6rpx; margin-top:14rpx">
-        <view wx:for="{{week}}" wx:key="index"
-          style="flex:1; height:22rpx; background:{{item}}; border-radius:{{index === 0 ? '999rpx 4rpx 4rpx 999rpx' : index === 6 ? '4rpx 999rpx 999rpx 4rpx' : '4rpx'}}"></view>
+        <view wx:for="{{week}}" wx:key="index" style="flex:1; text-align:center">
+          <view style="height:22rpx; background:{{item.c}}; border-radius:{{index === 0 ? '999rpx 4rpx 4rpx 999rpx' : index === 6 ? '4rpx 999rpx 999rpx 4rpx' : '4rpx'}}"></view>
+          <view style="font-size:20rpx; margin-top:6rpx; color:{{item.today ? '#b5432f' : '#8a8272'}}; font-weight:{{item.today ? '700' : '400'}}">{{item.label}}</view>
+        </view>
       </view>
       <view class="muted" style="margin-top:10rpx; font-size:24rpx">每天的当值色排好了,出行提前配</view>
     </view>

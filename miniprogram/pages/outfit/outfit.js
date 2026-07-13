@@ -4,17 +4,19 @@ const almanac = require('../../utils/today-almanac.js');
 const { hexOf } = require('../../utils/colormap.js');
 
 // 今日之后 N 天的当值五行色(公共黄历,滚动展示,无个人信息)
+const WEEK_CH = ['日', '一', '二', '三', '四', '五', '六'];
 function weekStrip() {
   const out = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date();
     d.setDate(d.getDate() + i);
+    const label = i === 0 ? '今天' : `周${WEEK_CH[d.getDay()]}`;
     try {
       const p = MY.baziCalculator.calculatePillars({ year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: 'male' });
       const el = almanac.GAN_WX[p.pillars.day.gan];
       const adv = MY.recommendOutfit({ favorableWuxing: [el], unfavorableWuxing: [], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
-      out.push(hexOf((adv.colors.main || [''])[0] || ''));
-    } catch (e) { out.push('#d8cdb4'); }
+      out.push({ c: hexOf((adv.colors.main || [''])[0] || ''), label, today: i === 0 });
+    } catch (e) { out.push({ c: '#d8cdb4', label, today: i === 0 }); }
   }
   return out;
 }
