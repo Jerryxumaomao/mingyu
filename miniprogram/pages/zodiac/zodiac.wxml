@@ -1,0 +1,22 @@
+<view wx:if="{{today}}">
+  <view class="card ani-rise" style="text-align:center; padding:30rpx">
+    <view class="cardtitle">十二生肖今日 <text class="en" style="margin-left:8rpx">{{today.date}}</text></view>
+    <view class="muted" style="margin-top:8rpx">今日{{today.element}}气当值 · 十二生肖各有提点,找到你的属相看一看</view>
+  </view>
+
+  <view class="card ani-rise d{{index < 6 ? 1 : 2}}" wx:for="{{zodiacs}}" wx:key="animal"
+    style="display:flex; align-items:center; gap:22rpx; padding:26rpx 32rpx">
+    <view style="flex:none; width:92rpx; height:92rpx; border-radius:20rpx; border:3rpx solid {{item.color}}; display:flex; align-items:center; justify-content:center">
+      <text style="font-size:44rpx; font-weight:700; color:{{item.color}}">{{item.animal}}</text>
+    </view>
+    <view style="flex:1; min-width:0">
+      <view style="display:flex; align-items:center; gap:12rpx">
+        <text style="font-size:30rpx; font-weight:700">属{{item.animal}}</text>
+        <text style="font-size:22rpx; color:#fbf3e2; background:{{item.color}}; padding:2rpx 14rpx; border-radius:999rpx">{{item.tag}}</text>
+      </view>
+      <view class="muted" style="margin-top:6rpx; font-size:26rpx; line-height:1.5">{{item.text}}</view>
+    </view>
+  </view>
+
+  <view class="muted" style="text-align:center; margin:30rpx">生肖与今日的关系为传统民俗,仅供文化欣赏与娱乐</view>
+</view>

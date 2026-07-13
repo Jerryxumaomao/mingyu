@@ -1,14 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/profile/profile",
-    "pages/fortune/fortune",
-    "pages/fortune-chart/fortune-chart",
-    "pages/liuren/liuren",
     "pages/outfit/outfit",
+    "pages/zodiac/zodiac",
     "pages/week-colors/week-colors",
-    "pages/wardrobe/wardrobe",
-    "pages/kchart/kchart"
+    "pages/wardrobe/wardrobe"
   ],
   "window": {
     "navigationBarBackgroundColor": "#f4eddc",
@@ -24,9 +20,9 @@
     "backgroundColor": "#fbf7ec",
     "borderStyle": "white",
     "list": [
+      { "pagePath": "pages/index/index", "text": "今日", "iconPath": "assets/tab-home.png", "selectedIconPath": "assets/tab-home-on.png" },
       { "pagePath": "pages/outfit/outfit", "text": "穿搭", "iconPath": "assets/tab-yi.png", "selectedIconPath": "assets/tab-yi-on.png" },
-      { "pagePath": "pages/index/index", "text": "玩占", "iconPath": "assets/tab-home.png", "selectedIconPath": "assets/tab-home-on.png" },
-      { "pagePath": "pages/fortune/fortune", "text": "今日", "iconPath": "assets/tab-yun.png", "selectedIconPath": "assets/tab-yun-on.png" }
+      { "pagePath": "pages/zodiac/zodiac", "text": "生肖", "iconPath": "assets/tab-xiao.png", "selectedIconPath": "assets/tab-xiao-on.png" }
     ]
   },
   "style": "v2",

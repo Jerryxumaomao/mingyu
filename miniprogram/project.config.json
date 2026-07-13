@@ -32,8 +32,6 @@
   "packOptions": {
     "ignore": [
       { "type": "folder", "value": "brand" },
-      { "type": "folder", "value": "pages/hehun" },
-      { "type": "folder", "value": "pages/paipan" },
       { "type": "file", "value": "README.md" }
     ],
     "include": []

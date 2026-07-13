@@ -1,32 +1,26 @@
 <navbar title="今日穿搭"/>
-<view wx:if="{{r}}">
-  <!-- 今日色彩:大色卡,少文字 -->
+<view wx:if="{{today}}">
+  <!-- 今日色彩:大色卡 -->
   <view class="card ani-rise">
     <view style="display:flex; justify-content:space-between; align-items:center">
       <view class="cardtitle">今日色彩 <text class="en" style="margin-left:8rpx">Colors</text></view>
-      <view class="en" style="flex:none">{{isSelf ? 'FOR ME' : 'FOR FRIEND'}}</view>
+      <view class="en" style="flex:none">{{today.element}}色系</view>
     </view>
     <view style="display:flex; gap:26rpx; margin-top:24rpx; align-items:flex-end">
-      <view wx:for="{{r.main}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
+      <view wx:for="{{today.colors.main}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
         <view class="cbar" style="background:{{item.c}}"></view>
         <text style="font-size:24rpx">{{item.n}}</text>
       </view>
       <view style="width:1rpx; height:140rpx; background:#e6dcc6; align-self:center"></view>
-      <view wx:for="{{r.accent}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
+      <view wx:for="{{today.colors.accent}}" wx:key="n" style="display:flex; flex-direction:column; align-items:center; gap:10rpx">
         <view class="cbar-s" style="background:{{item.c}}"></view>
         <text class="muted" style="font-size:22rpx">{{item.n}}</text>
       </view>
     </view>
-    <view style="display:flex; align-items:center; gap:12rpx; margin-top:22rpx; flex-wrap:wrap">
-      <text class="muted" style="font-size:24rpx; flex:none">今天别碰</text>
-      <view wx:for="{{r.avoid}}" wx:key="n" style="display:flex; align-items:center; gap:6rpx; padding:4rpx 16rpx; border-radius:999rpx; border:2rpx solid #e6dcc6">
-        <view style="width:20rpx; height:20rpx; border-radius:50%; background:{{item.c}}; opacity:.5"></view>
-        <text class="muted" style="font-size:22rpx; text-decoration:line-through">{{item.n}}</text>
-      </view>
-    </view>
+    <view class="muted" style="margin-top:20rpx; font-size:24rpx">{{today.elementLine}}</view>
   </view>
 
-  <!-- 未来一周色卡入口:七段彩带预览 -->
+  <!-- 一周色卡入口:七段彩带 -->
   <view class="card ani-rise d1" wx:if="{{week}}" hover-class="btn-press" bindtap="goWeek" style="display:flex; align-items:center; gap:22rpx">
     <view style="flex:1; min-width:0">
       <view class="cardtitle" style="font-size:30rpx">未来一周 <text class="en" style="margin-left:8rpx">Week Colors</text></view>
@@ -34,30 +28,29 @@
         <view wx:for="{{week}}" wx:key="index"
           style="flex:1; height:22rpx; background:{{item}}; border-radius:{{index === 0 ? '999rpx 4rpx 4rpx 999rpx' : index === 6 ? '4rpx 999rpx 999rpx 4rpx' : '4rpx'}}"></view>
       </view>
-      <view class="muted" style="margin-top:10rpx; font-size:24rpx">七天的主色排好了,出行/见人提前配</view>
+      <view class="muted" style="margin-top:10rpx; font-size:24rpx">每天的当值色排好了,出行提前配</view>
     </view>
     <view class="muted" style="font-size:36rpx; flex:none">›</view>
   </view>
 
-  <!-- 配饰 + 香调:两列并排 chips -->
+  <!-- 配饰 + 香调 -->
   <view class="tile-row ani-rise d2">
     <view class="tile">
       <view style="font-weight:700; font-size:29rpx">配饰 <text class="en">Wear</text></view>
       <view style="display:flex; gap:10rpx; flex-wrap:wrap; margin-top:14rpx">
-        <view wx:for="{{r.acc}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; border:2rpx solid #d8cdb4; font-size:24rpx">{{item}}</view>
+        <view wx:for="{{today.acc}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; border:2rpx solid #d8cdb4; font-size:24rpx">{{item}}</view>
       </view>
     </view>
     <view class="tile">
       <view style="font-weight:700; font-size:29rpx">香调 <text class="en">Scent</text></view>
       <view style="display:flex; gap:10rpx; flex-wrap:wrap; margin-top:14rpx">
-        <view wx:for="{{r.scent}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; background:rgba(181,67,47,.1); color:#b5432f; font-size:24rpx">{{item}}</view>
-        <view wx:for="{{r.scentAvoid}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; border:2rpx solid #e6dcc6; color:#8a8272; font-size:24rpx; text-decoration:line-through">{{item}}</view>
+        <view wx:for="{{today.scent}}" wx:key="index" style="padding:6rpx 18rpx; border-radius:999rpx; background:rgba(181,67,47,.1); color:#b5432f; font-size:24rpx">{{item}}</view>
       </view>
     </view>
   </view>
 
-  <!-- 搭配:从衣橱里挑(新用户空态盖灰蒙版) -->
-  <view class="card ani-rise d2" wx:if="{{isSelf && owned}}" style="position:relative; overflow:hidden">
+  <!-- 搭配:从我的衣橱里挑(新用户空态盖蒙版) -->
+  <view class="card ani-rise d3" wx:if="{{owned}}" style="position:relative; overflow:hidden">
     <view class="cardtitle" style="font-size:30rpx">搭配 <text class="en" style="margin-left:8rpx">My Picks</text></view>
     <block wx:if="{{!owned.empty}}">
       <view wx:if="{{owned.mats.length}}" style="display:flex; align-items:center; gap:12rpx; margin-top:16rpx; flex-wrap:wrap">
@@ -73,7 +66,6 @@
       <view class="muted" hover-class="btn-press" bindtap="goWardrobe" style="margin-top:16rpx">管理我的衣橱 ›</view>
     </block>
     <block wx:else>
-      <!-- 占位(蒙版之下,示意这里将来长什么样) -->
       <view style="display:flex; align-items:center; gap:12rpx; margin-top:16rpx">
         <text style="font-weight:700; flex:none">戴</text>
         <view wx:for="{{[1, 2, 3]}}" wx:key="*this" style="width:120rpx; height:52rpx; border-radius:999rpx; border:2rpx dashed #d8cdb4"></view>
@@ -82,7 +74,6 @@
         <text style="font-weight:700; flex:none">喷</text>
         <view style="width:280rpx; height:52rpx; border-radius:999rpx; border:2rpx dashed #d8cdb4"></view>
       </view>
-      <!-- 灰蒙版:按钮绝对居中,引导小字贴底 -->
       <view style="position:absolute; left:0; top:0; right:0; bottom:0; background:rgba(51,48,42,.42); display:flex; align-items:center; justify-content:center">
         <view hover-class="btn-press" bindtap="goWardrobe"
           style="background:#b5432f; color:#fbf3e2; padding:18rpx 46rpx; border-radius:999rpx; font-size:29rpx; letter-spacing:4rpx; box-shadow:0 6rpx 16rpx rgba(0,0,0,.28)">＋ 添加配饰 / 香水</view>
@@ -90,29 +81,6 @@
       </view>
     </block>
   </view>
-
 </view>
-
-<view class="card ani-rise" wx:if="{{!r && !busy && !showForm}}">
-  <view class="cardtitle">今日色彩还未点亮</view>
-  <view class="muted" style="margin-top:10rpx">设置本人档案后,这里每天自动生成;也可以点下方按钮帮别人配一配。</view>
-  <navigator url="/pages/profile/profile"><view class="gold" style="margin-top:12rpx">去设置档案 ›</view></navigator>
-</view>
-
-<view wx:if="{{showForm}}" class="card ani-rise">
-  <view class="cardtitle" style="font-size:30rpx">换一个出生信息</view>
-  <view class="label">出生日期</view>
-  <picker mode="date" value="{{date}}" start="1600-01-01" end="2100-12-31" bindchange="onDate"><view>{{date}}</view></picker>
-  <view style="display:flex;gap:16rpx">
-    <picker style="flex:1" range="{{times}}" value="{{ti}}" bindchange="onTime"><view>{{times[ti]}}</view></picker>
-    <picker style="flex:1" range="{{genders}}" value="{{gi}}" bindchange="onGender"><view>{{genders[gi]}}</view></picker>
-  </view>
-  <view class="label">看哪天</view>
-  <picker mode="date" value="{{target}}" bindchange="onTarget"><view>{{target}}</view></picker>
-  <button class="go" style="margin:24rpx 0 4rpx" hover-class="btn-press" bindtap="run" disabled="{{busy}}">{{busy ? '正在调色…' : '生成穿搭建议'}}</button>
-</view>
-
-<button wx:if="{{!showForm}}" class="go" style="background:transparent; color:#b5432f; border:2rpx solid #b5432f"
-  hover-class="btn-press" bindtap="toggleForm">帮 TA 看看</button>
 
 <view class="muted" style="text-align:center;margin:30rpx">灵感源自传统文化配色,仅供风格参考与娱乐</view>
