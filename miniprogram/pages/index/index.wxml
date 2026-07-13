@@ -3,22 +3,20 @@
   <image src="/assets/splash.jpg" mode="aspectFill" binderror="onSplashError" style="width:100%;height:100%"/>
 </view>
 
-<view style="padding-top:{{padTop}}px; padding-bottom:30rpx">
+<navbar title="今日{{today ? ' · ' + today.date : ''}}"/>
+<view style="padding-bottom:30rpx">
   <!-- 头卡:品牌 + 今日概览 -->
   <view class="card ani-rise" style="padding:46rpx 36rpx 34rpx; position:relative; overflow:hidden">
     <image src="/assets/deco-branch.png" mode="widthFix" style="position:absolute; right:-14rpx; top:-6rpx; width:210rpx; opacity:.35"/>
-    <view style="display:flex; justify-content:space-between; height:280rpx">
+    <view style="display:flex; justify-content:space-between; height:260rpx">
       <!-- 品牌双列:逐字均布,等高自对齐 -->
-      <view style="display:flex; flex-direction:column; gap:12rpx; flex:none">
-        <view class="breathe" style="display:flex; gap:16rpx; height:232rpx">
-          <view style="display:flex; flex-direction:column; justify-content:space-between; align-items:center">
-            <text wx:for="{{['观', '变', '玩', '占']}}" wx:key="*this" style="font-size:52rpx; font-weight:700; color:#33302a; line-height:1">{{item}}</text>
-          </view>
-          <view style="display:flex; flex-direction:column; justify-content:space-between; align-items:center">
-            <text wx:for="{{['观', '其', '变', '而', '玩', '其', '占']}}" wx:key="index" class="muted" style="font-size:24rpx; line-height:1">{{item}}</text>
-          </view>
+      <view class="breathe" style="display:flex; gap:16rpx; height:100%; flex:none">
+        <view style="display:flex; flex-direction:column; justify-content:space-between; align-items:center">
+          <text wx:for="{{['观', '变', '玩', '占']}}" wx:key="*this" style="font-size:52rpx; font-weight:700; color:#33302a; line-height:1">{{item}}</text>
         </view>
-        <view wx:if="{{today}}" class="muted" style="font-size:24rpx; text-align:center">{{today.date}}</view>
+        <view style="display:flex; flex-direction:column; justify-content:space-between; align-items:center">
+          <text wx:for="{{['观', '其', '变', '而', '玩', '其', '占']}}" wx:key="index" class="muted" style="font-size:24rpx; line-height:1">{{item}}</text>
+        </view>
       </view>
       <view wx:if="{{today}}" style="align-self:center; padding:0 10rpx; min-width:0">
         <view style="display:flex; gap:14rpx; align-items:baseline">

@@ -2,12 +2,10 @@ const almanac = require('../../utils/today-almanac.js');
 
 Page({
   data: {
-    padTop: 40, splash: false, splashFade: false,
+    splash: false, splashFade: false,
     today: null, zodiacs: null,
   },
   onLoad() {
-    const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
-    this.setData({ padTop: (info.statusBarHeight || 32) + 10 });
     const app = getApp();
     if (!app.globalData.splashDone) {
       app.globalData.splashDone = true;
