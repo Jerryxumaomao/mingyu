@@ -37,6 +37,8 @@ const LIU_HE = { 子: '丑', 丑: '子', 寅: '亥', 亥: '寅', 卯: '戌', 戌
 const LIU_CHONG = { 子: '午', 午: '子', 丑: '未', 未: '丑', 寅: '申', 申: '寅', 卯: '酉', 酉: '卯', 辰: '戌', 戌: '辰', 巳: '亥', 亥: '巳' };
 const SAN_HE = [['申', '子', '辰'], ['亥', '卯', '未'], ['寅', '午', '戌'], ['巳', '酉', '丑']];
 const inTrine = (a, b) => a !== b && SAN_HE.some((g) => g.indexOf(a) > -1 && g.indexOf(b) > -1);
+// 相生为辅:当值五行所生者作每日辅色(木生火/火生土/土生金/金生水/水生木)
+const SHENG = { 木: '火', 火: '土', 土: '金', 金: '水', 水: '木' };
 
 function todayDayPillar() {
   const d = new Date();
@@ -61,7 +63,7 @@ function overview() {
   let acc = []; let scent = [];
   try {
     const adv = MY.recommendOutfit({
-      favorableWuxing: [el], unfavorableWuxing: [],
+      favorableWuxing: [el, SHENG[el]], unfavorableWuxing: [],
       dayGan: day.gan, dayZhi: day.zhi, dayMasterGan: day.gan,
     });
     colors = {
@@ -98,4 +100,4 @@ function zodiacs(dayZhi) {
   });
 }
 
-module.exports = { overview, zodiacs, GAN_WX, ZHI_WX };
+module.exports = { overview, zodiacs, GAN_WX, ZHI_WX, SHENG };

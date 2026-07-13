@@ -14,7 +14,7 @@ function weekStrip() {
     try {
       const p = MY.baziCalculator.calculatePillars({ year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: 'male' });
       const el = almanac.GAN_WX[p.pillars.day.gan];
-      const adv = MY.recommendOutfit({ favorableWuxing: [el], unfavorableWuxing: [], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
+      const adv = MY.recommendOutfit({ favorableWuxing: [el, almanac.SHENG[el]], unfavorableWuxing: [], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
       out.push({ c: hexOf((adv.colors.main || [''])[0] || ''), label, today: i === 0 });
     } catch (e) { out.push({ c: '#d8cdb4', label, today: i === 0 }); }
   }
