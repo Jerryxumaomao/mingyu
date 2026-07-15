@@ -1,6 +1,6 @@
 const MY = require('../../lib/mingyu.js');
 const { hexOf } = require('../../utils/colormap.js');
-const { GAN_WX, SHENG } = require('../../utils/today-almanac.js');
+const { dayPalette } = require('../../utils/today-almanac.js');
 
 const WEEK = ['日', '一', '二', '三', '四', '五', '六'];
 
@@ -17,8 +17,8 @@ Page({
         const d = new Date();
         d.setDate(d.getDate() + i);
         const p = MY.baziCalculator.calculatePillars({ year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: 'male' });
-        const el = GAN_WX[p.pillars.day.gan];
-        const adv = MY.recommendOutfit({ favorableWuxing: [el, SHENG[el]], unfavorableWuxing: [], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
+        const { el, lucky, avoid } = dayPalette(p.pillars.day.ganZhi);
+        const adv = MY.recommendOutfit({ favorableWuxing: [lucky, el], unfavorableWuxing: [avoid], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
         const main = (adv.colors.main || []).slice(0, 3).map((n) => ({ n, c: hexOf(n) }));
         const accent = (adv.colors.accent || []).slice(0, 2).map((n) => ({ n, c: hexOf(n) }));
         days.push({

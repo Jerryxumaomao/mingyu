@@ -13,8 +13,8 @@ function weekStrip() {
     const label = i === 0 ? '今天' : `周${WEEK_CH[d.getDay()]}`;
     try {
       const p = MY.baziCalculator.calculatePillars({ year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: 'male' });
-      const el = almanac.GAN_WX[p.pillars.day.gan];
-      const adv = MY.recommendOutfit({ favorableWuxing: [el, almanac.SHENG[el]], unfavorableWuxing: [], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
+      const { el, lucky, avoid } = almanac.dayPalette(p.pillars.day.ganZhi);
+      const adv = MY.recommendOutfit({ favorableWuxing: [lucky, el], unfavorableWuxing: [avoid], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
       out.push({ c: hexOf((adv.colors.main || [''])[0] || ''), label, today: i === 0 });
     } catch (e) { out.push({ c: '#d8cdb4', label, today: i === 0 }); }
   }
@@ -27,7 +27,7 @@ Page({
     const d = new Date();
     const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     if (this._key === key && this.data.today) {
-      this.setData({ owned: wardrobe.match([this.data.today.element], []) }); // 衣橱可能刚改过
+      this.setData({ owned: wardrobe.match([this.data.today.luckyWX], []) }); // 衣橱可能刚改过
       return;
     }
     wx.showLoading({ title: '正在铺色', mask: true });
@@ -37,7 +37,7 @@ Page({
         this._key = key;
         this.setData({
           today,
-          owned: wardrobe.match([today.element], []),
+          owned: wardrobe.match([today.luckyWX], []),
           week: weekStrip(),
         }, () => wx.hideLoading());
       } catch (e) { wx.hideLoading(); }
