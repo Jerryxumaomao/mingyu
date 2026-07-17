@@ -1,4 +1,4 @@
-/* 玩占 · 宣纸主题(新中式:宣纸白 + 墨字 + 朱砂印)
+/* 乾坤 · 宣纸主题(新中式:宣纸白 + 墨字 + 朱砂印)
    排版基准 v2:正文 32rpx / 行高 1.75(用户反馈原 28rpx 偏小、行距不足) */
 page { background: #f4eddc; color: #33302a; font-size: 32rpx; line-height: 1.75; font-family: "Noto Serif SC", "Songti SC", serif; }
 .card { background: #fbf7ec; border: 1rpx solid #e6dcc6; border-radius: 22rpx; padding: 32rpx; margin: 22rpx 24rpx; box-shadow: 0 2rpx 10rpx rgba(90, 70, 30, .05); }

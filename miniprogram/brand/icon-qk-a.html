@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:"ZMX";src:url("ZhiMangXing-Regular.ttf")}
+*{margin:0;padding:0}body{width:512px;height:512px;background:#b5432f;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* A. 阴阳双章:上乾(朱底白文)下坤(纸底朱文),一章两分 */
+.frame{width:408px;height:408px;border:9px solid #fbf3e2;border-radius:26px;overflow:hidden;
+  box-shadow:inset 0 0 0 13px #b5432f;display:flex;flex-direction:column}
+.half{flex:1;display:flex;align-items:center;justify-content:center}
+.h1{background:#b5432f}
+.h2{background:#fbf3e2}
+.t{font-family:"ZMX";font-size:172px;line-height:1;filter:url(#thin)}
+.h1 .t{color:#fbf3e2;transform:translateY(6px)}
+.h2 .t{color:#b5432f;transform:translateY(-2px)}
+</style></head><body>
+<svg width="0" height="0"><filter id="thin"><feMorphology operator="erode" radius="2"/></filter></svg>
+<div class="frame">
+  <div class="half h1"><div class="t">乾</div></div>
+  <div class="half h2"><div class="t">坤</div></div>
+</div>
+</body></html>

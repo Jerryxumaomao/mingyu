@@ -44,6 +44,6 @@ Page({
   goOutfit() { wx.switchTab({ url: '/pages/outfit/outfit' }); },
   goZodiac() { wx.switchTab({ url: '/pages/zodiac/zodiac' }); },
   goWardrobe() { wx.navigateTo({ url: '/pages/wardrobe/wardrobe' }); },
-  onShareAppMessage() { return { title: '今日五行色,今天穿什么 · 玩占', path: '/pages/index/index' }; },
-  onShareTimeline() { return { title: '今日五行色,今天穿什么 · 玩占' }; },
+  onShareAppMessage() { return { title: '今天穿什么颜色 · 乾坤穿搭', path: '/pages/index/index' }; },
+  onShareTimeline() { return { title: '今天穿什么颜色 · 乾坤穿搭' }; },
 });
