@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:"ZMX";src:url("ZhiMangXing-Regular.ttf")}
+*{margin:0;padding:0}body{width:512px;height:512px;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:radial-gradient(circle at 50% 42%, #38342c 0%, #2b2822 62%, #211e19 100%)}
+/* E. 无框满幅:微光墨底 + 大字乾坤 + 落款印(极简,圆形方形都成立) */
+.col{display:flex;flex-direction:column;align-items:center;gap:12px}
+.t{font-family:"ZMX";writing-mode:vertical-rl;font-size:184px;color:#efe6d2;letter-spacing:-14px;filter:url(#thin);transform:translateX(3px)}
+.seal{width:58px;height:58px;background:#b5432f;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;color:#fbf3e2;font-family:"ZMX";font-size:32px}
+</style></head><body>
+<svg width="0" height="0"><filter id="thin"><feMorphology operator="erode" radius="2"/></filter></svg>
+<div class="col"><div class="t">乾坤</div><div class="seal">衣</div></div>
+</body></html>
