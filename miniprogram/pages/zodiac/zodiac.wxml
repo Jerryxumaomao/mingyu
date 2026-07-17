@@ -6,13 +6,14 @@
 
   <view class="card ani-rise d{{index < 6 ? 1 : 2}}" wx:for="{{zodiacs}}" wx:key="animal"
     style="display:flex; align-items:center; gap:22rpx; padding:26rpx 32rpx">
-    <view style="flex:none; width:92rpx; height:92rpx; border-radius:20rpx; border:3rpx solid {{item.color}}; display:flex; align-items:center; justify-content:center">
-      <text style="font-size:44rpx; font-weight:700; color:{{item.color}}">{{item.animal}}</text>
+    <view style="flex:none; width:92rpx; height:92rpx; border-radius:20rpx; border:3rpx solid {{item.tag === '平和' ? '#d5c9b2' : item.color}}; display:flex; align-items:center; justify-content:center">
+      <text style="font-size:44rpx; font-weight:700; color:{{item.tag === '平和' ? '#8a8272' : item.color}}">{{item.animal}}</text>
     </view>
     <view style="flex:1; min-width:0">
       <view style="display:flex; align-items:center; gap:12rpx">
         <text style="font-size:30rpx; font-weight:700">属{{item.animal}}</text>
-        <text style="font-size:22rpx; color:#fbf3e2; background:{{item.color}}; padding:2rpx 14rpx; border-radius:999rpx">{{item.tag}}</text>
+        <text wx:if="{{item.tag !== '平和'}}" style="font-size:22rpx; color:#fbf3e2; background:{{item.color}}; padding:2rpx 14rpx; border-radius:999rpx">{{item.tag}}</text>
+        <text wx:else class="muted" style="font-size:22rpx">{{item.tag}}</text>
       </view>
       <view class="muted" style="margin-top:6rpx; font-size:26rpx; line-height:1.5">{{item.text}}</view>
     </view>

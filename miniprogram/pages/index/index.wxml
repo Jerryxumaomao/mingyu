@@ -11,7 +11,7 @@
     <view style="display:flex; justify-content:space-between; height:260rpx">
       <!-- 品牌双列:逐字均布,等高自对齐 -->
       <view class="breathe" style="display:flex; gap:16rpx; height:100%; flex:none">
-        <view style="display:flex; flex-direction:column; justify-content:space-between; align-items:center; padding:10rpx 0">
+        <view style="display:flex; flex-direction:column; justify-content:center; gap:44rpx; align-items:center">
           <text wx:for="{{['乾', '坤']}}" wx:key="*this" style="font-size:80rpx; font-weight:700; color:#33302a; line-height:1">{{item}}</text>
         </view>
         <view style="display:flex; flex-direction:column; justify-content:space-between; align-items:center">
@@ -39,7 +39,7 @@
     <view style="flex:1; min-width:0">
       <view class="cardtitle">今日 <text class="en" style="margin-left:8rpx">Today · {{today.god}}日</text></view>
       <view style="margin-top:14rpx; display:flex; align-items:baseline; gap:14rpx">
-        <text style="font-size:60rpx; font-weight:700; color:{{today.bandColor}}">{{today.element}}</text>
+        <text style="font-size:60rpx; font-weight:700; color:{{today.elementColor}}">{{today.element}}</text>
         <text class="muted">气当值</text>
       </view>
       <view style="display:flex; align-items:flex-end; gap:12rpx; margin-top:16rpx">

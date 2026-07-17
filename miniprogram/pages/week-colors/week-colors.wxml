@@ -14,7 +14,6 @@
     </view>
     <view style="flex:none; text-align:right">
       <view style="font-size:28rpx">{{item.name}}</view>
-      <view class="en">Main</view>
     </view>
   </view>
   <view class="muted ani-rise d6" style="text-align:center; margin:30rpx">每日当值色 · 仅供风格参考与娱乐</view>
