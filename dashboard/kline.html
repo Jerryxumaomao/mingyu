@@ -18,6 +18,17 @@
 document.querySelector('header').innerHTML = headerHTML('kline');
 $('#form').innerHTML = birthFormHTML('a');
 function run() {
+  // 计算是同步的会冻住页面:先渲染 loading,下一拍再开算,算完恢复按钮
+  const btn = document.querySelector('button.go');
+  btn.disabled = true;
+  const orig = btn.textContent;
+  btn.textContent = '推演中…';
+  $('#out').innerHTML = '<div class="card"><div class="loading"><div class="ring"></div>正在逐年推演大运流年与流月,数十年盘面约需几秒…</div></div>';
+  setTimeout(() => {
+    try { doRun(); } finally { btn.disabled = false; btn.textContent = orig; }
+  }, 30);
+}
+function doRun() {
   const p = personFromForm('a');
   let k;
   try { k = MY.calculateLifeKline({ ...p, strengthModel: 'classic-calibrated' }, { startAge: +$('#sa').value, endAge: +$('#ea').value }); }
