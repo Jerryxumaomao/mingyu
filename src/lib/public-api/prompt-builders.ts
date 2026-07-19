@@ -12,6 +12,7 @@ import {
 import { buildCombinedZiweiPrompt, type ZiweiRuntime } from '../full-chart-engine/ziwei';
 import { mapScopeLabel, mapTopicLabel } from '../ziwei-prompts/labels';
 import { formatPromptCurrentTime } from '../prompt-time';
+import { buildSimilarCasesSection, FALSIFIABLE_OUTPUT_SPEC } from './local-casebank';
 
 export const BAZI_PROMPT_TOPICS = [
   'general',
@@ -220,11 +221,22 @@ export function buildBaziPromptForResult(params: {
   );
 
   const baseText = buildCombinedPromptText(prompt.system, prompt.user);
+  // 增强段:相似古例(仅当本地命例库存在)+ 可证伪断语规范(恒附)
+  // 动机:回测证实逐年吉凶预测≈噪音(AUC~0.52),解读的价值在证据引用与诚实表达——
+  // 古例提供类比锚定治"层次拔高",断语规范强制可证伪治"怎么都对"。
+  const p = params.result.pillars;
+  const casesSection = buildSimilarCasesSection({
+    year: p.year.ganZhi,
+    month: p.month.ganZhi,
+    day: p.day.ganZhi,
+    hour: p.hour.ganZhi,
+  });
+  const enhanced = [baseText, casesSection, FALSIFIABLE_OUTPUT_SPEC].filter(Boolean).join('\n\n');
   const schoolGuidance = getBaziSchoolGuidance(params.school);
   if (schoolGuidance) {
-    return `${schoolGuidance}\n\n${baseText}`;
+    return `${schoolGuidance}\n\n${enhanced}`;
   }
-  return baseText;
+  return enhanced;
 }
 
 export function buildSerializableZiweiResult(result: ZiweiRuntime) {

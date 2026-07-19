@@ -50,3 +50,4 @@ miniprogram/project.private.config.json
 
 # cwTeX Q Kai 楷体(14MB,仅本地渲字用;下载地址见 brand/qianchar.html 注释)
 miniprogram/brand/cwTeXQKai-Medium.ttf
+data/casebank.local.jsonl
