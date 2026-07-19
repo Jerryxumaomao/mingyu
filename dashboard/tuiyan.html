@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>推演 · 玩占</title><link rel="stylesheet" href="assets/style.css">
+<style>
+.tygrid{display:grid;grid-template-columns:minmax(300px,5fr) minmax(320px,6fr);gap:14px;align-items:start}
+@media(max-width:860px){.tygrid{grid-template-columns:1fr}}
+#flow{max-height:70vh;overflow-y:auto;padding-right:4px}
+.step{border-left:3px solid transparent;padding:8px 10px;margin:6px 0;border-radius:6px;opacity:.45;transition:all .25s}
+.step.done{opacity:.8}.step.now{opacity:1;background:var(--card,#fbf7ec);border-left-color:var(--gold,#b5432f);box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.step .ph{font-size:12px;letter-spacing:2px;color:var(--gold,#b5432f)}
+.step .tt{font-weight:700;margin:2px 0}
+.step .tx{font-size:13px;line-height:1.7;white-space:pre-wrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{font-size:12px;background:rgba(0,0,0,.05);border-radius:99px;padding:2px 10px}
+.btable{width:100%;border-collapse:collapse;text-align:center}
+.btable th{font-size:12px;font-weight:400;color:#8a8577;padding:4px}
+.btable td{padding:6px 4px}
+.pz{display:inline-flex;flex-direction:column;gap:2px;min-width:44px;padding:8px 6px;border-radius:8px;background:rgba(0,0,0,.04);transition:all .35s}
+.pz .g,.pz .z{font-size:22px;font-family:Georgia,'STKaiti','KaiTi',serif}
+.pz .ss{font-size:11px;color:#8a8577}
+.pz.dim{opacity:.22;filter:grayscale(1)}
+.pz.lit{background:var(--card,#fbf7ec);box-shadow:0 1px 5px rgba(0,0,0,.10)}
+.pz.hot{outline:2px solid var(--gold,#b5432f);outline-offset:2px}
+.pz.fav .g,.pz.fav .z{color:#2f6d4f}
+#rel{min-height:34px;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.reltag{font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(181,67,47,.10);color:var(--gold,#b5432f);border:1px solid rgba(181,67,47,.35)}
+.reltag.he{background:rgba(47,109,79,.10);color:#2f6d4f;border-color:rgba(47,109,79,.35)}
+#facts{font-size:13px;line-height:1.8;margin-top:8px}
+#scrub{position:sticky;bottom:0;background:var(--paper,#f4eddc);padding:10px 0;border-top:1px solid rgba(0,0,0,.08);display:flex;align-items:center;gap:10px}
+#bar{flex:1;height:6px;background:rgba(0,0,0,.08);border-radius:99px;cursor:pointer;position:relative}
+#bar i{position:absolute;left:0;top:0;bottom:0;background:var(--gold,#b5432f);border-radius:99px}
+#scrub button{min-width:36px}
+.sl{font-size:12px;color:#8a8577;white-space:nowrap}
+</style></head>
+<body><header></header>
+<main>
+  <h1>推演</h1><p class="sub">每一步如何确定,盘面同步展示 · 引擎确定性计算驱动 · 断语遵循可证伪规范</p>
+  <div id="form"></div>
+  <div class="row" style="margin:8px 0">
+    <div><label>推演年份(起)</label><input id="ty" type="number" value=""></div>
+    <div><label>共几年</label><input id="tn" type="number" value="4" min="1" max="8"></div>
+  </div>
+  <button class="go" onclick="start()">开始推演</button>
+  <div class="tygrid" style="margin-top:14px">
+    <aside id="flow"></aside>
+    <section>
+      <div class="card">
+        <b style="color:var(--gold)">盘面</b>
+        <table class="btable" id="bt"></table>
+        <div id="rel"></div>
+        <div id="facts"></div>
+      </div>
+    </section>
+  </div>
+  <div id="scrub" style="display:none">
+    <button onclick="jump(cur-1)">◀</button>
+    <div id="bar" onclick="seek(event)"><i></i></div>
+    <button onclick="jump(cur+1)">▶</button>
+    <button id="auto" onclick="toggleAuto()">播放</button>
+    <span class="sl" id="sl"></span>
+  </div>
+</main>
+<footer>仅供文化研究与娱乐 · 断语含概率与证伪条件,不构成任何决策建议</footer>
+<script src="assets/mingyu.js"></script><script src="assets/common.js"></script>
+<script>
+document.querySelector('header').innerHTML = headerHTML('tuiyan');
+$('#form').innerHTML = birthFormHTML('a');
+$('#ty').value = new Date().getFullYear();
+
+const GAN='甲乙丙丁戊己庚辛壬癸', ZHI='子丑寅卯辰巳午未申酉戌亥';
+const SIXTY=[]; for(let i=0;i<60;i++) SIXTY.push(GAN[i%10]+ZHI[i%12]);
+const yearGZ=(y)=>SIXTY[(((y-1984)%60)+60)%60];
+
+let steps=[], cur=0, timer=null, R=null;
+
+function start(){
+  const p = personFromForm('a');
+  try { R = MY.baziCalculator.calculateBazi({ ...p, strengthModel: 'classic-calibrated' }); }
+  catch(e){ alert(e.message); return; }
+  const y0=+$('#ty').value, n=Math.min(8,Math.max(1,+$('#tn').value));
+  const years=Array.from({length:n},(_,i)=>y0+i);
+  steps = buildTrace(R, p, years);
+  cur = 0; $('#scrub').style.display='flex';
+  render();
+}
+
+function pillarsOf(r){ return ['year','month','day','hour'].map(k=>r.pillars[k]); }
+
+function relsOf(r, lnGZ){
+  const g=MY.ganzhi, out=[];
+  const lz=lnGZ[1], lg=lnGZ[0];
+  const cols=['年','月','日','时'];
+  pillarsOf(r).forEach((pz,i)=>{
+    const hid=[g.getHiddenMainStem(pz.zhi),g.getHiddenMediumStem(pz.zhi),g.getHiddenResidualStem(pz.zhi)].filter(Boolean);
+    if(hid.includes(lg)) out.push({t:'透',col:i,label:`流年干${lg}透清${cols[i]}支${pz.zhi}藏干`});
+    if(g.isLiuchong(lz,pz.zhi)) out.push({t:'冲',col:i,label:`${lz}冲${cols[i]}支${pz.zhi}${'辰戌丑未'.includes(pz.zhi)?'(冲开墓库)':''}`});
+    if(g.isLiuhe(lz,pz.zhi)) out.push({t:'合',col:i,label:`${lz}合${cols[i]}支${pz.zhi}`});
+  });
+  const natal=pillarsOf(r).map(p=>p.zhi);
+  const ju=g.isCompleteSanhe([lz,...natal]);
+  if(ju && !g.isCompleteSanhe(natal)) out.push({t:'合',col:-1,label:`流年${lz}会齐${ju}`});
+  return out;
+}
+
+function buildTrace(r, p, years){
+  const S=[]; const dm=r.dayMaster;
+  const s=r.analysis.dayMasterStrength, ug=r.analysis.usefulGod;
+  S.push({ph:'思考',tt:'推演目标',tx:`为此盘推演 ${years[0]}–${years[years.length-1]} 年运势:先立盘定喜忌,再定大运,而后逐年对照引动与岁运联动,最后按可证伪规范下断。`,bd:{}});
+  S.push({ph:'任务',tt:'立盘',chips:['排四柱','定日主','十神标注'],bd:{}});
+  S.push({ph:'调用',tt:'排盘引擎 · calculateBazi',tx:`四柱:${pillarsOf(r).map(x=>x.ganZhi).join(' ')}\n日主 ${dm.gan}${dm.element}(${dm.yinYang}) · 格局 ${r.analysis.mingGe.pattern}${r.timing?.enabled?`\n真太阳时已校正 ${Math.round(r.timing.totalCorrectionMinutes)} 分钟`:''}`,bd:{pillars:true}});
+  S.push({ph:'任务',tt:'强弱与用神',chips:['评分分解','四派并判','最终裁决'],bd:{}});
+  S.push({ph:'调用',tt:'强弱评估 · dayMasterStrength',tx:`评分 ${s.score},判 ${s.status}(古籍校准模型,61 例吻合 82%)`,bd:{}});
+  S.push({ph:'结论',tt:'喜忌裁决',tx:`喜用:${(ug.favorableWuxing||[]).join('、')};忌:${(ug.unfavorableWuxing||[]).join('、')}\n取用理由:${ug.primaryReason||'-'}`,bd:{fav:ug.favorableWuxing||[]}});
+  const cyc=(r.luckInfo.cycles||[]).filter(c=>!c.isXiaoyun);
+  const dyOf=(y)=>{ for(const c of cyc){ const s0=c.startSolarTime?.year??c.year, e0=c.endSolarTime?.year??(s0+10); if(y>=s0&&y<e0) return c; } return null; };
+  const dy0=dyOf(years[0]);
+  S.push({ph:'任务',tt:'大运定位',bd:{}});
+  S.push({ph:'调用',tt:'大运 · luckInfo',tx:dy0?`${years[0]} 年行 ${dy0.ganZhi} 运(${dy0.startSolarTime?.year??dy0.year} 起,${dy0.age} 岁上运)`:'该年不在已排大运区间',bd:{dayun:dy0?dy0.ganZhi:'—'}});
+  S.push({ph:'任务',tt:'候选流年对照',chips:years.map(String),bd:{}});
+  const table=[];
+  for(const y of years){
+    const gz=yearGZ(y);
+    const dy=dyOf(y);
+    const hits=MY.analyzeLiunianInteractions({pillars:r.pillars,dayMaster:dm.gan,liunianGanZhi:gz,dayunGanZhi:dy?dy.ganZhi:undefined});
+    const rels=relsOf(r,gz);
+    table.push({y,gz,hits,rels});
+    const hitTx=hits.length?hits.map(h=>`${h.severity==='major'?'‼':'⚠'}${h.name}`).join(';'):'无经典联动';
+    const relTx=rels.length?rels.map(x=>x.label).join(';'):'与原局四支无冲合透';
+    S.push({ph:'调用',tt:`流年 ${y} ${gz}`,tx:`引动:${relTx}\n岁运联动:${hitTx}`,bd:{liunian:gz,rels,dayun:dy?dy.ganZhi:'—'}});
+  }
+  const score=(t)=>t.rels.reduce((s2,x)=>s2+(x.t==='透'?3:x.t==='冲'?2:1),0)+t.hits.reduce((s2,h)=>s2+(h.severity==='major'?3:1),0);
+  const best=[...table].sort((a,b)=>score(b)-score(a))[0];
+  const cmp=table.map(t=>`${t.y}${t.gz}:引动${t.rels.length}项/联动${t.hits.length}项${t.hits.some(h=>h.severity==='major')?'(含‼)':''}`).join('\n');
+  S.push({ph:'结论',tt:'对照裁决',tx:cmp+`\n\n引动最强:${best.y} ${best.gz}(横向对照后选定,非单点验证)`,bd:{liunian:best.gz,rels:best.rels}});
+  const dir=best.hits.some(h=>h.severity==='major')?'变动与压力并存,宜守不宜进':'有引动而无恶性联动,主题为变化与机会';
+  S.push({ph:'结论',tt:'终判(可证伪)',tx:`[盘面] ${best.y} ${best.gz} 对此盘引动最强(${best.rels.map(x=>x.label).join('、')||'以联动为主'})。\n[推断] 结论:${best.y} 年为区间内最需关注之年,${dir}。概率 0.6;应期窗口 ${best.y} 全年;若当年无任何可辨识的重要变化,此断记错。\n\n注:回测显示逐年吉凶预测接近噪音,本推演展示的是传统命理的推理过程与文化演绎,不构成预测承诺。`,bd:{liunian:best.gz,rels:best.rels}});
+  return S;
+}
+
+function boardState(i){
+  const b={pillars:false,fav:[],dayun:null,liunian:null,rels:[]};
+  for(let k=0;k<=i;k++){ const d=steps[k].bd||{};
+    if(d.pillars) b.pillars=true;
+    if(d.fav) b.fav=d.fav;
+    if(d.dayun!==undefined) b.dayun=d.dayun;
+    if(d.liunian!==undefined){ b.liunian=d.liunian; b.rels=d.rels||[]; }
+  }
+  return b;
+}
+
+function render(){
+  // 推理流
+  $('#flow').innerHTML = steps.map((st,i)=>`<div class="step ${i<cur?'done':i===cur?'now':''}" id="st${i}" onclick="jump(${i})">
+    <div class="ph">${st.ph}</div><div class="tt">${st.tt}</div>
+    ${st.chips?`<div class="chips">${st.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:''}
+    ${st.tx&&i<=cur?`<div class="tx">${st.tx}</div>`:''}
+  </div>`).join('');
+  const now=document.getElementById('st'+cur); if(now) now.scrollIntoView({block:'nearest',behavior:'smooth'});
+  // 盘面
+  const b=boardState(cur);
+  const cols=['年柱','月柱','日柱','时柱','大运','流年'];
+  const g=MY.ganzhi;
+  const cells=pillarsOf(R).map((pz,i)=>{
+    const hot=b.rels.some(x=>x.col===i);
+    const fav=b.fav.includes(g.getBranchWuxing(pz.zhi))||b.fav.includes(g.getStemWuxing(pz.gan));
+    return `<td><div class="pz ${b.pillars?'lit':'dim'} ${hot?'hot':''} ${b.pillars&&fav?'fav':''}"><span class="g">${pz.gan}</span><span class="z">${pz.zhi}</span><span class="ss">${i===2?'日主':''}</span></div></td>`;
+  });
+  const dyCell=`<td><div class="pz ${b.dayun?'lit':'dim'}">${b.dayun&&b.dayun!=='—'?`<span class="g">${b.dayun[0]}</span><span class="z">${b.dayun[1]}</span><span class="ss">大运</span>`:`<span class="g">—</span><span class="z">—</span><span class="ss">大运</span>`}</div></td>`;
+  const lnCell=`<td><div class="pz ${b.liunian?'lit hot':'dim'}">${b.liunian?`<span class="g">${b.liunian[0]}</span><span class="z">${b.liunian[1]}</span><span class="ss">流年</span>`:`<span class="g">—</span><span class="z">—</span><span class="ss">流年</span>`}</div></td>`;
+  $('#bt').innerHTML=`<tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr><tr>${cells.join('')}${dyCell}${lnCell}</tr>`;
+  $('#rel').innerHTML=b.rels.map(x=>`<span class="reltag ${x.t==='合'?'he':''}">${x.t}·${x.label}</span>`).join('');
+  $('#facts').innerHTML=b.fav.length?`喜用:${b.fav.map(w=>`<span class="pill fav">${w}</span>`).join('')}`:'';
+  // 滑杆
+  $('#bar i').style.width=((cur+1)/steps.length*100)+'%';
+  $('#sl').textContent=`步骤 ${cur+1}/${steps.length} · ${steps[cur].tt}`;
+}
+
+function jump(i){ if(!steps.length) return; cur=Math.min(steps.length-1,Math.max(0,i)); render(); }
+function seek(ev){ const r=$('#bar').getBoundingClientRect(); jump(Math.round((ev.clientX-r.left)/r.width*(steps.length-1))); }
+function toggleAuto(){
+  if(timer){ clearInterval(timer); timer=null; $('#auto').textContent='播放'; return; }
+  $('#auto').textContent='暂停';
+  timer=setInterval(()=>{ if(cur>=steps.length-1){ clearInterval(timer); timer=null; $('#auto').textContent='播放'; return; } jump(cur+1); },1300);
+}
+</script>
+</body></html>

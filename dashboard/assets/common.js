@@ -51,7 +51,7 @@ function pillarsHTML(pillars) {
 }
 
 function headerHTML(active) {
-  const items = [['index', '总览'], ['paipan', '排盘'], ['kline', '人生K线'], ['hehun', '合婚'], ['liuren', '小六壬'], ['outfit', '五行穿搭']];
+  const items = [['index', '总览'], ['paipan', '排盘'], ['tuiyan', '推演'], ['kline', '人生K线'], ['hehun', '合婚'], ['liuren', '小六壬'], ['outfit', '五行穿搭']];
   return `<a class="logo" href="index.html">玩 占</a><nav>${items
     .map(([f, n]) => `<a href="${f}.html" class="${f === active ? 'on' : ''}">${n}</a>`).join('')}</nav>
   <button class="theme-btn" onclick="toggleTheme()">${currentTheme() === 'paper' ? '🌙 水墨' : '📜 宣纸'}</button>`;
