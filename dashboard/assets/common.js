@@ -51,8 +51,12 @@ function pillarsHTML(pillars) {
 }
 
 function headerHTML(active) {
-  const items = [['index', '总览'], ['paipan', '排盘'], ['tuiyan', '推演'], ['kline', '人生K线'], ['hehun', '合婚'], ['liuren', '小六壬'], ['outfit', '五行穿搭']];
-  return `<a class="logo" href="index.html"><span class="seal">乾</span>乾 坤</a><nav>${items
+  const items = [['index', '功能合集'], ['paipan', '排盘'], ['tuiyan', '推演'], ['kline', '人生K线'], ['hehun', '合婚'], ['liuren', '小六壬'], ['outfit', '五行穿搭']];
+  // 挂在乾坤推演台下(/legacy/)时:logo 与"问乾坤"都回主站;独立打开(file://)时 logo 回总览
+  const inSuite = location.pathname.includes('/legacy/');
+  const home = inSuite ? '/' : 'index.html';
+  return `<a class="logo" href="${home}" title="${inSuite ? '回到乾坤 · 推演问答' : '功能合集'}"><span class="seal">乾</span>乾 坤</a><nav>${
+    (inSuite ? `<a href="/" class="back">⟵ 问乾坤</a>` : '') + items
     .map(([f, n]) => `<a href="${f}.html" class="${f === active ? 'on' : ''}">${n}</a>`).join('')}</nav>
   <button class="theme-btn" onclick="toggleTheme()">${currentTheme() === 'paper' ? '🌙 水墨' : '📜 宣纸'}</button>`;
 }

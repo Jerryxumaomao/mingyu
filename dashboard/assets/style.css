@@ -26,6 +26,8 @@ header nav { display: flex; gap: 14px; flex-wrap: wrap; flex: 1; }
 header nav a { color: var(--muted); text-decoration: none; font-size: 14px; padding: 2px 2px; border-bottom: 1px solid transparent; }
 header nav a:hover { color: var(--text); }
 header nav a.on { color: var(--gold); border-bottom-color: var(--gold); }
+header nav a.back { color: var(--cinnabar); }
+header nav a.back:hover { color: var(--cinnabar); border-bottom-color: var(--cinnabar); }
 .theme-btn { background: var(--card); border: 1px solid var(--line-strong); color: var(--muted); border-radius: 999px; padding: 4px 14px; font: inherit; font-size: 13px; cursor: pointer; }
 .theme-btn:hover { color: var(--gold); border-color: var(--gold); }
 main { max-width: 1080px; margin: 28px auto; padding: 0 20px; }
