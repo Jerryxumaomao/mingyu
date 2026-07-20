@@ -2,11 +2,11 @@
    夜观天象(默认暗色):与乾坤推演台同一套 token——玄墨蓝底/月白字/鎏金干支/朱砂行动/松烟绿吉
    宣纸(亮色):Claude 式暖纸底 + 朱砂/赭金,古籍气质 */
 :root {
-  --canvas: #12141c; --card: #1a1d28; --elevated: #212530;
-  --line: #262b38; --line-strong: #343b4c;
+  --canvas: #0f1118; --card: #161927; --elevated: #1d2231;
+  --line: #232839; --line-strong: #313a52;
   --gold: #c9a86a; --gold-active: #dabb7c; --on-gold: #171207;
   --cinnabar: #e06a50; --teal: #7ba888;
-  --text: #e6e1d3; --muted: #8b8878; --faint: #6b6a5e;
+  --text: #e8e6f0; --muted: #8d8a9e; --faint: #5f5c72;
   --shadow: none;
 }
 html[data-theme="paper"] {
@@ -21,7 +21,7 @@ html[data-theme="paper"] {
 body { background: var(--canvas); color: var(--text); font: 15px/1.7 "Noto Serif SC", "Songti SC", serif; min-height: 100vh; transition: background .25s, color .25s; }
 header { display: flex; align-items: center; gap: 18px; padding: 14px 28px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 header .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; color: var(--gold); letter-spacing: 4px; text-decoration: none; }
-header .logo .seal { width: 30px; height: 30px; border-radius: 6px; background: #c8553d; color: #f6ede4; display: grid; place-items: center; font-family: "KaiTi", "STKaiti", serif; font-size: 17px; letter-spacing: 0; box-shadow: 0 2px 10px rgba(200, 85, 61, .35); }
+header .logo .seal { width: 30px; height: 30px; border-radius: 7px; background: linear-gradient(165deg,rgba(139,124,248,.32),rgba(92,75,216,.12)); border: 1px solid rgba(160,146,255,.55); color: #cfc6ff; display: grid; place-items: center; font-family: "KaiTi", "STKaiti", serif; font-size: 17px; letter-spacing: 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.16); }
 header nav { display: flex; gap: 14px; flex-wrap: wrap; flex: 1; }
 header nav a { color: var(--muted); text-decoration: none; font-size: 14px; padding: 2px 2px; border-bottom: 1px solid transparent; }
 header nav a:hover { color: var(--text); }
