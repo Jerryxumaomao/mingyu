@@ -1,8 +1,3 @@
-<!-- 开屏(冷启动一次,轻触跳过) -->
-<view wx:if="{{splash}}" class="splash {{splashFade ? 'splash-out' : ''}}" bindtap="skipSplash">
-  <image src="/assets/splash.jpg" mode="aspectFill" binderror="onSplashError" style="width:100%;height:100%"/>
-</view>
-
 <navbar title="今日{{today ? ' · ' + today.date : ''}}"/>
 <view style="padding-bottom:30rpx">
   <!-- 头卡:品牌 + 今日概览 -->
