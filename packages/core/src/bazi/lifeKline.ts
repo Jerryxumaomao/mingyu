@@ -67,15 +67,22 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 
 export function calculateLifeKline(
   person: Person,
-  opts?: { startAge?: number; endAge?: number },
+  opts?: {
+    startAge?: number;
+    endAge?: number;
+    /** 喜忌覆盖:调用方可传入多派裁决后的喜忌(如乾坤站 xiji_verdict 口径)。
+     *  缺省保持原行为(引擎单派 usefulGod),历史结果可复现——新能力走可选参数的既定先例。 */
+    favorableOverride?: string[];
+    unfavorableOverride?: string[];
+  },
 ): LifeKlineResult {
   const chart = baziCalculator.calculateBazi(person);
   const ug = chart.analysis.usefulGod as unknown as {
     favorableWuxing?: string[];
     unfavorableWuxing?: string[];
   };
-  const favorable = ug.favorableWuxing ?? [];
-  const unfavorable = ug.unfavorableWuxing ?? [];
+  const favorable = opts?.favorableOverride ?? ug.favorableWuxing ?? [];
+  const unfavorable = opts?.unfavorableOverride ?? ug.unfavorableWuxing ?? [];
   const dayMaster = chart.dayMaster.gan;
   const pillars = chart.pillars as Pillars;
 
