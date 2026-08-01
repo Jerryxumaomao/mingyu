@@ -143,7 +143,7 @@ node scripts/render-daily-card.mjs 明天 7   # 引擎算流日 → hyperframes 
 ```bash
 node scripts/calibrate-strength.mjs      # 报告两模型吻合度 + 阈值网格
 ```
-扩充命例:古籍 txt 放 `D:\Claude\Projects\玄学\古籍\` →
+扩充命例:古籍 txt 放 `D:\AI work\Projects\Qiankun\古籍\` →
 `node scripts/extract-classic-cases.mjs <txt> <书名> > out.jsonl` →
 **人工逐条复核**(警惕:反问句"岂不"、驳论"俗谓…不知"、说别的盘"前造")→
 `node scripts/build-classic-fixture.mjs out.jsonl`(四柱反查日期,书中干支自相矛盾的会正确落入 unmatched)。
