@@ -25,8 +25,9 @@
 `utils/today-almanac.js` 按“日支五行 → 所生五行为主色、同气为辅色”计算；
 `tests/miniprogram-daily-color.test.ts` 固定校验 2026-08-02 戊申日应推荐黑蓝水系。
 
-首页 Logo 使用 `assets/logo-seal.png`，其 512px 墨黑/纸白母版位于
-`brand/logo-web-bw-512.png`，造型来自网页 `public/pwa-512x512.png`。
+首页 Logo 使用 `assets/logo-seal.png`；造型来自 `askqiankun.com` 当前导航栏的
+双断环 `.qk-logo`。可编辑黑白 SVG 母版位于 `brand/logo-askqiankun-bw.svg`，
+512px 小程序后台头像位于 `brand/logo-askqiankun-bw-512.png`。
 
 ## 拆分单功能小程序
 

@@ -182,9 +182,11 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
 >   OFL-ZhiMangXing.txt 随库分发)——书法笔意版,当前主推;A 横排斜势 / B 印框竖排 /
 >   C 宣纸底+右下小印。行书细笔画在小尺寸靠 -webkit-text-stroke 增肥保清晰。
 > - **icon 字体是 §3.1 字体栈的唯一豁免场景**(logo 属图形标识,不受正文衬线约束)。
-> - **当前小程序 Logo(2026-08-02)**:改用网页 `public/pwa-512x512.png` 的墨黑/纸白版；
->   512 母版为 `miniprogram/brand/logo-web-bw-512.png`，首页运行时资产为
->   `miniprogram/assets/logo-seal.png`。这是既有网页图形的确定性换色，不重绘造型。
+> - **当前小程序 Logo(2026-08-02)**:使用 `askqiankun.com` 导航栏内联 `.qk-logo`
+>   的双断环与中心圆点造型；SVG 母版为 `miniprogram/brand/logo-askqiankun-bw.svg`，
+>   512px 后台头像为 `miniprogram/brand/logo-askqiankun-bw-512.png`，首页运行时资产为
+>   `miniprogram/assets/logo-seal.png`。黑白版保留线上原始路径、线宽、圆角端点与内环
+>   半透明层级，只把网页的白/金配色确定性映射为规范里的 `ink`/`card`。
 
 ## 12. v4 增补(2026-07-11:底部导航 / 排版基准 v2)
 
