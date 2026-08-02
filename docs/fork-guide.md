@@ -164,6 +164,8 @@ node scripts/calibrate-strength.mjs      # 报告两模型吻合度 + 阈值网�
 | 强弱判定和"感觉"不符 | legacy 阈值偏严(评分系统性偏弱约4分) | 用 `strengthModel:'classic-calibrated'`;别直接改权重 |
 | 小六壬渲染 undefined | 用了 `sequence.end` | 是 `sequence.result` |
 | 看板改完没生效 | 没重打 bundle / 浏览器缓存 | build-dashboard + 强刷 |
+| 手机仍显示已删开的开屏或旧版每日颜色 | 微信线上包仍停在旧上传版本；本地 commit 不会自动更新线上小程序 | 查 `git log -- miniprogram` 确认修复已进代码，重打 `build-miniprogram-lib`，上传新版本并在后台完成提审/发布 |
+| `miniprogram-ci` 报 `-10008 invalid ip` | 当前公网 IP 未加入微信“小程序代码上传”白名单 | 在微信后台开发设置加入报错中的 IP，或用已登录微信开发者工具本机预览，再重试 CI |
 | K线图某主题下看不清 | SVG 里写死了颜色 | 用 `cssVar('--line'/'--muted'/'--gold')` |
 | 城市查不到经度 | lookupCity 返回 null 没判 | 判空并回退到手输经度 |
 | CI lint 挂 prettier 引号错 | 用 shell printf/echo 直接生成 .ts 文件,双引号违反仓库规则 | 生成代码文件后跑 `npx eslint src --fix`;push 前 `pnpm run lint` 预检(CI 有 lint/type-check/build/test 四个 job,推前最好全预检) |

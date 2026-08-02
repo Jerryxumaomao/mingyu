@@ -65,7 +65,7 @@ const WX_COLOR_NAME = { 木: '青绿', 火: '红', 土: '黄', 金: '白', 水: 
 /** 今日总览:五行、色、指数(建除)、宜忌 */
 function overview() {
   const { day, month } = todayDayPillar();
-  // 今日五行=日柱干支组合的纳音(与主流"每日五行穿衣"博主口径一致),宜色=其所生(贵人色)
+  // 今日五行=日支五行,宜色=其所生(贵人色)。口径统一收口在 dayPalette。
   const { el, lucky, avoid } = dayPalette(day.ganZhi);
   const dayZhiIdx = ZHI.indexOf(day.zhi);
   const monZhiIdx = ZHI.indexOf(month.zhi);

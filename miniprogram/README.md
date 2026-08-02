@@ -21,6 +21,13 @@
 - `pages/week-colors`:一周色卡
 - `pages/wardrobe`:衣橱搭配
 
+冷启动直接进入 `pages/index`，项目不包含自定义开屏遮罩。每日颜色统一由
+`utils/today-almanac.js` 按“日支五行 → 所生五行为主色、同气为辅色”计算；
+`tests/miniprogram-daily-color.test.ts` 固定校验 2026-08-02 戊申日应推荐黑蓝水系。
+
+首页 Logo 使用 `assets/logo-seal.png`，其 512px 墨黑/纸白母版位于
+`brand/logo-web-bw-512.png`，造型来自网页 `public/pwa-512x512.png`。
+
 ## 拆分单功能小程序
 
 每个页面自包含(只依赖 `lib/mingyu.js` + `app.wxss` 样式),把对应 `pages/xxx` 目录

@@ -182,8 +182,11 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
 >   OFL-ZhiMangXing.txt 随库分发)——书法笔意版,当前主推;A 横排斜势 / B 印框竖排 /
 >   C 宣纸底+右下小印。行书细笔画在小尺寸靠 -webkit-text-stroke 增肥保清晰。
 > - **icon 字体是 §3.1 字体栈的唯一豁免场景**(logo 属图形标识,不受正文衬线约束)。
+> - **当前小程序 Logo(2026-08-02)**:改用网页 `public/pwa-512x512.png` 的墨黑/纸白版；
+>   512 母版为 `miniprogram/brand/logo-web-bw-512.png`，首页运行时资产为
+>   `miniprogram/assets/logo-seal.png`。这是既有网页图形的确定性换色，不重绘造型。
 
-## 12. v4 增补(2026-07-11:开屏 / 底部导航 / 排版基准 v2)
+## 12. v4 增补(2026-07-11:底部导航 / 排版基准 v2)
 
 - **排版基准 v2**(用户反馈原字号偏小、行距不足,全局提级):正文 32rpx、行高 1.75;
   辅文 .muted 26rpx/1.7;标题 .cardtitle 34rpx;英文小注 .en 18rpx Georgia 大写加宽
@@ -191,9 +194,8 @@ font-family: "Noto Serif SC", "Songti SC", serif;             /* 小程序 */
 - **底部导航(tabBar)**:穿搭 | 玩占(中,首页) | 年运 三键;
   icon 为汉字方章(描边灰墨=未选,朱砂实底=选中),资产 assets/tab-*.png(81px)。
   tab 页跳转必须 wx.switchTab,普通页仍 navigateTo。
-- **开屏**:冷启动展示一次 assets/splash.jpg(豆绿失焦树影 + 左上品牌竖排:
-  易环/WANZHAN 框/玩占行书框字/拼音/朱砂小印,源 brand/splash.html),2.6s 自动淡出,
-  轻触跳过;期间 hideTabBar。品牌列顶部须避开状态栏(top≥190/1624)。
+- **开屏已移除(2026-07-23)**:冷启动直接进入首页，不隐藏 tabBar、不设计时器或遮罩；
+  2026-08-02 进一步删除未引用的 splash 运行时与源素材，避免旧包或后续维护误接回。
 - **首页=仪表盘**:头卡(观变玩占 + 四柱常驻 + 档印)→ 今日穿搭色卡(主色/点缀色圆点)
   → 命盘喜忌 + 今年运势(半宽 .tile 两列)→ 合婚/起卦入口。数据同档案同日缓存
   (storage key `wz-dash`),重计算走 setTimeout 让 loading 先渲染。
