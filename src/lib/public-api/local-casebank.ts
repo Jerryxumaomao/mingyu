@@ -17,8 +17,32 @@ interface LocalCase {
 }
 
 // 轻量五行表(避免为此引深层依赖)
-const STEM_WX: Record<string, string> = { 甲: '木', 乙: '木', 丙: '火', 丁: '火', 戊: '土', 己: '土', 庚: '金', 辛: '金', 壬: '水', 癸: '水' };
-const BRANCH_WX: Record<string, string> = { 子: '水', 丑: '土', 寅: '木', 卯: '木', 辰: '土', 巳: '火', 午: '火', 未: '土', 申: '金', 酉: '金', 戌: '土', 亥: '水' };
+const STEM_WX: Record<string, string> = {
+  甲: '木',
+  乙: '木',
+  丙: '火',
+  丁: '火',
+  戊: '土',
+  己: '土',
+  庚: '金',
+  辛: '金',
+  壬: '水',
+  癸: '水',
+};
+const BRANCH_WX: Record<string, string> = {
+  子: '水',
+  丑: '土',
+  寅: '木',
+  卯: '木',
+  辰: '土',
+  巳: '火',
+  午: '火',
+  未: '土',
+  申: '金',
+  酉: '金',
+  戌: '土',
+  亥: '水',
+};
 const SHENG: Record<string, string> = { 木: '火', 火: '土', 土: '金', 金: '水', 水: '木' };
 const KE: Record<string, string> = { 木: '土', 火: '金', 土: '水', 金: '木', 水: '火' };
 
@@ -44,10 +68,12 @@ function profileOf(pillars: string[]): Record<string, number> | null {
   return p;
 }
 
-let cache: { mtime: number; cases: (LocalCase & { _p: Record<string, number> | null })[] } | null = null;
+let cache: { mtime: number; cases: (LocalCase & { _p: Record<string, number> | null })[] } | null =
+  null;
 
 function loadCasebank(): (LocalCase & { _p: Record<string, number> | null })[] | null {
-  const file = process.env.MINGYU_CASEBANK_PATH ?? path.join(process.cwd(), 'data', 'casebank.local.jsonl');
+  const file =
+    process.env.MINGYU_CASEBANK_PATH ?? path.join(process.cwd(), 'data', 'casebank.local.jsonl');
   try {
     const stat = fs.statSync(file);
     if (cache && cache.mtime === stat.mtimeMs) return cache.cases;
