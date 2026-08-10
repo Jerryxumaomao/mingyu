@@ -11,6 +11,7 @@ const SOURCE_LABELS = {
   retailer: '零售商资料',
   mixed: '多源交叉资料',
   community: '社区资料',
+  public: '公开资料',
 };
 
 const cache = Object.create(null);
