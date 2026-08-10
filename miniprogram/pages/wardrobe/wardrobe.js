@@ -5,16 +5,25 @@ const wardrobe = require('../../utils/wardrobe.js');
 // 展示用中性香调分组;首字符仍是内部归类键,截取逻辑不变
 const WX_GROUPS = ['木质绿意(绿叶/草本)', '火暖甜香(辛香/东方)', '土沉稳调(檀香/大地)', '金净白调(白花/皂感)', '水清凉调(海洋/水生)'];
 
+const materialOptions = (owned = []) => MATERIALS.map((item) => ({
+  ...item,
+  selected: owned.includes(item.n),
+}));
+
 Page({
   data: {
-    mats: MATERIALS, owned: [], perfumes: [],
+    mats: materialOptions(), owned: [], perfumes: [],
     kw: '', results: [],
     showCustom: false, customName: '', groups: WX_GROUPS, gIdx: 0,
   },
   onLoad() {
     const w = wardrobe.get();
     // 旧存量条目补上分布标记(●◐○)展示字段
-    this.setData({ owned: w.mats, perfumes: w.perfumes.map((p) => ({ ...p, d: wardrobe.marks(p.wx) })) });
+    this.setData({
+      mats: materialOptions(w.mats),
+      owned: w.mats,
+      perfumes: w.perfumes.map((p) => ({ ...p, d: wardrobe.marks(p.wx) })),
+    });
   },
   persist() {
     wardrobe.save({ mats: this.data.owned, perfumes: this.data.perfumes });
@@ -24,7 +33,7 @@ Page({
     const owned = this.data.owned.includes(n)
       ? this.data.owned.filter((x) => x !== n)
       : [...this.data.owned, n];
-    this.setData({ owned }, () => this.persist());
+    this.setData({ mats: materialOptions(owned), owned }, () => this.persist());
   },
   onKw(e) {
     const kw = e.detail.value.trim().toLowerCase();

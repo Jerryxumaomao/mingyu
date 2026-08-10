@@ -1,0 +1,23 @@
+.material-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.material-chip {
+  padding: 10rpx 24rpx;
+  border: 1rpx solid #d5c9b2;
+  border-radius: 999rpx;
+  background: #efe7d3;
+  color: #33302a;
+  font-size: 28rpx;
+  line-height: 1.7;
+  transition: transform .12s ease, background-color .12s ease;
+}
+
+.material-chip-selected {
+  border-color: #b5432f;
+  background: #b5432f;
+  color: #fbf3e2;
+}

@@ -2,9 +2,9 @@
 <view class="card ani-rise">
   <view class="cardtitle">我的配饰材质 <text class="en" style="margin-left:8rpx">Materials</text></view>
   <view class="muted" style="margin-top:6rpx">勾选你已有的,穿搭页会优先从这里挑当日适配款</view>
-  <view style="display:flex; flex-wrap:wrap; gap:14rpx; margin-top:20rpx">
+  <view class="material-list">
     <view wx:for="{{mats}}" wx:key="n" data-n="{{item.n}}" bindtap="toggleMat"
-      style="padding:10rpx 22rpx; border-radius:999rpx; font-size:27rpx; border:2rpx solid {{owned.indexOf(item.n) > -1 ? '#b5432f' : '#d8cdb4'}}; background:{{owned.indexOf(item.n) > -1 ? '#b5432f' : 'transparent'}}; color:{{owned.indexOf(item.n) > -1 ? '#fbf3e2' : '#5d5747'}}">
+      hover-class="btn-press" class="material-chip {{item.selected ? 'material-chip-selected' : ''}}">
       {{item.n}}
     </view>
   </view>

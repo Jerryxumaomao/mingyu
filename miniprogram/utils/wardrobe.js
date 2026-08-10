@@ -8,7 +8,10 @@ const MATERIALS = require('../data/materials.js');
 const get = () => {
   try {
     const w = wx.getStorageSync(KEY);
-    return w && w.mats ? w : { mats: [], perfumes: [] };
+    return {
+      mats: Array.isArray(w && w.mats) ? w.mats : [],
+      perfumes: Array.isArray(w && w.perfumes) ? w.perfumes : [],
+    };
   } catch (e) { return { mats: [], perfumes: [] }; }
 };
 const save = (w) => { try { wx.setStorageSync(KEY, w); } catch (e) { /* 存不进则本次会话内有效 */ } };
