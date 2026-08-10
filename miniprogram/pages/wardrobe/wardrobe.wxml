@@ -12,8 +12,8 @@
 
 <view class="card ani-rise d1">
   <view class="cardtitle">我的香水架 <text class="en" style="margin-left:8rpx">Perfumes</text></view>
-  <view class="muted" style="margin-top:6rpx">搜索添加;查不到的款,自选香调存入个人库</view>
-  <input placeholder="搜香水名,如:蓝风铃 / santal" value="{{kw}}" bindinput="onKw" style="margin-top:18rpx"/>
+  <view class="muted" style="margin-top:6rpx">优先查本地香水库;没有时,再由你决定是否联网查香调</view>
+  <input maxlength="80" placeholder="搜香水名,如:蓝风铃 / santal" value="{{kw}}" bindinput="onKw" style="margin-top:18rpx"/>
   <view wx:for="{{results}}" wx:key="n" data-i="{{index}}" bindtap="addPerfume" hover-class="btn-press"
     style="display:flex; justify-content:space-between; align-items:center; padding:18rpx 8rpx; border-bottom:1rpx solid #efe7d3">
     <view style="min-width:0">
@@ -22,11 +22,46 @@
     </view>
     <view class="gold" style="font-size:40rpx; flex:none">＋</view>
   </view>
-  <view wx:if="{{showCustom}}" style="margin-top:16rpx; padding:22rpx; border:2rpx dashed #d8cdb4; border-radius:16rpx">
-    <view class="muted">库里没有「{{kw}}」,自己标一下它的香调:</view>
-    <input placeholder="香水全名(默认用搜索词)" value="{{customName}}" bindinput="onCustomName" style="margin-top:12rpx"/>
+  <view wx:if="{{showCustom}}" class="custom-perfume">
+    <view class="muted">本地库里没有「{{kw}}」</view>
+    <input maxlength="80" placeholder="香水全名(默认用搜索词)" value="{{customName}}" bindinput="onCustomName" style="margin-top:12rpx"/>
+
+    <button class="ai-lookup" hover-class="btn-press" loading="{{aiLoading}}" disabled="{{aiLoading}}" bindtap="lookupPerfume">
+      {{aiLoading ? '正在查找公开资料' : '联网识别香调'}}
+    </button>
+    <view wx:if="{{aiLoading}}" class="ai-status muted">只提交香水名,正在核对香调与资料来源…</view>
+    <view wx:if="{{aiError}}" class="ai-status ai-error">{{aiError}} 手动选择仍可使用。</view>
+
+    <view wx:if="{{aiResult}}" class="ai-result ani-rise">
+      <view class="ai-result-name">{{aiResult.n}}</view>
+      <view wx:if="{{aiResult.brand || aiResult.edition}}" class="muted ai-meta">
+        <text wx:if="{{aiResult.brand}}">{{aiResult.brand}}</text>
+        <text wx:if="{{aiResult.edition}}"> · {{aiResult.edition}}</text>
+      </view>
+      <view class="ai-row"><text class="muted">香调</text><text>{{aiResult.f}}</text></view>
+      <view wx:if="{{aiResult.notesText}}" class="ai-row"><text class="muted">主要香材</text><text class="ai-row-value">{{aiResult.notesText}}</text></view>
+      <view class="ai-row">
+        <text class="muted">五行分布</text>
+        <view class="wx-distribution">
+          <text>● {{aiResult.wx[0]}}</text>
+          <text wx:if="{{aiResult.wx[1]}}" class="muted">◐ {{aiResult.wx[1]}}</text>
+          <text wx:if="{{aiResult.wx[2]}}" class="muted">○ {{aiResult.wx[2]}}</text>
+        </view>
+      </view>
+      <view class="ai-row">
+        <text class="muted">资料等级</text>
+        <view><text>{{aiResult.sourceLabel}}</text><text wx:if="{{aiResult.sources.length}}"> · {{aiResult.sources.length}} 条</text></view>
+      </view>
+      <view wx:if="{{aiResult.sources.length}}" class="source-list">
+        <view class="muted">资料出处</view>
+        <view wx:for="{{aiResult.sources}}" wx:key="url" class="source-title">{{index + 1}}. {{item.title}}</view>
+      </view>
+      <button class="go ai-confirm" hover-class="btn-press" bindtap="confirmAiPerfume">确认结果并上架</button>
+    </view>
+
+    <view class="manual-title muted">{{aiResult ? '结果不准确?改为手动选择:' : '也可以直接手动选择:'}}</view>
     <picker range="{{groups}}" value="{{gIdx}}" bindchange="onGroup" style="margin-top:8rpx"><view>{{groups[gIdx]}}</view></picker>
-    <button class="go" style="margin:20rpx 0 4rpx" hover-class="btn-press" bindtap="addCustom">存入我的香水架</button>
+    <button class="manual-save" hover-class="btn-press" bindtap="addCustom">按手动选择上架</button>
   </view>
   <view wx:if="{{perfumes.length}}" style="margin-top:20rpx">
     <view class="muted" style="margin-bottom:8rpx">已上架 {{perfumes.length}} 支</view>

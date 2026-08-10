@@ -29,6 +29,18 @@
 双断环 `.qk-logo`。可编辑黑白 SVG 母版位于 `brand/logo-askqiankun-bw.svg`，
 512px 小程序后台头像位于 `brand/logo-askqiankun-bw-512.png`。
 
+## 香水文字识别与隐私
+
+衣橱搜索始终先查 `data/perfumes.js` 的离线香水库，本地命中不联网。仅当本地
+查不到且用户主动点击识别时，`utils/perfume-ai.js` 才会把当次香水名称发送到
+`https://askqiankun.com/api/miniprogram/perfumes/resolve`。服务端缓存命中不调用模型；
+首次未命中才检索少量公开资料并用低输出预算模型提取香调。识别结果必须由用户
+确认后才按既有 `{ n, f, wx }` 结构保存到本机，手动选择香调的入口始终保留。
+
+小程序端不包含搜索或模型 API key，也不会在该请求中发送既有衣橱、账号、生日、
+位置或联系方式。上线前必须同步更新微信公众平台《小程序用户隐私保护指引》，并
+把 `https://askqiankun.com` 配置为 `request` 合法域名。
+
 ## 拆分单功能小程序
 
 每个页面自包含(只依赖 `lib/mingyu.js` + `app.wxss` 样式),把对应 `pages/xxx` 目录
