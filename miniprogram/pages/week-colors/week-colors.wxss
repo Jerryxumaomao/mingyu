@@ -1,0 +1,116 @@
+.week-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.week-summary {
+  min-height: 112rpx;
+  padding: 24rpx 32rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.week-summary-press {
+  opacity: .72;
+}
+
+.week-meta {
+  flex: none;
+  width: 96rpx;
+  text-align: center;
+}
+
+.week-label {
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.week-date,
+.week-element,
+.week-toggle {
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.week-mini-palette {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 8rpx;
+}
+
+.week-result {
+  flex: none;
+  width: 144rpx;
+  text-align: right;
+}
+
+.week-name {
+  font-size: 28rpx;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.week-toggle {
+  margin-top: 8rpx;
+}
+
+.week-detail {
+  padding: 32rpx;
+}
+
+.week-guidance {
+  font-size: 28rpx;
+  line-height: 1.75;
+}
+
+.week-section {
+  margin-top: 24rpx;
+}
+
+.week-section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.week-color-list,
+.week-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.week-color-item {
+  min-width: 128rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.week-color-name {
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.week-pair {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  margin-top: 32rpx;
+}
+
+.week-pair-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.week-footer {
+  margin: 32rpx;
+  text-align: center;
+}

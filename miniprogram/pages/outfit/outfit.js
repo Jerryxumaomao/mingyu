@@ -1,21 +1,18 @@
-const MY = require('../../lib/mingyu.js');
 const wardrobe = require('../../utils/wardrobe.js');
 const almanac = require('../../utils/today-almanac.js');
 const { hexOf } = require('../../utils/colormap.js');
 
 // 今日之后 N 天的当值五行色(公共黄历,滚动展示,无个人信息)
 const WEEK_CH = ['日', '一', '二', '三', '四', '五', '六'];
-function weekStrip() {
+function weekStrip(baseDate) {
   const out = [];
+  const base = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), 12);
   for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
+    const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i, 12);
     const label = i === 0 ? '今天' : `周${WEEK_CH[d.getDay()]}`;
     try {
-      const p = MY.baziCalculator.calculatePillars({ year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: 'male' });
-      const { el, lucky, avoid } = almanac.dayPalette(p.pillars.day.ganZhi);
-      const adv = MY.recommendOutfit({ favorableWuxing: [lucky, el], unfavorableWuxing: [avoid], dayGan: p.pillars.day.gan, dayZhi: p.pillars.day.zhi, dayMasterGan: p.pillars.day.gan });
-      out.push({ c: hexOf((adv.colors.main || [''])[0] || ''), label, today: i === 0 });
+      const daily = almanac.outfitForDate(d);
+      out.push({ c: daily.colors.main.length ? daily.colors.main[0].c : hexOf(''), label, today: i === 0 });
     } catch (e) { out.push({ c: '#d8cdb4', label, today: i === 0 }); }
   }
   return out;
@@ -33,12 +30,12 @@ Page({
     wx.showLoading({ title: '正在铺色', mask: true });
     setTimeout(() => {
       try {
-        const today = almanac.overview();
+        const today = almanac.overview(d);
         this._key = key;
         this.setData({
           today,
           owned: wardrobe.match([today.luckyWX], []),
-          week: weekStrip(),
+          week: weekStrip(d),
         }, () => wx.hideLoading());
       } catch (e) { wx.hideLoading(); }
     }, 60);

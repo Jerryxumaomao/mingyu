@@ -51,31 +51,30 @@ function dayPalette(ganZhi) {
   return { el, lucky: SHENG[el], avoid: KE[el] };
 }
 
-function todayDayPillar() {
-  const d = new Date();
+function datePillars(d) {
   const p = MY.baziCalculator.calculatePillars({
     year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), timeIndex: 6, gender: 'male',
   });
   return { day: p.pillars.day, month: p.pillars.month };
 }
 
+function todayDayPillar() {
+  return datePillars(new Date());
+}
+
 // 五行 → 一句中文色名(用于文案)
 const WX_COLOR_NAME = { 木: '青绿', 火: '红', 土: '黄', 金: '白', 水: '黑蓝' };
 
-/** 今日总览:五行、色、指数(建除)、宜忌 */
-function overview() {
-  const { day, month } = todayDayPillar();
-  // 今日五行=日支五行,宜色=其所生(贵人色)。口径统一收口在 dayPalette。
+const pad2 = (n) => (n < 10 ? `0${n}` : String(n));
+
+/** 指定日期的穿搭建议：今日页与一周页共用，避免颜色口径漂移。 */
+function outfitForDate(date) {
+  const d = date || new Date();
+  const { day, month } = datePillars(d);
   const { el, lucky, avoid } = dayPalette(day.ganZhi);
-  const dayZhiIdx = ZHI.indexOf(day.zhi);
-  const monZhiIdx = ZHI.indexOf(month.zhi);
-  const godIdx = (dayZhiIdx - monZhiIdx + 12) % 12;
-  const god = VALUE_GODS[godIdx];
-  const qi = GOD_BAND[god];
-  const hint = GOD_HINT[god];
-  // 今日色:主色=宜色(今日五行所生,贵人色),辅色=今日五行本身(同气次吉)
-  let colors = { main: [], accent: [] };
-  let acc = []; let scent = [];
+  let colors = { main: [], accent: [], avoid: [] };
+  let acc = [];
+  let scent = [];
   try {
     const adv = MY.recommendOutfit({
       favorableWuxing: [lucky, el], unfavorableWuxing: [avoid],
@@ -84,19 +83,38 @@ function overview() {
     colors = {
       main: (adv.colors.main || []).slice(0, 3).map((n) => ({ n, c: hexOf(n) })),
       accent: (adv.colors.accent || []).slice(0, 2).map((n) => ({ n, c: hexOf(n) })),
+      avoid: (adv.colors.avoid || []).slice(0, 3).map((n) => ({ n, c: hexOf(n) })),
     };
     acc = (adv.accessories || []).slice(0, 6);
-    scent = (adv.scents && adv.scents.families) || [];
-  } catch (e) { /* 配色拿不到就只显示主色块 */ }
-  const dd = new Date();
+    scent = ((adv.scents && adv.scents.families) || []).slice(0, 4);
+  } catch (e) { /* 配色拿不到时保留日期与五行，页面可显示降级提示 */ }
+
   return {
-    date: `${dd.getMonth() + 1}月${dd.getDate()}日`,
+    dateKey: `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`,
+    date: `${d.getMonth() + 1}月${d.getDate()}日`,
+    day, month, el, lucky, avoid, colors, acc, scent,
+    elementLine: `当日${el}当值，宜${WX_COLOR_NAME[lucky]}系添运，避${WX_COLOR_NAME[avoid]}系。`,
+  };
+}
+
+/** 今日总览:五行、色、指数(建除)、宜忌 */
+function overview(date) {
+  const daily = outfitForDate(date || new Date());
+  const { day, month, el, lucky, avoid } = daily;
+  const dayZhiIdx = ZHI.indexOf(day.zhi);
+  const monZhiIdx = ZHI.indexOf(month.zhi);
+  const godIdx = (dayZhiIdx - monZhiIdx + 12) % 12;
+  const god = VALUE_GODS[godIdx];
+  const qi = GOD_BAND[god];
+  const hint = GOD_HINT[god];
+  return {
+    date: daily.date,
     element: el, elementColor: WX_COLOR[el],
     luckyWX: lucky, avoidWX: avoid, avoidColor: WX_COLOR[avoid],
     god, qi, band: BAND_CH[qi], bandColor: BAND_COLOR[qi],
     yi: hint.yi, ji: hint.ji,
-    colors, acc, scent,
-    elementLine: `今日${el}当值,宜${WX_COLOR_NAME[lucky]}系添运,避${WX_COLOR_NAME[avoid]}系。`,
+    colors: daily.colors, acc: daily.acc, scent: daily.scent,
+    elementLine: `今日${el}当值，宜${WX_COLOR_NAME[lucky]}系添运，避${WX_COLOR_NAME[avoid]}系。`,
     dayZhi: day.zhi,
   };
 }
@@ -116,4 +134,4 @@ function zodiacs(dayZhi) {
   });
 }
 
-module.exports = { overview, zodiacs, GAN_WX, ZHI_WX, SHENG, KE, dayPalette };
+module.exports = { overview, zodiacs, outfitForDate, GAN_WX, ZHI_WX, SHENG, KE, dayPalette };

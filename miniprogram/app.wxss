@@ -30,6 +30,12 @@ input, picker { background: #fbf7ec; border: 1rpx solid #e6dcc6; border-radius: 
 .wxp { display: inline-flex; align-items: center; justify-content: center; min-width: 46rpx; height: 46rpx;
   border-radius: 10rpx; font-size: 26rpx; font-weight: 700; color: #fbf3e2; margin-right: 8rpx; padding: 0 6rpx; flex: none; }
 .cardtitle { font-size: 34rpx; font-weight: 700; letter-spacing: 4rpx; }
+.card-current { border-color: #b5432f; }
+.hairline-top { border-top: 1rpx solid #e6dcc6; }
+.chip { display: inline-flex; align-items: center; min-height: 48rpx; box-sizing: border-box;
+  padding: 8rpx 16rpx; border: 1rpx solid #e6dcc6; border-radius: 999rpx;
+  background: #efe7d3; color: #33302a; font-size: 26rpx; line-height: 1.5; }
+.chip-bad { color: #8a8272; border-style: dashed; text-decoration: line-through; }
 
 /* ── 动效库(浮入/翻牌/盖章/弹现/朱砂呼吸)── */
 @keyframes rise { from { opacity: 0; transform: translateY(40rpx); } to { opacity: 1; transform: translateY(0); } }
